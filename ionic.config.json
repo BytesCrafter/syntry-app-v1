@@ -1,5 +1,7 @@
 {
   "name": "BusiNext-Syntry",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }

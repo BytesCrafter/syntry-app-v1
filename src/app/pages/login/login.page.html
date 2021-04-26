@@ -1,0 +1,29 @@
+<!--
+
+  Authors : Bytes Crafter
+  Website : https://bytescrafter.net
+  App Name : Galyon App
+  Created : 01-Sep-2020
+
+ -->
+ <ion-content>
+  <div class="main_content_div">
+
+    <div class="iconDiv">
+      <img src="assets/images/logo.png" alt="" class="icon">
+    </div>
+    <div class="form_div">
+      <ion-label class="main_head"> {{util.getString('Sign in')}} </ion-label>
+      <ion-input type="email" [placeholder]="util.getString('Email')" [(ngModel)]="email">
+        <ion-icon name="mail" slot="icon-only"></ion-icon>
+      </ion-input>
+      <ion-input type="password" [placeholder]="util.getString('Password')" [(ngModel)]="password">
+        <ion-icon name="key" slot="icon-only"></ion-icon>
+      </ion-input>
+      <ion-button expand="block" (click)="login()">
+        <span *ngIf="!loggedIn"> {{util.getString('SIGN IN')}} </span>
+        <ion-spinner name="circular" *ngIf="loggedIn"></ion-spinner>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

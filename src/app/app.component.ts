@@ -1,18 +1,47 @@
 import { Component } from '@angular/core';
+import { UtilService } from 'src/app/services/util.service';
+import { ApiService } from 'src/app/services/api.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+  fname: any = '';
+  lname: any = '';
+  email: any = '';
+  avatar: any = '';
   public appPages = [
-    { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
+    { title: 'Home', url: '/home', icon: 'home' },
+    { title: 'Camera', url: '/camera', icon: 'camera' },
+    { title: 'Gallery', url: '/gallery', icon: 'images' },
+    { title: 'Biometrix', url: '/qrscan', icon: 'qr-code' },
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {}
+  public labels = ['Logout'];
+  constructor(
+    public util: UtilService,
+    private api: ApiService,
+    private router: Router,
+  ) {
+    this.fname = localStorage.getItem('fname');
+    this.lname = localStorage.getItem('lname');
+    this.email = localStorage.getItem('email');
+    this.avatar = localStorage.getItem('avatar');
+    // this.api.get('users/token').subscribe((response: any) => {
+    //   if(response.success) {
+    //     if(response.data.length > 0) {
+    //       for (let i = 0; i < response.data.length; i++) {
+    //         localStorage.setItem(response.data[i].name, response.data[i].value);
+    //       }
+    //     }
+    //   }
+    // });
+  }
+
+  logout() {
+    localStorage.clear();
+    this.router.navigate([`/login`], { replaceUrl: true });
+  }
+
 }

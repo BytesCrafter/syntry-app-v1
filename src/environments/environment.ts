@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  baseURL: 'https://businext.dev/v1/api/',
+  authToken: '2bb22f08eb0770d'
 };
 
 /*
