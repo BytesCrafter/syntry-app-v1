@@ -2,7 +2,8 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ToastController, LoadingController, Platform } from '@ionic/angular';
 import jsQR from 'jsqr';
 import { AppComponent } from 'src/app/app.component';
-import { IonInfiniteScroll } from '@ionic/angular';
+import { UtilService } from 'src/app/services/util.service';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-qrscan',
@@ -13,11 +14,10 @@ export class QrscanPage {
   @ViewChild('video', { static: false }) video: ElementRef;
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
   @ViewChild('fileinput', { static: false }) fileinput: ElementRef;
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   attendance: any[] = [];
   previous: any;
-  retries: any = 1;
+  retries: any = 0;
   canvasElement: any;
   videoElement: any;
   canvasContext: any;
@@ -26,6 +26,8 @@ export class QrscanPage {
   loading: HTMLIonLoadingElement = null;
 
   constructor(
+    public util: UtilService,
+    private api: ApiService,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private plt: Platform,
@@ -66,15 +68,35 @@ export class QrscanPage {
   }
 
   logtime(data) {
-    console.log('Data: ' + data);
-    this.attendance.push(
-      {
-        avatar: 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y',
-        fname: 'Juan',
-        lname: 'Dela Cruz',
-        stamp: 'April 4, 2021 10:12 PM'
+
+    let user = JSON.parse(data);
+    //console.log('ID: ' + user.id);
+
+    const param = {};
+    this.api.post('attendance/logtime/'+user.id, param).subscribe((res: any) => {
+      if(res.success === true) {
+        this.api.get('users/get/'+user.id).subscribe((response: any) => {
+          //console.log(response);
+          if(response.success) {
+            let premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
+            this.util.showToast(premsg + response.data.fname +' '+ response.data.lname, 'dark', 'bottom');
+
+            this.attendance.unshift(
+              {
+                avatar: response.data.avatar,
+                fname: response.data.fname,
+                lname: response.data.lname,
+                stamp: res.stamp,
+                color: res.clocked ? 'danger' : 'success',
+                event: res.clocked ? ' OUT ' : ' IN '
+              }
+            );
+          }
+        });
+      } else {
+        this.util.showToast(res.message, 'dark', 'top');
       }
-    );
+    });
   }
 
   // Helper functions
@@ -83,14 +105,16 @@ export class QrscanPage {
       if(this.previous !== this.scanResult ) {
         this.previous = this.scanResult;
         this.logtime(this.scanResult);
-        console.log('Saving QR Code...');
       } else {
-        console.log('Same QR, next...');
         this.retries += 1;
+        let remain = 3 - this.retries;
 
-        if(this.retries === 3) {
+        if(remain == 0) {
           this.retries = 0;
           this.previous = '';
+          this.util.showToast('You can now log your time. Try now!', 'dark', 'bottom');
+        } else {
+          this.util.showToast('Try again for ' + remain + ' to reset.', 'dark', 'bottom');
         }
       }
       await this.sleep(3000);

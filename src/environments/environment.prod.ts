@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  baseURL: 'https://businext.dev/v1/api/',
-  authToken: '2bb22f08eb0770d'
+  baseURL: 'https://beta.erpat.net/v1/api/',
+  authToken: '9bc12f10eb077de'
 };

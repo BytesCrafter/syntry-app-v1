@@ -15,13 +15,14 @@ export class ApiService {
   }
 
   post(url, body) {
+    let authKey = localStorage.getItem('token') === null ? environment.authToken : localStorage.getItem('token');
     const header = {
       headers: new HttpHeaders()
         .set('Content-Type', 'application/x-www-form-urlencoded')
-        .set('Basic', `${environment.authToken}`)
+        .set('Basic', authKey)
     };
 
-    body.businext_csrf_token = localStorage.getItem('businext_csrf_token');
+    //body.businext_csrf_token = localStorage.getItem('businext_csrf_token');
     const param = this.jsonUrlEncode(body);
     return this.http.post(this.baseUrl + url, param, header);
   }
