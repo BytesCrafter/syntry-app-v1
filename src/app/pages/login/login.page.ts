@@ -3,6 +3,7 @@ import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
 import { MenuController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginPage implements OnInit {
     private api: ApiService,
     private menuController: MenuController,
     private router: Router,
+    private appComp: AppComponent
   ) {
     //Check if the is a token in local storage but need to check first.
     if(localStorage.getItem('token') === null) {
@@ -57,6 +59,8 @@ export class LoginPage implements OnInit {
         localStorage.setItem('lname', response.data.user.lname);
         localStorage.setItem('avatar', response.data.user.avatar);
         localStorage.setItem('email', response.data.user.email);
+
+        this.appComp.display();
         this.menuController.enable(true);
         this.router.navigate([`/`], { replaceUrl: true });
       } else {

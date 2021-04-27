@@ -24,10 +24,6 @@ export class AppComponent {
     private api: ApiService,
     private router: Router,
   ) {
-    this.fname = localStorage.getItem('fname');
-    this.lname = localStorage.getItem('lname');
-    this.email = localStorage.getItem('email');
-    this.avatar = localStorage.getItem('avatar');
     // this.api.get('users/token').subscribe((response: any) => {
     //   if(response.success) {
     //     if(response.data.length > 0) {
@@ -37,6 +33,7 @@ export class AppComponent {
     //     }
     //   }
     // });
+    this.display();
   }
 
   logout() {
@@ -44,4 +41,10 @@ export class AppComponent {
     this.router.navigate([`/login`], { replaceUrl: true });
   }
 
+  display() {
+    this.fname = localStorage.getItem('fname');
+    this.lname = localStorage.getItem('lname');
+    this.email = localStorage.getItem('email');
+    this.avatar = localStorage.getItem('avatar');
+  }
 }
