@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">BusiNext-Syntry</string>
-    <string name="title_activity_main">BusiNext-Syntry</string>
+    <string name="app_name">BusiNext</string>
+    <string name="title_activity_main">BusiNext</string>
     <string name="package_name">app.businext.syntry</string>
     <string name="custom_url_scheme">app.businext.syntry</string>
 </resources>
