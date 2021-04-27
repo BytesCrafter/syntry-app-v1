@@ -2,8 +2,8 @@
   "targets": {
     "businext-app": {
       "hosting": {
-        "businext-app": [
-          "erpat-beta"
+        "app": [
+          "businext-app"
         ]
       }
     }
