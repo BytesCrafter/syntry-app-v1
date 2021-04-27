@@ -51,6 +51,7 @@ export class LoginPage implements OnInit {
 
     this.api.post('users/signin', param).subscribe((response: any) => {
       if(response.success === true) {
+        localStorage.setItem('id', response.data.user.id);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('fname', response.data.user.fname);
         localStorage.setItem('lname', response.data.user.lname);

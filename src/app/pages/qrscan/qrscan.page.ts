@@ -15,15 +15,39 @@ export class QrscanPage {
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
   @ViewChild('fileinput', { static: false }) fileinput: ElementRef;
 
+  videoStream = null;
   attendance: any[] = [];
-  previous: any;
+  previous = null;
   retries: any = 0;
+  dname: string = 'Hello!';
+  cdown: number = 3;
+  get countdown(): number {
+      return 3 - this.retries;
+  }
+  set countdown(value: number) {
+      this.cdown = value;
+  }
   canvasElement: any;
   videoElement: any;
   canvasContext: any;
   scanActive = false;
   scanResult = null;
   loading: HTMLIonLoadingElement = null;
+  sColor = 'light';
+  get statusColor(): string {
+    if(this.previous !== null) {
+      return this.scanActive ? 'primary' : 'secondary';
+    } else {
+      if(this.scanActive) {
+        return 'success';
+      } else {
+        return 'danger';
+      }
+    }
+  }
+  set statusColor(value: string) {
+      this.sColor = value;
+  }
 
   constructor(
     public util: UtilService,
@@ -39,17 +63,6 @@ export class QrscanPage {
       console.log('I am a an iOS PWA!');
       // E.g. hide the scan functionality!
     }
-
-    // for(var i=0; i< 50; i++) {
-    //   this.attendance.push(
-    //     {
-    //       avatar: 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y',
-    //       fname: 'Juan',
-    //       lname: 'Dela Cruz',
-    //       stamp: 'April 4, 2021 10:12 PM'
-    //     }
-    //   );
-    // }
   }
 
   loadData(event) {
@@ -69,15 +82,57 @@ export class QrscanPage {
 
   logtime(data) {
 
-    let user = JSON.parse(data);
-    //console.log('ID: ' + user.id);
+    if(!this.util.isJsonValid(data)) {
+      this.util.showToast('QR code dont have a valid data!', 'dark', 'bottom');
+      this.previous = null;
+      this.retries = 0;
+    } else {
+      let user = JSON.parse(data);
 
-    const param = {};
+      if(typeof user.id === 'undefined' || user.id === null) {
+        this.util.showToast('QR code data dont have a valid property!', 'dark', 'bottom');
+        this.previous = null;
+        this.retries = 0;
+      } else {
+        this.api.get('users/get/'+user.id).subscribe((response: any) => {
+          if(response.success) {
+            this.dname = 'Hey! ' + response.data.fname;
+          } else {
+            this.dname = 'Hello!';
+          }
+        });
+
+        this.retries += 1;
+
+        if(this.previous === data ) {
+
+          if(this.countdown === 0) {
+            this.retries = 0;
+            this.trySend(user);
+            //this.util.showToast('You can now log your time. Try now!', 'dark', 'bottom');
+          } else {
+            //this.util.showToast('Try again for ' + this.countdown + ' to reset.', 'dark', 'bottom');
+          }
+        } else {
+          this.retries = 0;
+          this.previous = data;
+          this.statusColor = 'primary';
+        }
+      }
+    }
+  }
+
+  trySend(user) {
+    const param = {
+      id: localStorage.getItem('id')
+    };
     this.api.post('attendance/logtime/'+user.id, param).subscribe((res: any) => {
       if(res.success === true) {
         this.api.get('users/get/'+user.id).subscribe((response: any) => {
           //console.log(response);
           if(response.success) {
+            this.previous = null;
+
             let premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
             this.util.showToast(premsg + response.data.fname +' '+ response.data.lname, 'dark', 'bottom');
 
@@ -92,9 +147,13 @@ export class QrscanPage {
               }
             );
           }
+          this.scanResult = null;
+          this.countdown = 3;
         });
       } else {
         this.util.showToast(res.message, 'dark', 'top');
+        this.scanResult = null;
+        this.countdown = 3;
       }
     });
   }
@@ -102,22 +161,8 @@ export class QrscanPage {
   // Helper functions
   async showQrToast() {
     if(this.scanResult === '' || this.scanResult) {
-      if(this.previous !== this.scanResult ) {
-        this.previous = this.scanResult;
-        this.logtime(this.scanResult);
-      } else {
-        this.retries += 1;
-        let remain = 3 - this.retries;
-
-        if(remain == 0) {
-          this.retries = 0;
-          this.previous = '';
-          this.util.showToast('You can now log your time. Try now!', 'dark', 'bottom');
-        } else {
-          this.util.showToast('Try again for ' + remain + ' to reset.', 'dark', 'bottom');
-        }
-      }
-      await this.sleep(3000);
+      this.logtime(this.scanResult);
+      await this.sleep(500);
       this.startScan();
     }
     //Disable open toast on detect!
@@ -146,18 +191,21 @@ export class QrscanPage {
 
   async startScan() {
     // Not working on iOS standalone mode!
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user' }
-    });
+    if(this.videoStream === null) {
+      this.videoStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user' }
+      });
 
-    this.videoElement.srcObject = stream;
-    // Required for Safari
-    this.videoElement.setAttribute('playsinline', true);
+      this.videoElement.srcObject = this.videoStream;
+      // Required for Safari
+      this.videoElement.setAttribute('playsinline', true);
+
+      this.videoElement.play();
+    }
 
     this.loading = await this.loadingCtrl.create({});
     await this.loading.present();
 
-    this.videoElement.play();
     requestAnimationFrame(this.scan.bind(this));
   }
 
