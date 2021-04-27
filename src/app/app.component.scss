@@ -117,3 +117,30 @@ ion-note {
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
+
+.infoSection{
+  background: var(--ion-color-secondary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+  .userPhoto{
+    border-radius: 25px;
+    width: 100px;
+    margin: 20px 0px;
+  }
+  .userName{
+    margin: 0px;
+    padding: 0px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--ion-color-contrast);
+    margin-bottom: 5px;
+  }
+  .email {
+    margin: auto;
+    color: var(--ion-color-contrast);
+    margin-bottom: 20px;
+  }
+}

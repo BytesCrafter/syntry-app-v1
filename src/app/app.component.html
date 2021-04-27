@@ -1,14 +1,13 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
+    <ion-menu menuId="custom" contentId="main-content" type="overlay">
       <ion-content>
+        <div class="infoSection">
+          <img class="userPhoto" [src]="avatar" onError="this.src='assets/imgs/icon.png'" alt="">
+          <p class="userName">{{ fname }} {{ lname }}</p>
+          <p class="email">{{ email }}</p>
+        </div>
         <ion-list id="inbox-list">
-          <ion-thumbnail slot="start">
-            <ion-img [src]="avatar" style="border-radius: 50%;margin: 50px;"></ion-img>
-          </ion-thumbnail>
-          <ion-list-header>{{ fname }} {{ lname }}</ion-list-header>
-          <ion-note>{{ email }}</ion-note>
-
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
             <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
