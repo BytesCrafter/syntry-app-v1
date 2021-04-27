@@ -213,7 +213,11 @@ export class QrscanPage {
     // Not working on iOS standalone mode!
     if(this.videoStream === null) {
       this.videoStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user' }
+        video: {
+          facingMode: 'user',
+          height: screen.height / 2,
+          width: screen.width
+        },
       });
 
       this.videoElement.srcObject = this.videoStream;
