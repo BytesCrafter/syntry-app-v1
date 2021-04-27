@@ -11,7 +11,10 @@
     </div>
   </ion-label>
   <ion-fab vertical="top" horizontal="end" slot="fixed">
-    <ion-fab-button size="small" [attr.color]="this.statusColor" disabled><strong>{{countdown}}</strong></ion-fab-button>
+    <ion-fab-button [attr.size]="this.statusSize" [attr.color]="this.statusColor" disabled>
+      <strong *ngIf="!this.isSending" style="color: black;">{{countdown}}</strong>
+      <ion-icon *ngIf="this.isSending" name="cloud-upload-outline"></ion-icon>
+    </ion-fab-button>
   </ion-fab>
   <!-- Fallback for iOS PWA -->
   <!-- <input #fileinput type="file" accept="image/*;capture=camera" hidden (change)="handleFile($event.target.file)"> -->

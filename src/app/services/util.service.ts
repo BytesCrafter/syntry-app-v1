@@ -103,4 +103,11 @@ export class UtilService {
     }
     return true;
   }
+
+  playAudio(){
+    let audio = new Audio();
+    audio.src = '../../assets/audio/notify.wav';
+    audio.load();
+    audio.play();
+  }
 }

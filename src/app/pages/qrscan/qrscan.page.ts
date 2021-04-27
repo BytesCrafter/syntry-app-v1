@@ -35,18 +35,30 @@ export class QrscanPage {
   loading: HTMLIonLoadingElement = null;
   sColor = 'light';
   get statusColor(): string {
-    if(this.previous !== null) {
-      return this.scanActive ? 'primary' : 'secondary';
+    if(this.isSending) {
+      return 'warning';
     } else {
-      if(this.scanActive) {
-        return 'success';
+      if(this.previous !== null) {
+        return this.scanActive ? 'primary' : 'secondary';
       } else {
-        return 'danger';
+        if(this.scanActive) {
+          return 'success';
+        } else {
+          return 'danger';
+        }
       }
     }
   }
   set statusColor(value: string) {
       this.sColor = value;
+  }
+  isSending = false;
+  get statusSize(): string {
+    if(this.isSending) {
+      return 'large';
+    } else {
+      return 'small';
+    }
   }
 
   constructor(
@@ -80,7 +92,7 @@ export class QrscanPage {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  logtime(data) {
+  async logtime(data) {
 
     if(!this.util.isJsonValid(data)) {
       this.util.showToast('QR code dont have a valid data!', 'dark', 'bottom');
@@ -94,20 +106,13 @@ export class QrscanPage {
         this.previous = null;
         this.retries = 0;
       } else {
-        this.api.get('users/get/'+user.id).subscribe((response: any) => {
-          if(response.success) {
-            this.dname = 'Hey! ' + response.data.fname;
-          } else {
-            this.dname = 'Hello!';
-          }
-        });
-
         this.retries += 1;
 
         if(this.previous === data ) {
 
           if(this.countdown === 0) {
             this.retries = 0;
+            this.isSending = true;
             this.trySend(user);
             //this.util.showToast('You can now log your time. Try now!', 'dark', 'bottom');
           } else {
@@ -117,12 +122,20 @@ export class QrscanPage {
           this.retries = 0;
           this.previous = data;
           this.statusColor = 'primary';
+
+          this.dname = 'Hello!';
+          await this.api.get('users/get/'+user.id).subscribe((response: any) => {
+            if(response.success) {
+              this.dname = 'Hey! ' + response.data.fname;
+            }
+          });
         }
       }
     }
   }
 
-  trySend(user) {
+  async trySend(user) {
+
     const param = {
       id: localStorage.getItem('id')
     };
@@ -131,6 +144,7 @@ export class QrscanPage {
         this.api.get('users/get/'+user.id).subscribe((response: any) => {
           //console.log(response);
           if(response.success) {
+            this.util.playAudio();
             this.previous = null;
 
             let premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
@@ -149,21 +163,26 @@ export class QrscanPage {
           }
           this.scanResult = null;
           this.countdown = 3;
+          this.isSending = false;
+          this.startScan();
         });
       } else {
-        this.util.showToast(res.message, 'dark', 'top');
+        this.util.showToast(res.message, 'dark', 'bottom');
         this.scanResult = null;
         this.countdown = 3;
+        this.isSending = false;
+        this.startScan();
       }
     });
   }
 
   // Helper functions
-  async showQrToast() {
-    if(this.scanResult === '' || this.scanResult) {
+  async qrcodeDetected() {
+    if(this.scanResult && this.scanResult !== '' && this.scanResult !== null) {
       this.logtime(this.scanResult);
-      await this.sleep(500);
-      this.startScan();
+      if(!this.isSending) {
+        this.startScan();
+      }
     }
     //Disable open toast on detect!
     // const toast = await this.toastCtrl.create({
@@ -190,6 +209,7 @@ export class QrscanPage {
   }
 
   async startScan() {
+    await this.sleep(500);
     // Not working on iOS standalone mode!
     if(this.videoStream === null) {
       this.videoStream = await navigator.mediaDevices.getUserMedia({
@@ -240,7 +260,7 @@ export class QrscanPage {
       if (code) {
         this.scanActive = false;
         this.scanResult = code.data;
-        this.showQrToast();
+        this.qrcodeDetected();
       } else {
         if (this.scanActive) {
           requestAnimationFrame(this.scan.bind(this));
@@ -273,7 +293,7 @@ export class QrscanPage {
 
       if (code) {
         this.scanResult = code.data;
-        this.showQrToast();
+        this.qrcodeDetected();
       }
     };
     img.src = URL.createObjectURL(file);
