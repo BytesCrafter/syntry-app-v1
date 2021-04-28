@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { ToastController, LoadingController, Platform } from '@ionic/angular';
 import jsQR from 'jsqr';
 import { AppComponent } from 'src/app/app.component';
@@ -60,6 +60,7 @@ export class QrscanPage {
       return 'small';
     }
   }
+  isResizing = false;
 
   constructor(
     public util: UtilService,
@@ -74,6 +75,23 @@ export class QrscanPage {
     if (this.plt.is('ios') && isInStandaloneMode()) {
       console.log('I am a an iOS PWA!');
       // E.g. hide the scan functionality!
+    }
+
+    var supportsOrientationChange = 'onorientationchange' in window,
+      orientationEvent = supportsOrientationChange ? 'orientationchange' : 'resize';
+    window.addEventListener(orientationEvent, () => {
+        this.videoStream = null;
+        this.startScan();
+    }, false);
+  }
+
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if(!this.isResizing) {
+      this.isResizing = true;
+      this.videoStream = null;
+      this.startScan();
     }
   }
 
@@ -212,6 +230,7 @@ export class QrscanPage {
     await this.sleep(500);
     // Not working on iOS standalone mode!
     if(this.videoStream === null) {
+
       this.videoStream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: 'user',
@@ -225,6 +244,7 @@ export class QrscanPage {
       this.videoElement.setAttribute('playsinline', true);
 
       this.videoElement.play();
+      this.isResizing = false;
     }
 
     this.loading = await this.loadingCtrl.create({});

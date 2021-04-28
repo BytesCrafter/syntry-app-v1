@@ -7,7 +7,7 @@
 <ion-content>
 
   <ion-label *ngIf="this.previous !== null" vertical="top" horizontal="start" slot="fixed">
-    <div style="margin: 25px; padding: 5px 10px; background-color: #a243df;">
+    <div style="margin: 25px; padding: 5px 10px;">
       <h2>{{dname}}</h2>
     </div>
   </ion-label>
@@ -37,7 +37,7 @@
     Reset
   </ion-button> -->
 
-  <div style="background-color: #a243df; height: 50vh;">
+  <div style="height: 50vh;">
     <!-- Shows our camera stream -->
     <!-- <video #video [hidden]="!scanActive" width="100%" controls></video> -->
     <video #video width="100%" style="-webkit-transform: scaleX(-1);transform: scaleX(-1);"></video>
@@ -45,7 +45,7 @@
     <!-- Used to render the camera stream images -->
     <canvas #canvas hidden></canvas>
   </div>
-  <div style="height: 50vh;">
+  <div style="height: 50vh; background-color: var(--background);">
     <ion-list>
       <ion-list-header>
         <ion-label><h2>Log History for Today</h2></ion-label>
