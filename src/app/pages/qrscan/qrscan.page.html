@@ -6,7 +6,7 @@
 
 <ion-content>
   <ion-label *ngIf="this.previous !== null" vertical="top" horizontal="start" slot="fixed">
-    <div style="margin: 25px; padding: 5px 10px; background-color: #a243df;">
+    <div style="margin: 25px; padding: 5px 10px;">
       <h2>{{dname}}</h2>
     </div>
   </ion-label>
@@ -26,74 +26,34 @@
     Capture Image
   </ion-button> -->
 
-  <!-- <ion-button expand="full" (click)="startScan()">
-    <ion-icon slot="start" name="qr-scanner"></ion-icon>
-    Start scan
-  </ion-button> -->
+  <div style="height: 50vh;">
+    <!-- <video #video [hidden]="!scanActive" width="100%" controls></video> -->
+    <video #video width="100%" style="-webkit-transform: scaleX(-1);transform: scaleX(-1);"></video>
 
-  <!-- <ion-button expand="full" (click)="reset()" color="warning" *ngIf="scanResult">
-    <ion-icon slot="start" name="refresh"></ion-icon>
-    Reset
-  </ion-button> -->
+    <!-- Used to render the camera stream images -->
+    <canvas #canvas hidden></canvas>
+    <ion-item style="position: relative;top: -80px;">
+      <ion-range color="primary" pin="true" step="5" min="0" max="250" [(ngModel)]="focusValue" (ionChange)="onSliderEvent($event)"></ion-range>
+    </ion-item>
+  </div>
 
-  <!-- Shows our camera stream -->
-  <!-- <video #video [hidden]="!scanActive" width="100%" controls></video> -->
-  <video #video width="100%" style="-webkit-transform: scaleX(-1);transform: scaleX(-1);"></video>
+  <div style="height: 50vh;">
 
-  <!-- Used to render the camera stream images -->
-  <canvas #canvas hidden></canvas>
-
-  <ion-item>
-    <ion-range color="primary" pin="true" step="5" min="0" max="250" [(ngModel)]="focusValue" (ionChange)="onSliderEvent($event)"></ion-range>
-  </ion-item>
-
-  <!-- <ion-button expand="full" (click)="captureImage()">
-    <ion-icon slot="start" name="camera"></ion-icon>
-    Capture Image
-  </ion-button> -->
-
-  <!-- Stop our scanner preview if active -->
-  <!-- <ion-button expand="full" (click)="stopScan()" color="danger" *ngIf="scanActive">
-    <ion-icon slot="start" name="close"></ion-icon>
-    Stop scan
-  </ion-button> -->
-
-  <ion-list>
     <ion-list-header>
       <ion-label><h2>Log History for Today</h2></ion-label>
     </ion-list-header>
-
-    <ion-item *ngFor="let att of attendance; let i = index" style="border-bottom: 1px var(--ion-color-primary-contrast) solid;">
-      <ion-avatar slot="start">
-        <ion-img [src]="att.avatar"></ion-img>
-      </ion-avatar>
-      <ion-label>
-        <h2>{{att.fname}} {{att.lname}}</h2>
-        <p>{{att.stamp}}</p>
-      </ion-label>
-      <ion-badge color="{{att.color}}" slot="end">{{att.event}}</ion-badge>
-    </ion-item>
-  </ion-list>
-
-  <!-- <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
-    <ion-infinite-scroll-content
-      loadingSpinner="bubbles"
-      loadingText="Loading...">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll> -->
-
-  <!-- <ion-thumbnail slot="start" style="height: 250px;">
-    <ion-img [src]="app.avatar"></ion-img>
-  </ion-thumbnail>
-  <ion-label>{{app.fname}}</ion-label> -->
-
-  <!-- <ion-card *ngIf="scanResult">
-    <ion-card-header>
-      <ion-card-title>QR Code</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      {{ scanResult }}
-    </ion-card-content>
-  </ion-card> -->
+    <ion-list>
+      <ion-item *ngFor="let att of attendance; let i = index">
+        <ion-avatar slot="start">
+          <ion-img [src]="att.avatar"></ion-img>
+        </ion-avatar>
+        <ion-label>
+          <h2>{{att.fname}} {{att.lname}}</h2>
+          <p>{{att.stamp}}</p>
+        </ion-label>
+        <ion-badge color="{{att.color}}" slot="end">{{att.event}}</ion-badge>
+      </ion-item>
+    </ion-list>
+  </div>
 
 </ion-content>
