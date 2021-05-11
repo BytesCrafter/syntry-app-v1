@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -12,6 +13,11 @@ export class AppComponent {
   lname: any = '';
   email: any = '';
   avatar: any = '';
+
+  get version(): string {
+    return environment.version;
+  }
+
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
     { title: 'Camera', url: '/camera', icon: 'camera' },

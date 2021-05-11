@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  version: '0.1.0',
   baseURL: 'https://erpat.dev/v1/api/',
   authToken: '2bb22f08eb0770d',
   firebase: {

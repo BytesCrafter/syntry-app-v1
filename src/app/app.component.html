@@ -15,14 +15,17 @@
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
-        </ion-list>
-
-        <ion-list id="labels-list">
           <ion-item lines="none" button (click)="logout()">
             <ion-icon slot="start" ios="power-outline" md="power-outline"></ion-icon>
             <ion-label>Logout</ion-label>
           </ion-item>
         </ion-list>
+
+        <ion-list id="labels-list">
+          <ion-label class="version">Syntry v{{ version }}</ion-label>
+          <ion-label class="version" style="padding-top: 10px;">2021 © BytesCrafter</ion-label>
+        </ion-list>
+
       </ion-content>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
