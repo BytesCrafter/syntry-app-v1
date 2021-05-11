@@ -1,5 +1,6 @@
 {
-  "hosting": {
+  "hosting": [
+  {
       "site": "erpat-ahm",
       "public": "www",
       "ignore": [
