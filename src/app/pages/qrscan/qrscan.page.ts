@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { ToastController, LoadingController, Platform } from '@ionic/angular';
 import jsQR from 'jsqr';
 import { AppComponent } from 'src/app/app.component';
@@ -62,6 +62,7 @@ export class QrscanPage {
   }
   focusValue = 1;
   previouslyCorrected = false;
+  isResizing = false;
 
   constructor(
     public util: UtilService,
@@ -90,6 +91,22 @@ export class QrscanPage {
     }, 5000);
 
     this.focusValue = Number(localStorage.getItem('focusValue'));
+    var supportsOrientationChange = 'onorientationchange' in window,
+      orientationEvent = supportsOrientationChange ? 'orientationchange' : 'resize';
+    window.addEventListener(orientationEvent, () => {
+        this.videoStream = null;
+        this.startScan();
+    }, false);
+  }
+
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if(!this.isResizing) {
+      this.isResizing = true;
+      this.videoStream = null;
+      this.startScan();
+    }
   }
 
   loadData(event) {
@@ -278,11 +295,23 @@ export class QrscanPage {
   async startScan() {
     // Not working on iOS standalone mode!
     if(this.videoStream === null) {
+
       this.videoStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user',  }
+        video: {
+          facingMode: 'user',
+          height: screen.height / 2,
+          width: screen.width
+        }
       })
       .then(this.gotMedia.bind(this))
       .catch(err => console.error('getUserMedia() failed: ', err));
+
+      this.videoElement.srcObject = this.videoStream;
+      // Required for Safari
+      this.videoElement.setAttribute('playsinline', true);
+
+      this.videoElement.play();
+      this.isResizing = false;
     }
 
     this.loading = await this.loadingCtrl.create({});
