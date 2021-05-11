@@ -110,4 +110,17 @@ export class UtilService {
     audio.load();
     audio.play();
   }
+
+  async modalAlert(title='Alert', subtitle='', content='') {
+    const alert = await this.alertCtrl.create({
+      cssClass: 'my-custom-class',
+      header: title,
+      subHeader: subtitle,
+      message: content
+    });
+    await alert.present();
+    setTimeout(()=> {
+      alert.dismiss();
+    }, 2000);
+  }
 }
