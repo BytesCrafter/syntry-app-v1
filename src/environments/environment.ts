@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseURL: 'https://businext.dev/v1/api/',
+  baseURL: 'https://erpat.dev/v1/api/',
   authToken: '2bb22f08eb0770d'
 };
 
