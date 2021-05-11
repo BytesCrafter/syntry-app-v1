@@ -12,6 +12,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
+// 1. Import the libs you need
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -20,6 +25,12 @@ import { environment } from '../environments/environment';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+
+    // 3. Initialize
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule, // auth
+    AngularFireAnalyticsModule, // analytics
+
     ServiceWorkerModule.register('ngsw-worker.js', {
   enabled: environment.production,
   // Register the ServiceWorker as soon as the app is stable

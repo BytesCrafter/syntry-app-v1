@@ -60,11 +60,12 @@ export class QrscanPage {
       return 'small';
     }
   }
+  focusValue = 1;
+  previouslyCorrected = false;
 
   constructor(
     public util: UtilService,
     private api: ApiService,
-    private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private plt: Platform,
     public app: AppComponent
@@ -75,6 +76,20 @@ export class QrscanPage {
       console.log('I am a an iOS PWA!');
       // E.g. hide the scan functionality!
     }
+
+    setInterval(()=> {
+      if(!this.scanActive) {
+        if(this.previouslyCorrected) {
+          this.scanActive = true;
+          console.log('Corrected');
+        }
+        this.previouslyCorrected = !this.previouslyCorrected;
+      } else {
+        this.previouslyCorrected = false;
+      }
+    }, 5000);
+
+    this.focusValue = Number(localStorage.getItem('focusValue'));
   }
 
   loadData(event) {
@@ -149,6 +164,7 @@ export class QrscanPage {
 
             let premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
             this.util.showToast(premsg + response.data.fname +' '+ response.data.lname, 'dark', 'bottom');
+            //this.util.modalAlert(premsg, response.data.stamp, response.data.fname +' '+ response.data.lname);
 
             this.attendance.unshift(
               {
@@ -208,19 +224,65 @@ export class QrscanPage {
     this.scanActive = false;
   }
 
+  gotMedia(mediastream) {
+    const track = mediastream.getVideoTracks()[0];
+    const capabilities = track.getCapabilities();
+    const focusInt: number = this.focusValue;
+
+    // Check whether focus distance is supported or not.
+    if (!capabilities.focusDistance) {
+      console.log('Sorry, manual focus not supported');
+    } else {
+
+      track.applyConstraints({
+        advanced: [
+          {
+            focusMode: 'manual',
+            focusDistance: focusInt
+          }
+        ]
+      });
+    }
+
+    this.videoElement.srcObject = mediastream;
+    this.videoElement.setAttribute('playsinline', true);
+    this.videoElement.play();
+
+    return mediastream;
+  }
+
+  onSliderEvent(event) {
+    if(this.videoStream) {
+      const track = this.videoStream.getVideoTracks()[0];
+      const capabilities = track.getCapabilities();
+      const focusInt: number = this.focusValue;
+
+      // Check whether focus distance is supported or not.
+      if (!capabilities.focusDistance) {
+        console.log('Sorry, manual focus not supported');
+      } else {
+
+        track.applyConstraints({
+          advanced: [
+            {
+              focusMode: 'manual',
+              focusDistance: focusInt
+            }
+          ]
+        });
+      }
+    }
+    localStorage.setItem('focusValue', this.focusValue.toString());
+  }
+
   async startScan() {
-    await this.sleep(500);
     // Not working on iOS standalone mode!
     if(this.videoStream === null) {
       this.videoStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user' }
-      });
-
-      this.videoElement.srcObject = this.videoStream;
-      // Required for Safari
-      this.videoElement.setAttribute('playsinline', true);
-
-      this.videoElement.play();
+        video: { facingMode: 'user',  }
+      })
+      .then(this.gotMedia.bind(this))
+      .catch(err => console.error('getUserMedia() failed: ', err));
     }
 
     this.loading = await this.loadingCtrl.create({});
@@ -273,29 +335,5 @@ export class QrscanPage {
 
   captureImage() {
     this.fileinput.nativeElement.click();
-  }
-
-  handleFile(files: FileList) {
-    const file = files.item(0);
-
-    var img = new Image();
-    img.onload = () => {
-      this.canvasContext.drawImage(img, 0, 0, this.canvasElement.width, this.canvasElement.height);
-      const imageData = this.canvasContext.getImageData(
-        0,
-        0,
-        this.canvasElement.width,
-        this.canvasElement.height
-      );
-      const code = jsQR(imageData.data, imageData.width, imageData.height, {
-        inversionAttempts: 'dontInvert'
-      });
-
-      if (code) {
-        this.scanResult = code.data;
-        this.qrcodeDetected();
-      }
-    };
-    img.src = URL.createObjectURL(file);
   }
 }
