@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   version: '0.1.0',
-  baseURL: 'https://beta.erpat.net/v1/api/',
+  baseURL: 'https://erpat.ahmoutsourcing.com//v1/api/',
   authToken: '9bc12f10eb077de',
   firebase: {
     apiKey: 'AIzaSyDBy1btu2_RUN2r4tWTtUY2Zhw4oJsum6E',
