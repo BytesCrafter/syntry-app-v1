@@ -32,7 +32,7 @@
 
     <!-- Used to render the camera stream images -->
     <canvas #canvas hidden></canvas>
-    <ion-item style="position: relative;top: -80px;">
+    <ion-item style="position: relative;top: -80px;" *ngIf="false">
       <ion-range color="primary" pin="true" step="5" min="0" max="250" [(ngModel)]="focusValue" (ionChange)="onSliderEvent($event)"></ion-range>
     </ion-item>
   </div>
