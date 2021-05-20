@@ -17,6 +17,8 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -37,10 +39,13 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
   // or after 30 seconds (whichever comes first).
   registrationStrategy: 'registerWhenStable:30000'
 })],
-  providers: [{
-    provide: RouteReuseStrategy,
-    useClass: IonicRouteStrategy
-  }],
+  providers: [
+    AndroidPermissions,
+    {
+      provide: RouteReuseStrategy,
+      useClass: IonicRouteStrategy
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  version: '0.1.0',
+  version: '0.2.1',
   baseURL: 'https://beta.erpat.net/v1/api/',
   authToken: '9bc12f10eb077de',
   firebase: {

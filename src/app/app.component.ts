@@ -3,6 +3,8 @@ import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -29,6 +31,7 @@ export class AppComponent {
     public util: UtilService,
     private api: ApiService,
     private router: Router,
+    private permissions: AndroidPermissions
   ) {
     this.fname = localStorage.getItem('fname');
     this.lname = localStorage.getItem('lname');
@@ -43,6 +46,20 @@ export class AppComponent {
     //     }
     //   }
     // });
+
+    this.permissions.checkPermission(this.permissions.PERMISSION.INTERNET)
+      .then( result => {
+        if(!result.hasPermission) {
+          this.permissions.requestPermission(this.permissions.PERMISSION.INTERNET);
+        }
+      });
+
+    this.permissions.checkPermission(this.permissions.PERMISSION.CAMERA)
+      .then( result => {
+        if(!result.hasPermission) {
+          this.permissions.requestPermission(this.permissions.PERMISSION.CAMERA);
+        }
+      });
   }
 
   logout() {
