@@ -97,6 +97,26 @@ export class QrscanPage {
         this.videoStream = null;
         this.startScan();
     }, false);
+
+    this.api.get('attendance/clocked_in_list').subscribe((response: any) => {
+      if(response.success) {
+        this.previous = null;
+
+        response.data.forEach(attd => {
+          this.attendance.unshift(
+            {
+              avatar: attd.avatar,
+              fname: attd.fname,
+              lname: attd.lname,
+              stamp: attd.in_time,
+              color: attd.out_time ? 'danger' : 'success',
+              event: attd.out_time ? ' OUT ' : ' IN '
+            }
+          );
+        });
+
+      }
+    });
   }
 
 
