@@ -124,6 +124,6 @@ export class UtilService {
     await alert.present();
     setTimeout(()=> {
       alert.dismiss();
-    }, 2000);
+    }, 2500);
   }
 }
