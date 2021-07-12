@@ -97,6 +97,26 @@ export class QrscanPage {
         this.videoStream = null;
         this.startScan();
     }, false);
+
+    this.api.get('attendance/clocked_in_list').subscribe((response: any) => {
+      if(response.success) {
+        this.previous = null;
+
+        response.data.forEach(attd => {
+          this.attendance.unshift(
+            {
+              avatar: attd.avatar,
+              fname: attd.fname,
+              lname: attd.lname,
+              stamp: attd.in_time,
+              color: attd.out_time ? 'danger' : 'success',
+              event: attd.out_time ? ' OUT ' : ' IN '
+            }
+          );
+        });
+
+      }
+    });
   }
 
 
@@ -127,14 +147,16 @@ export class QrscanPage {
   async logtime(data) {
 
     if(!this.util.isJsonValid(data)) {
-      this.util.showToast('QR code dont have a valid data!', 'dark', 'bottom');
+      //this.util.showToast('QR code dont have a valid data!', 'dark', 'bottom');
+      this.util.modalAlert("Something went wrong", 'QR code dont have a valid data!');
       this.previous = null;
       this.retries = 0;
     } else {
       let user = JSON.parse(data);
 
       if(typeof user.id === 'undefined' || user.id === null) {
-        this.util.showToast('QR code data dont have a valid property!', 'dark', 'bottom');
+        //this.util.showToast('QR code data dont have a valid property!', 'dark', 'bottom');
+        this.util.modalAlert("Something went wrong", 'QR code data dont have a valid property!');
         this.previous = null;
         this.retries = 0;
       } else {
@@ -180,8 +202,8 @@ export class QrscanPage {
             this.previous = null;
 
             let premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
-            this.util.showToast(premsg + response.data.fname +' '+ response.data.lname, 'dark', 'bottom');
-            //this.util.modalAlert(premsg, response.data.stamp, response.data.fname +' '+ response.data.lname);
+            //this.util.showToast(premsg + response.data.fname +' '+ response.data.lname, 'dark', 'bottom');
+            this.util.modalAlert(premsg, response.data.stamp, response.data.fname +' '+ response.data.lname);
 
             this.attendance.unshift(
               {
@@ -200,7 +222,8 @@ export class QrscanPage {
           this.startScan();
         });
       } else {
-        this.util.showToast(res.message, 'dark', 'bottom');
+        //this.util.showToast(res.message, 'dark', 'bottom');
+        this.util.modalAlert("Something went wrong", res.message);
         this.scanResult = null;
         this.countdown = 3;
         this.isSending = false;
