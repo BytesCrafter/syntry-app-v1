@@ -15,23 +15,21 @@ export class QrscanPage implements AfterViewInit {
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
   @ViewChild('fileinput', { static: false }) fileinput: ElementRef;
 
-  videoStream = null;
-  attendance: any[] = [];
   previous = null;
+  lastLog: number;
   retries: any = 0;
-  dname: string = 'Hello!';
-  cdown: number = 3;
+  dname: any = 'Hello!';
+  timespan: any = 1; //do not set
   get countdown(): number {
-      return 3 - this.retries;
+      return this.timespan - this.retries;
   }
-  set countdown(value: number) {
-      this.cdown = value;
-  }
+
+  videoStream = null;
   canvasElement: any;
   videoElement: any;
   canvasContext: any;
+
   scanActive = false;
-  scanResult = null;
   loading: HTMLIonLoadingElement = null;
   sColor = 'light';
   get statusColor(): string {
@@ -60,9 +58,12 @@ export class QrscanPage implements AfterViewInit {
       return 'small';
     }
   }
+
   focusValue = 1;
   previouslyCorrected = false;
   isResizing = false;
+
+  attendance: any[] = [];
 
   constructor(
     public util: UtilService,
@@ -78,17 +79,18 @@ export class QrscanPage implements AfterViewInit {
       // E.g. hide the scan functionality!
     }
 
+    this.lastLog = new Date().getTime();
     setInterval(()=> {
-      if(!this.scanActive) {
-        if(this.previouslyCorrected) {
-          this.scanActive = true;
-          console.log('Corrected');
-        }
-        this.previouslyCorrected = !this.previouslyCorrected;
-      } else {
-        this.previouslyCorrected = false;
+      const timer = new Date().getTime() - this.lastLog;
+      const seconds = timer/1000;
+      if( seconds > 10) {
+        this.retries = 0;
+        this.previous = null;
+        this.scanActive = true;
+        this.isSending = false;
+        this.lastLog = new Date().getTime();
       }
-    }, 5000);
+    }, 1000);
 
     this.focusValue = Number(localStorage.getItem('focusValue'));
     let supportsOrientationChange = 'onorientationchange' in window,
@@ -102,8 +104,9 @@ export class QrscanPage implements AfterViewInit {
       if(response.success) {
         this.previous = null;
 
-        response.data.forEach(attd => {
-          this.attendance.unshift(
+        const clockedIn: any[] = response.data;
+        clockedIn.forEach(attd => {
+          this.attendance.push(
             {
               avatar: attd.avatar,
               fname: attd.fname,
@@ -119,7 +122,6 @@ export class QrscanPage implements AfterViewInit {
     });
   }
 
-
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     if(!this.isResizing) {
@@ -129,8 +131,36 @@ export class QrscanPage implements AfterViewInit {
     }
   }
 
+  onSliderEvent(event) {
+    if(this.videoStream) {
+      const track = this.videoStream.getVideoTracks()[0];
+      const capabilities = track.getCapabilities();
+      const focusInt: number = this.focusValue;
+
+      // Check whether focus distance is supported or not.
+      if (!capabilities.focusDistance) {
+        console.log('Sorry, manual focus not supported');
+      } else {
+
+        track.applyConstraints({
+          advanced: [
+            {
+              focusMode: 'manual',
+              focusDistance: focusInt
+            }
+          ]
+        });
+      }
+    }
+    localStorage.setItem('focusValue', this.focusValue.toString());
+  }
+
   loadData(event) {
     event.target.complete();
+  }
+
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   async ngAfterViewInit() {
@@ -138,157 +168,6 @@ export class QrscanPage implements AfterViewInit {
     this.canvasContext = this.canvasElement.getContext('2d');
     this.videoElement = this.video.nativeElement;
     this.startScan();
-  }
-
-  sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  async logtime(data) {
-
-    if(!this.util.isJsonValid(data)) {
-      //this.util.showToast('QR code dont have a valid data!', 'dark', 'bottom');
-      this.util.modalAlert('Something went wrong', 'QR code dont have a valid data!');
-      this.previous = null;
-      this.retries = 0;
-    } else {
-      const user = JSON.parse(data);
-
-      if(typeof user.id === 'undefined' || user.id === null) {
-        //this.util.showToast('QR code data dont have a valid property!', 'dark', 'bottom');
-        this.util.modalAlert('Something went wrong', 'QR code data dont have a valid property!');
-        this.previous = null;
-        this.retries = 0;
-      } else {
-        this.retries += 1;
-
-        if(this.previous === data ) {
-
-          if(this.countdown === 0) {
-            this.retries = 0;
-            this.isSending = true;
-            this.trySend(user);
-            //this.util.showToast('You can now log your time. Try now!', 'dark', 'bottom');
-          } else {
-            //this.util.showToast('Try again for ' + this.countdown + ' to reset.', 'dark', 'bottom');
-          }
-        } else {
-          this.retries = 0;
-          this.previous = data;
-          this.statusColor = 'primary';
-
-          this.dname = 'Hello!';
-          await this.api.get('users/get/'+user.id).subscribe((response: any) => {
-            if(response.success) {
-              this.dname = 'Hey! ' + response.data.fname;
-            }
-          });
-        }
-      }
-    }
-  }
-
-  async trySend(user) {
-
-    const param = {
-      id: localStorage.getItem('id')
-    };
-    this.api.post('attendance/logtime/'+user.id, param).subscribe((res: any) => {
-      if(res.success === true) {
-        this.api.get('users/get/'+user.id).subscribe((response: any) => {
-          //console.log(response);
-          if(response.success) {
-            this.util.playAudio();
-            this.previous = null;
-
-            const premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
-            //this.util.showToast(premsg + response.data.fname +' '+ response.data.lname, 'dark', 'bottom');
-            this.util.modalAlert(premsg, response.data.stamp, response.data.fname +' '+ response.data.lname);
-
-            this.attendance.unshift(
-              {
-                avatar: response.data.avatar,
-                fname: response.data.fname,
-                lname: response.data.lname,
-                stamp: res.stamp,
-                color: res.clocked ? 'danger' : 'success',
-                event: res.clocked ? ' OUT ' : ' IN '
-              }
-            );
-          }
-          this.scanResult = null;
-          this.countdown = 3;
-          this.isSending = false;
-          this.startScan();
-        });
-      } else {
-        //this.util.showToast(res.message, 'dark', 'bottom');
-        this.util.modalAlert('Something went wrong', res.message);
-        this.scanResult = null;
-        this.countdown = 3;
-        this.isSending = false;
-        this.startScan();
-      }
-    });
-  }
-
-  // Helper functions
-  async qrcodeDetected() {
-    if(this.scanResult && this.scanResult !== '' && this.scanResult !== null) {
-      this.logtime(this.scanResult);
-      if(!this.isSending) {
-        this.startScan();
-      }
-    }
-    //Disable open toast on detect!
-    // const toast = await this.toastCtrl.create({
-    //   message: `Open ${this.scanResult}?`,
-    //   position: 'top',
-    //   buttons: [
-    //     {
-    //       text: 'Open',
-    //       handler: () => {
-    //         window.open(this.scanResult, '_system', 'location=yes');
-    //       }
-    //     }
-    //   ]
-    // });
-    // toast.present();
-  }
-
-  reset() {
-    this.scanResult = null;
-  }
-
-  stopScan() {
-    this.scanActive = false;
-  }
-
-  gotMedia(mediastream) {
-    const track = mediastream.getVideoTracks()[0];
-    const capabilities = track.getCapabilities();
-    const focusInt: number = this.focusValue;
-
-    // Check whether focus distance is supported or not.
-    if (!capabilities.focusDistance) {
-      this.util.modalAlert('NOT SUPPORTED', '', 'Sorry, manual focus not supported!');
-    } else {
-      track.applyConstraints({
-        advanced: [
-          {
-            focusMode: 'manual',
-            focusDistance: focusInt
-          }
-        ]
-      });
-    }
-
-    this.videoElement.srcObject = mediastream;
-    this.videoElement.setAttribute('playsinline', true);
-    this.videoElement.play();
-    this.isResizing = false;
-
-    return mediastream;
   }
 
   async startScan() {
@@ -310,6 +189,31 @@ export class QrscanPage implements AfterViewInit {
     await this.loading.present();
 
     requestAnimationFrame(this.scan.bind(this));
+  }
+
+  gotMedia(mediastream) {
+    const track = mediastream.getVideoTracks()[0];
+    const capabilities = track.getCapabilities();
+    const focusInt: number = this.focusValue;
+
+    // Check whether focus distance is supported or not.
+    if (!capabilities.focusDistance) {
+      this.util.modalAlert('NOT SUPPORTED', '', 'Sorry, manual focus not supported!');
+    } else {
+      track.applyConstraints({
+        advanced: [{
+            focusMode: 'manual',
+            focusDistance: focusInt
+        }]
+      });
+    }
+
+    this.videoElement.srcObject = mediastream;
+    this.videoElement.setAttribute('playsinline', true);
+    this.videoElement.play();
+    this.isResizing = false;
+
+    return mediastream;
   }
 
   async scan() {
@@ -343,40 +247,100 @@ export class QrscanPage implements AfterViewInit {
       });
 
       if (code) {
+        //Temporary disable scan to take time for qr processing.
         this.scanActive = false;
-        this.scanResult = code.data;
-        this.qrcodeDetected();
-      } else {
-        if (this.scanActive) {
-          requestAnimationFrame(this.scan.bind(this));
+
+        const data: any = code.data;
+        if( this.util.isJsonValid(data) ) {
+          const user = JSON.parse(data);
+          if(typeof user.id !== 'undefined' && user.id !== null && user.id !== '') {
+            this.logtime(user.id);
+            return;
+          }
         }
+
+        this.scanActive = true;
       }
+    }
+
+    // this.previous = null;
+    // this.retries = 0;
+    requestAnimationFrame(this.scan.bind(this));
+  }
+
+  async logtime(userId: any = 0) {
+    this.lastLog = new Date().getTime();
+    this.retries += 1;
+
+    //New user clocked in.
+    if(this.previous !== userId ) {
+      this.retries = 0;
+      this.previous = userId;
+      this.statusColor = 'primary';
+
+      this.dname = 'Hello!';
+      await this.api.get('users/get/'+userId).subscribe((response: any) => {
+        if(response.success) {
+          this.dname = 'Hey! ' + response.data.fname;
+        }
+      });
+      this.startScan();
     } else {
-      requestAnimationFrame(this.scan.bind(this));
+      if(this.countdown !== 0) {
+        this.startScan();
+        return;
+      }
+
+      this.retries = 0;
+      this.previous = null;
+      this.trySend(userId); //Validated! Send clocked in.
     }
   }
 
-  onSliderEvent(event) {
-    if(this.videoStream) {
-      const track = this.videoStream.getVideoTracks()[0];
-      const capabilities = track.getCapabilities();
-      const focusInt: number = this.focusValue;
+  async trySend(userId: any = 0) {
+    this.scanActive = false;
+    this.isSending = true;
 
-      // Check whether focus distance is supported or not.
-      if (!capabilities.focusDistance) {
-        console.log('Sorry, manual focus not supported');
-      } else {
+    this.api.post('attendance/logtime/'+userId, {
+      id: localStorage.getItem('id')
+    }).subscribe(async (res: any) => {
 
-        track.applyConstraints({
-          advanced: [
-            {
-              focusMode: 'manual',
-              focusDistance: focusInt
-            }
-          ]
-        });
+      if(res.success === false) {
+        this.util.modalAlert('Action not Allowed', res.message);
+        await this.sleep(3000);
+        this.resetScan();
+        return;
       }
-    }
-    localStorage.setItem('focusValue', this.focusValue.toString());
+
+      this.util.playAudio();
+      const premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
+      this.util.modalAlert(premsg, res.stamp, res.data.fname +' '+ res.data.lname);
+
+      this.attendance.unshift(
+        {
+          avatar: res.data.avatar,
+          fname: res.data.fname,
+          lname: res.data.lname,
+          stamp: res.stamp,
+          color: res.clocked ? 'danger' : 'success',
+          event: res.clocked ? ' OUT ' : ' IN '
+        }
+      );
+
+      await this.sleep(3000);
+      this.resetScan();
+    });
+  }
+
+  resetScan() {
+    this.retries = 0;
+    this.previous = null;
+    this.scanActive = true;
+    this.isSending = false;
+    this.startScan();
+  }
+
+  stopScan() {
+    this.scanActive = false;
   }
 }

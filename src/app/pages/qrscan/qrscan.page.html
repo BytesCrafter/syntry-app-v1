@@ -12,7 +12,8 @@
   </ion-label>
   <ion-fab vertical="top" horizontal="end" slot="fixed">
     <ion-fab-button [attr.size]="this.statusSize" [attr.color]="this.statusColor" disabled>
-      <strong *ngIf="!this.isSending" style="color: black;">{{countdown}}</strong>
+      <!-- <strong *ngIf="!this.isSending" style="color: black;">{{countdown}}</strong> -->
+      <ion-icon *ngIf="!this.isSending" name="eye" style="color: white;"></ion-icon>
       <ion-icon *ngIf="this.isSending" name="cloud-upload-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
