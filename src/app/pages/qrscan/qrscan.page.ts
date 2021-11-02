@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, ViewChild, ElementRef, HostListener, AfterViewInit } from '@angular/core';
 import { ToastController, LoadingController, Platform } from '@ionic/angular';
 import jsQR from 'jsqr';
 import { AppComponent } from 'src/app/app.component';
@@ -10,7 +10,7 @@ import { ApiService } from 'src/app/services/api.service';
   templateUrl: './qrscan.page.html',
   styleUrls: ['./qrscan.page.scss'],
 })
-export class QrscanPage {
+export class QrscanPage implements AfterViewInit {
   @ViewChild('video', { static: false }) video: ElementRef;
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
   @ViewChild('fileinput', { static: false }) fileinput: ElementRef;
@@ -91,7 +91,7 @@ export class QrscanPage {
     }, 5000);
 
     this.focusValue = Number(localStorage.getItem('focusValue'));
-    var supportsOrientationChange = 'onorientationchange' in window,
+    let supportsOrientationChange = 'onorientationchange' in window,
       orientationEvent = supportsOrientationChange ? 'orientationchange' : 'resize';
     window.addEventListener(orientationEvent, () => {
         this.videoStream = null;
@@ -148,15 +148,15 @@ export class QrscanPage {
 
     if(!this.util.isJsonValid(data)) {
       //this.util.showToast('QR code dont have a valid data!', 'dark', 'bottom');
-      this.util.modalAlert("Something went wrong", 'QR code dont have a valid data!');
+      this.util.modalAlert('Something went wrong', 'QR code dont have a valid data!');
       this.previous = null;
       this.retries = 0;
     } else {
-      let user = JSON.parse(data);
+      const user = JSON.parse(data);
 
       if(typeof user.id === 'undefined' || user.id === null) {
         //this.util.showToast('QR code data dont have a valid property!', 'dark', 'bottom');
-        this.util.modalAlert("Something went wrong", 'QR code data dont have a valid property!');
+        this.util.modalAlert('Something went wrong', 'QR code data dont have a valid property!');
         this.previous = null;
         this.retries = 0;
       } else {
@@ -201,7 +201,7 @@ export class QrscanPage {
             this.util.playAudio();
             this.previous = null;
 
-            let premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
+            const premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
             //this.util.showToast(premsg + response.data.fname +' '+ response.data.lname, 'dark', 'bottom');
             this.util.modalAlert(premsg, response.data.stamp, response.data.fname +' '+ response.data.lname);
 
@@ -223,7 +223,7 @@ export class QrscanPage {
         });
       } else {
         //this.util.showToast(res.message, 'dark', 'bottom');
-        this.util.modalAlert("Something went wrong", res.message);
+        this.util.modalAlert('Something went wrong', res.message);
         this.scanResult = null;
         this.countdown = 3;
         this.isSending = false;
@@ -271,9 +271,8 @@ export class QrscanPage {
 
     // Check whether focus distance is supported or not.
     if (!capabilities.focusDistance) {
-      console.log('Sorry, manual focus not supported');
+      this.util.modalAlert('NOT SUPPORTED', '', 'Sorry, manual focus not supported!');
     } else {
-
       track.applyConstraints({
         advanced: [
           {
@@ -287,32 +286,9 @@ export class QrscanPage {
     this.videoElement.srcObject = mediastream;
     this.videoElement.setAttribute('playsinline', true);
     this.videoElement.play();
+    this.isResizing = false;
 
     return mediastream;
-  }
-
-  onSliderEvent(event) {
-    if(this.videoStream) {
-      const track = this.videoStream.getVideoTracks()[0];
-      const capabilities = track.getCapabilities();
-      const focusInt: number = this.focusValue;
-
-      // Check whether focus distance is supported or not.
-      if (!capabilities.focusDistance) {
-        console.log('Sorry, manual focus not supported');
-      } else {
-
-        track.applyConstraints({
-          advanced: [
-            {
-              focusMode: 'manual',
-              focusDistance: focusInt
-            }
-          ]
-        });
-      }
-    }
-    localStorage.setItem('focusValue', this.focusValue.toString());
   }
 
   async startScan() {
@@ -328,13 +304,6 @@ export class QrscanPage {
       })
       .then(this.gotMedia.bind(this))
       .catch(err => console.error('getUserMedia() failed: ', err));
-
-      this.videoElement.srcObject = this.videoStream;
-      // Required for Safari
-      this.videoElement.setAttribute('playsinline', true);
-
-      this.videoElement.play();
-      this.isResizing = false;
     }
 
     this.loading = await this.loadingCtrl.create({});
@@ -361,12 +330,14 @@ export class QrscanPage {
         this.canvasElement.width,
         this.canvasElement.height
       );
+
       const imageData = this.canvasContext.getImageData(
         0,
         0,
         this.canvasElement.width,
         this.canvasElement.height
       );
+
       const code = jsQR(imageData.data, imageData.width, imageData.height, {
         inversionAttempts: 'dontInvert'
       });
@@ -385,7 +356,27 @@ export class QrscanPage {
     }
   }
 
-  captureImage() {
-    this.fileinput.nativeElement.click();
+  onSliderEvent(event) {
+    if(this.videoStream) {
+      const track = this.videoStream.getVideoTracks()[0];
+      const capabilities = track.getCapabilities();
+      const focusInt: number = this.focusValue;
+
+      // Check whether focus distance is supported or not.
+      if (!capabilities.focusDistance) {
+        console.log('Sorry, manual focus not supported');
+      } else {
+
+        track.applyConstraints({
+          advanced: [
+            {
+              focusMode: 'manual',
+              focusDistance: focusInt
+            }
+          ]
+        });
+      }
+    }
+    localStorage.setItem('focusValue', this.focusValue.toString());
   }
 }
