@@ -4,6 +4,7 @@ import jsQR from 'jsqr';
 import { AppComponent } from 'src/app/app.component';
 import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-qrscan',
@@ -70,6 +71,7 @@ export class QrscanPage implements AfterViewInit {
     private api: ApiService,
     private loadingCtrl: LoadingController,
     private plt: Platform,
+    private auth: AuthService,
     public app: AppComponent
   ) {
     const isInStandaloneMode = () =>
@@ -302,7 +304,7 @@ export class QrscanPage implements AfterViewInit {
     this.isSending = true;
 
     this.api.post('attendance/logtime/'+userId, {
-      id: localStorage.getItem('id')
+      id: this.auth.userToken.id
     }).subscribe(async (res: any) => {
 
       if(res.success === false) {

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { MenuController } from '@ionic/angular';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -24,13 +25,17 @@ export class AppComponent {
   public labels = ['Logout'];
   constructor(
     public util: UtilService,
-    private api: ApiService,
+    public auth: AuthService,
     private router: Router,
+    private menuCtrl: MenuController
   ) {
-    this.fname = localStorage.getItem('fname');
-    this.lname = localStorage.getItem('lname');
-    this.email = localStorage.getItem('email');
-    this.avatar = localStorage.getItem('avatar');
+    if(this.auth.userToken) {
+      this.fname = this.auth.userToken.fullname;
+      this.lname = '';
+      this.email = this.auth.userToken.email;
+      this.avatar = this.auth.userToken.avatar;
+    }
+
     // this.api.get('users/token').subscribe((response: any) => {
     //   if(response.success) {
     //     if(response.data.length > 0) {
@@ -40,6 +45,10 @@ export class AppComponent {
     //     }
     //   }
     // });
+  }
+
+  openMenu() {
+    this.menuCtrl.open();
   }
 
   logout() {

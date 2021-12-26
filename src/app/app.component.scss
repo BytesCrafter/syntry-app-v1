@@ -33,16 +33,6 @@ ion-menu.md ion-list#inbox-list ion-list-header {
   min-height: 20px;
 }
 
-ion-menu.md ion-list#labels-list ion-list-header {
-  font-size: 16px;
-
-  margin-bottom: 18px;
-
-  color: #757575;
-
-  min-height: 26px;
-}
-
 ion-menu.md ion-item {
   --padding-start: 10px;
   --padding-end: 10px;
@@ -118,9 +108,17 @@ ion-item.selected {
   --color: var(--ion-color-primary);
 }
 
-.version {
-  flex-grow: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+.menu-footer {
+  margin-top: 40px;
+  .footer-item {
+    font-size: 14px;
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .footer-copy {
+    padding-top: 10px;
+    font-size: 12px;
+  }
 }

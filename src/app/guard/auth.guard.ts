@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,7 @@ export class AuthGuard implements CanActivate {
       next: ActivatedRouteSnapshot,
       state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-      const uid = localStorage.getItem('token');
-      //console.log('UserID: ', localStorage.getItem('uid'));
+      const uid = localStorage.getItem(AuthService.tokenKey);
       if (uid && uid != null && uid !== 'null') {
         return true;
       }

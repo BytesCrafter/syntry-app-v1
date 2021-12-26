@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { AlertController, ToastController } from '@ionic/angular';
 import { version } from '../../../package.json';
 
@@ -107,7 +108,7 @@ export class UtilService {
   }
 
   playAudio(){
-    let audio = new Audio();
+    const audio = new Audio();
     audio.src = '../../assets/audio/notify.wav';
     audio.load();
     audio.play();
@@ -124,5 +125,10 @@ export class UtilService {
     setTimeout(()=> {
       alert.dismiss();
     }, 2500);
+  }
+
+  jwtDecode(token: string) {
+    const jwt = new JwtHelperService();
+    return jwt.decodeToken(token);
   }
 }

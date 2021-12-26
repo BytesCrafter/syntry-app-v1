@@ -1,3 +1,12 @@
+<ion-header *ngIf="auth.isAuthenticated">
+  <ion-toolbar>
+    <ion-button (click)="openMenu()">
+      <ion-icon name="menu-outline" style="background: none;"></ion-icon>
+    </ion-button>
+    <ion-title>BusiNext</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-app>
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
@@ -21,9 +30,9 @@
           </ion-item>
         </ion-list>
 
-        <ion-list id="labels-list">
-          <ion-label class="version">Syntry v{{ util.version }}</ion-label>
-          <ion-label class="version" style="padding-top: 10px;">2021 © BytesCrafter</ion-label>
+        <ion-list class="menu-footer">
+          <ion-label class="footer-item">Syntry v{{ util.version }}</ion-label>
+          <ion-label class="footer-item footer-copy">2021 © BytesCrafter</ion-label>
         </ion-list>
 
       </ion-content>
