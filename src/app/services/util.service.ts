@@ -1,21 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
-import { environment } from 'src/environments/environment';
+import { version } from '../../../package.json';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilService {
+  public version: string = version;
+
   public translations: any[] = [];
-  appVersion: any = '';
   constructor(
     public alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private router: Router
-  ) {
-    this.appVersion = environment.version;
-  }
+  ) {}
 
   async showToast(msg, colors, positon) {
     const toast = await this.toastCtrl.create({
