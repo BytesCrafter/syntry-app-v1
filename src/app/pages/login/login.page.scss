@@ -8,13 +8,24 @@ ion-content{
   --background: var(--ion-color-primary);
 }
 
-.main_content_div{
-  width: 100%;
+.login-window{
+  max-width: 480px;
+  width: fit-content;
   padding: 30px;
   position: absolute;
   top: 45%;
   left: 50%;
   transform: translate(-50%,-50%);
+
+  .header-section{
+    display: grid;
+    text-align: center;
+    .icon {
+      width: 320px;
+      height: auto;
+
+    }
+  }
 
   ion-icon{
       color: var(--ion-color-primary);
@@ -22,18 +33,13 @@ ion-content{
       padding: 10px;
   }
 
-  .iconDiv{
-      text-align: center;
-      .icon{
-          height: 90px;
-          margin-top: 15vh;
-      }
-  }
-  .form_div{
+  .form-div{
       padding: 25px;
-
       position: relative;
-      .main_head{
+      border: 1px solid white;
+      border-radius: 20px;
+      margin-top: 26px;
+      .form-head{
           display: block;
           text-align: left;
           color: white;
@@ -45,61 +51,22 @@ ion-content{
           font-size: 12px;
           color: white;
       }
-
-      .forgot{
-          display: block;
-          text-align: right;
-          color: white;
-      }
-
       ion-input{
           background: white;
           color: rgb(49, 49, 49);
-          border-radius: 20px;
+          border-radius: 10px;
           margin-bottom: 15px;
-          --padding-start: 8px;
-          --padding-end: 10px;
-      }
-
-      .mobiles{
-          background: white;
-          border-radius: 20px;
-          --padding-start: 8px;
-          --padding-end: 10px;
-          font-size: 18px;
-          color: gray;
-          height: max-content;
-          padding: 6px;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
       }
       ion-button{
           margin-top: 20px;
-          --border-radius: 20px;
+          font-weight: bolder;
+          --border-radius: 5px;
           --background: white;
           --color: var(--ion-color-primary);
-          font-family: muli-bold;
       }
-      .tri {
-          width: 0;
-          height: 0;
-          border-left: 8px solid transparent;
-          border-right: 8px solid transparent;
-          border-bottom: 15px solid white;
-          position: absolute;
-          top: -15px;
-      }
-      .lbl{
-          margin-top: 20px;
-          color: white;
-          display: block;
-          text-align: center;
-      }
-      .signup_span{
-          color: white;
-          font-weight: 600;
-          font-size: 14px;
-      }
+      ion-button:hover{
+        --background: var(--ion-color-secondary);
+        --color: var(--ion-color-light);
+    }
   }
 }
