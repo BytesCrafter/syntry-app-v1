@@ -15,12 +15,12 @@ const routes: Routes = [
   },
   {
     path: 'camera',
-    loadChildren: () => import('./pages/camera/camera.module').then( m => m.CameraPageModule),
+    loadChildren: () => import('./reserved/camera/camera.module').then( m => m.CameraPageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'gallery',
-    loadChildren: () => import('./pages/gallery/gallery.module').then( m => m.GalleryPageModule),
+    loadChildren: () => import('./reserved/gallery/gallery.module').then( m => m.GalleryPageModule),
     canActivate: [AuthGuard]
   },
   {
