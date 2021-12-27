@@ -18,8 +18,8 @@ export class AppComponent {
 
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
-    { title: 'Camera', url: '/camera', icon: 'camera' },
-    { title: 'Gallery', url: '/gallery', icon: 'images' },
+    // { title: 'Camera', url: '/camera', icon: 'camera' },
+    // { title: 'Gallery', url: '/gallery', icon: 'images' },
     { title: 'Biometrix', url: '/qrscan', icon: 'qr-code' },
   ];
   public labels = ['Logout'];

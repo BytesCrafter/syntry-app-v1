@@ -19,13 +19,13 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'qrscan',
-    loadChildren: () => import('./pages/qrscan/qrscan.module').then( m => m.QrscanPageModule),
+    path: 'gallery',
+    loadChildren: () => import('./pages/gallery/gallery.module').then( m => m.GalleryPageModule),
     canActivate: [AuthGuard]
   },
   {
-    path: 'gallery',
-    loadChildren: () => import('./pages/gallery/gallery.module').then( m => m.GalleryPageModule),
+    path: 'qrscan',
+    loadChildren: () => import('./pages/qrscan/qrscan.module').then( m => m.QrscanPageModule),
     canActivate: [AuthGuard]
   },
   {

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilService } from 'src/app/services/util.service';
-import { ApiService } from 'src/app/services/api.service';
 import { MenuController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -17,7 +16,6 @@ export class LoginPage implements OnInit {
 
   constructor(
     public util: UtilService,
-    private api: ApiService,
     private auth: AuthService,
     private menuController: MenuController,
     private router: Router,
@@ -36,12 +34,12 @@ export class LoginPage implements OnInit {
 
   login() {
     if (!this.email || !this.password) {
-      this.util.showToast(this.util.getString('All Fields are required'), 'dark', 'top');
+      this.util.modalAlert('Notification', 'All Fields are required');
       return false;
     }
     const emailfilter = /^[\w._-]+[+]?[\w._-]+@[\w.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailfilter.test(this.email)) {
-      this.util.showToast(this.util.getString('Please enter valid email'), 'dark', 'top');
+      this.util.modalAlert('Notification', 'Please enter valid email');
       return false;
     }
     this.loggedIn = true;
@@ -52,7 +50,7 @@ export class LoginPage implements OnInit {
         this.menuController.enable(true);
         this.router.navigate([`/`], { replaceUrl: true });
       } else {
-        this.util.showToast(result.message, 'dark', 'top');
+        this.util.modalAlert('Action not Allowed', result.message);
       }
       this.loggedIn = false;
     });
