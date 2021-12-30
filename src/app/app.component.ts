@@ -48,7 +48,7 @@ export class AppComponent {
   }
 
   openMenu() {
-    this.menuCtrl.open();
+    this.menuCtrl.toggle();
   }
 
   logout() {
