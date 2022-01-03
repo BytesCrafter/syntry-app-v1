@@ -13,7 +13,8 @@ export class HomePage implements OnInit {
   attendance: any[] = [];
 
   constructor(
-    private api: ApiService
+    private api: ApiService,
+    public auth: AuthService
   ) {
     this.api.get('attendance/my_clocked_in_list').subscribe((response: any) => {
       if(response.success) {
@@ -23,12 +24,10 @@ export class HomePage implements OnInit {
         clockedIn.forEach(attd => {
           this.attendance.push(
             {
-              avatar: attd.avatar,
-              fname: attd.fname,
-              lname: attd.lname,
-              stamp: attd.in_time,
-              color: attd.out_time ? 'danger' : 'success',
-              event: attd.out_time ? ' OUT ' : ' IN '
+              avatar: auth.userToken.avatar,
+              timein: attd.in_time,
+              timeout: attd.out_time,
+              duration: attd.duration
             }
           );
         });

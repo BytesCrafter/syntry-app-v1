@@ -12,10 +12,10 @@
       <ion-content>
         <ion-list id="inbox-list">
           <ion-thumbnail slot="start">
-            <ion-img [src]="avatar" style="border-radius: 50%;margin: 50px;"></ion-img>
+            <ion-img [src]="auth.userToken.avatar" style="border-radius: 50%;margin: 50px;"></ion-img>
           </ion-thumbnail>
-          <ion-list-header>{{ fname }} {{ lname }}</ion-list-header>
-          <ion-note>{{ email }}</ion-note>
+          <ion-list-header>{{ auth.userToken.fullname }}</ion-list-header>
+          <ion-note>{{ auth.userToken.email }}</ion-note>
 
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
             <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
