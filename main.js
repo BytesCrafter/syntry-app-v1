@@ -4,11 +4,7 @@ const log = require('electron-log')
 const path = require('path')
 
 //-------------------------------------------------------------------
-// Logging
-//
-// THIS SECTION IS NOT REQUIRED
-//
-// This logging setup is not required for auto-updates to work,
+// Logging - This logging setup is not required for auto-updates to work,
 // but it sure makes debugging easier :)
 //-------------------------------------------------------------------
 autoUpdater.logger = log;
@@ -17,9 +13,6 @@ log.info('App starting...');
 
 //-------------------------------------------------------------------
 // Open a window that displays the version
-//
-// THIS SECTION IS NOT REQUIRED
-//
 // This isn't required for auto-updates to work, but it's easier
 // for the app to show a window than to have to click "About" to see
 // that updates are working.
@@ -28,10 +21,13 @@ let win;
 
 function sendStatusToWindow(text) {
   log.info(text);
-  win.webContents.send('message', text);
+  if(win) {
+    win.webContents.send('message', text);
+  }
 }
+
 function splashWindow() {
-  win = new BrowserWindow({
+  let splash = new BrowserWindow({
     width: 320,
     height: 320,
     resizable: false,
@@ -43,11 +39,12 @@ function splashWindow() {
       contextIsolation: false
     }
   });
-  win.on('closed', () => {
-    win = null;
+  //splash.webContents.openDevTools()
+  splash.on('closed', () => {
+    splash = null;
   });
-  win.loadURL(`file://${__dirname}/splash.html#v${app.getVersion()}`);
-  return win;
+  splash.loadURL(`file://${__dirname}/splash.html#v${app.getVersion()}`);
+  return splash;
 }
 autoUpdater.on('checking-for-update', () => {
   sendStatusToWindow('Checking for update...');
@@ -57,13 +54,20 @@ autoUpdater.on('update-available', (info) => {
 })
 autoUpdater.on('update-not-available', (info) => {
   sendStatusToWindow('Update not available.');
-  BrowserWindow.getAllWindows().forEach(function (win) {
-    win.close()
-  })
-  primaryWindow();
+  BrowserWindow.getAllWindows().forEach((curWin) => {
+    curWin.setClosable(true);
+    curWin.close();
+  });
+  win = primaryWindow();
 })
 autoUpdater.on('error', (err) => {
-  sendStatusToWindow('Error in auto-updater. ' + err);
+  //sendStatusToWindow('Error in auto-updater. ' + err);
+  sendStatusToWindow('Something went wrong during the update!');
+  BrowserWindow.getAllWindows().forEach((curWin) => {
+    curWin.setClosable(true);
+    curWin.close();
+  });
+  win = primaryWindow();
 })
 autoUpdater.on('download-progress', (progressObj) => {
   let log_message = "Download speed: " + progressObj.bytesPerSecond;
@@ -77,7 +81,7 @@ autoUpdater.on('update-downloaded', (info) => {
 });
 
 function primaryWindow () {
-  const win = new BrowserWindow({
+  const primary = new BrowserWindow({
     width: 480,
     height: 720,
     resizable: false,
@@ -92,17 +96,19 @@ function primaryWindow () {
     }
   })
 
-  win.loadURL(`file://${__dirname}/www/index.html`)
+  primary.loadURL(`file://${__dirname}/www/index.html`)
 
   //win.webContents.openDevTools()
+
+  return primary;
 }
 
 //-------------------------------------------------------------------
 // Auto updates - Option 1 - Simplest version
 //-------------------------------------------------------------------
 app.on('ready', function()  {
-  splashWindow();
-  autoUpdater.checkForUpdates(); //checkForUpdatesAndNotify
+  win = splashWindow();
+  autoUpdater.checkForUpdates();
 });
 
 app.on('window-all-closed', () => {
