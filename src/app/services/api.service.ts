@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class ApiService {
   }
 
   post(url, body) {
-    let authKey = localStorage.getItem('token') === null ? environment.authToken : localStorage.getItem('token');
+    const authKey = localStorage.getItem(AuthService.tokenKey) === null ?
+      environment.authToken : localStorage.getItem(AuthService.tokenKey);
     const header = {
       headers: new HttpHeaders()
         .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -25,6 +27,24 @@ export class ApiService {
     //body.businext_csrf_token = localStorage.getItem('businext_csrf_token');
     const param = this.jsonUrlEncode(body);
     return this.http.post(this.baseUrl + url, param, header);
+  }
+
+  public posts(url, body): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const authKey = localStorage.getItem(AuthService.tokenKey) === null ?
+        environment.authToken : localStorage.getItem(AuthService.tokenKey);
+      const header = {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('Basic', authKey)
+      };
+      const param = this.jsonUrlEncode(body);
+      this.http.post(this.baseUrl + url, param, header).subscribe((data) => {
+        resolve(data);
+      }, error => {
+        resolve(error);
+      });
+    });
   }
 
   externalPost(url, body, key) {

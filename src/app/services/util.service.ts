@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { AlertController, ToastController } from '@ionic/angular';
-import { environment } from 'src/environments/environment';
+import { version } from '../../../package.json';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilService {
+  public version: string = version;
+
   public translations: any[] = [];
-  appVersion: any = '';
   constructor(
     public alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private router: Router
-  ) {
-    this.appVersion = environment.version;
-  }
+  ) {}
 
   async showToast(msg, colors, positon) {
     const toast = await this.toastCtrl.create({
@@ -108,7 +108,7 @@ export class UtilService {
   }
 
   playAudio(){
-    let audio = new Audio();
+    const audio = new Audio();
     audio.src = '../../assets/audio/notify.wav';
     audio.load();
     audio.play();
@@ -125,5 +125,10 @@ export class UtilService {
     setTimeout(()=> {
       alert.dismiss();
     }, 2500);
+  }
+
+  jwtDecode(token: string) {
+    const jwt = new JwtHelperService();
+    return jwt.decodeToken(token);
   }
 }

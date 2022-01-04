@@ -4,6 +4,8 @@ import jsQR from 'jsqr';
 import { AppComponent } from 'src/app/app.component';
 import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-qrscan',
@@ -70,8 +72,26 @@ export class QrscanPage implements AfterViewInit {
     private api: ApiService,
     private loadingCtrl: LoadingController,
     private plt: Platform,
-    public app: AppComponent
+    private auth: AuthService,
+    public app: AppComponent,
+    private router: Router
   ) {
+    this.api.post('users/permissions', {}).subscribe((response: any) => {
+      let authorized = false;
+      if(response.success) {
+        if(response.admin) {
+          authorized = true;
+        } else {
+          if(typeof response.data.can_use_biometric !== 'undefined') {
+            authorized = response.data.can_use_biometric ? true:false;
+          }
+        }
+        if(!authorized) {
+          this.router.navigate(['/']);
+        }
+      }
+    });
+
     const isInStandaloneMode = () =>
       'standalone' in window.navigator && window.navigator['standalone'];
     if (this.plt.is('ios') && isInStandaloneMode()) {
@@ -302,7 +322,7 @@ export class QrscanPage implements AfterViewInit {
     this.isSending = true;
 
     this.api.post('attendance/logtime/'+userId, {
-      id: localStorage.getItem('id')
+      id: this.auth.userToken.id
     }).subscribe(async (res: any) => {
 
       if(res.success === false) {

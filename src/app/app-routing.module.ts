@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guard/auth.guard';
+import { BiometGuard } from './guard/biomet.guard';
 
 const routes: Routes = [
   {
@@ -15,18 +16,18 @@ const routes: Routes = [
   },
   {
     path: 'camera',
-    loadChildren: () => import('./pages/camera/camera.module').then( m => m.CameraPageModule),
+    loadChildren: () => import('./reserved/camera/camera.module').then( m => m.CameraPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'gallery',
+    loadChildren: () => import('./reserved/gallery/gallery.module').then( m => m.GalleryPageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'qrscan',
     loadChildren: () => import('./pages/qrscan/qrscan.module').then( m => m.QrscanPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'gallery',
-    loadChildren: () => import('./pages/gallery/gallery.module').then( m => m.GalleryPageModule),
-    canActivate: [AuthGuard]
+    canActivate: [BiometGuard]
   },
   {
     path: 'login',

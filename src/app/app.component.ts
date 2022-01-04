@@ -2,47 +2,51 @@ import { Component } from '@angular/core';
 import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { MenuController } from '@ionic/angular';
+import { AuthService } from './services/auth.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  fname: any = '';
-  lname: any = '';
-  email: any = '';
-  avatar: any = '';
-
-  get version(): string {
-    return environment.version;
-  }
 
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
-    { title: 'Camera', url: '/camera', icon: 'camera' },
-    { title: 'Gallery', url: '/gallery', icon: 'images' },
-    { title: 'Biometrix', url: '/qrscan', icon: 'qr-code' },
+    // { title: 'Camera', url: '/camera', icon: 'camera' },
+    // { title: 'Gallery', url: '/gallery', icon: 'images' },
+    //{ title: 'Biometrix', url: '/qrscan', icon: 'qr-code' }
   ];
   public labels = ['Logout'];
+
   constructor(
     public util: UtilService,
-    private api: ApiService,
+    public auth: AuthService,
     private router: Router,
+    private api: ApiService,
+    private menuCtrl: MenuController
   ) {
-    this.fname = localStorage.getItem('fname');
-    this.lname = localStorage.getItem('lname');
-    this.email = localStorage.getItem('email');
-    this.avatar = localStorage.getItem('avatar');
-    // this.api.get('users/token').subscribe((response: any) => {
-    //   if(response.success) {
-    //     if(response.data.length > 0) {
-    //       for (let i = 0; i < response.data.length; i++) {
-    //         localStorage.setItem(response.data[i].name, response.data[i].value);
-    //       }
-    //     }
-    //   }
-    // });
+    //If user have manage timecard then add
+    this.api.post('users/permissions', {}).subscribe((response: any) => {
+      let authorized = false;
+      if(response.success) {
+        if(response.admin) {
+          authorized = true;
+        } else {
+          if(typeof response.data.can_use_biometric !== 'undefined') {
+            authorized = response.data.can_use_biometric ? true:false;
+          }
+        }
+        if(authorized) {
+          this.appPages.push({ title: 'Biometrix', url: '/qrscan', icon: 'qr-code' });
+        }
+      }
+    });
+  }
+
+  openMenu() {
+    this.menuCtrl.toggle();
   }
 
   logout() {
