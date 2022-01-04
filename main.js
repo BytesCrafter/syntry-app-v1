@@ -1,7 +1,8 @@
-const { app, BrowserWindow } = require('electron')
+const { app, Tray, Menu, BrowserWindow, Notification } = require('electron')
 const { autoUpdater } = require("electron-updater")
 const log = require('electron-log')
 const path = require('path')
+const iconPath = path.join(__dirname, 'logo.png')
 
 //-------------------------------------------------------------------
 // Logging - This logging setup is not required for auto-updates to work,
@@ -18,6 +19,7 @@ log.info('App starting...');
 // that updates are working.
 //-------------------------------------------------------------------
 let win;
+let tray;
 
 function sendStatusToWindow(text) {
   log.info(text);
@@ -81,6 +83,34 @@ autoUpdater.on('update-downloaded', (info) => {
 });
 
 function primaryWindow () {
+  tray = new Tray(iconPath);
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Syntry',
+      click: async () => {
+        win.show();
+      }
+    },
+    {
+      label: 'Developer',
+      click: async () => {
+        const { shell } = require('electron')
+        await shell.openExternal('https://bytescrafter.net')
+      }
+    },
+    {
+      label: 'Quit',
+      click: async () => {
+        BrowserWindow.getAllWindows().forEach((curWin)=> {
+          curWin.setClosable(true);
+          curWin.close();
+        })
+      }
+    }
+  ])
+  tray.setToolTip('Syntry')
+  tray.setContextMenu(contextMenu)
+
   const primary = new BrowserWindow({
     width: 480,
     height: 720,
@@ -98,7 +128,10 @@ function primaryWindow () {
 
   primary.loadURL(`file://${__dirname}/www/index.html`)
 
-  //win.webContents.openDevTools()
+  //primary.webContents.openDevTools()
+  primary.on('minimize', () => {
+    primary.hide();
+  });
 
   return primary;
 }

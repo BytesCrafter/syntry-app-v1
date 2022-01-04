@@ -1,6 +1,6 @@
 {
-  "name": "BusiNext-Syntry",
-  "version": "0.3.0",
+  "name": "Syntry",
+  "version": "0.3.1",
   "description": "Initially a biometrics app for ERPAT system.",
   "main": "main.js",
   "author": "BytesCrafter",
@@ -103,8 +103,7 @@
         "provider": "github",
         "owner": "BytesCrafter",
         "repo": "BusiNext-Syntry",
-        "releaseType": "release",
-        "token": "gh_hash"
+        "releaseType": "release"
       }
     ],
     "afterSign": "./build/notarize.js",
