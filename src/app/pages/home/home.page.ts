@@ -11,6 +11,7 @@ import { UtilService } from 'src/app/services/util.service';
 })
 export class HomePage implements OnInit {
 
+  myInterval = null;
   previous = null;
   attendance: any[] = [];
 
@@ -26,9 +27,13 @@ export class HomePage implements OnInit {
     this.api.get('attendance/my_clocked_in_list').subscribe((response: any) => {
       if(response.success) {
         this.serverDatetime = new Date(response.status.local_time);
-        setInterval(() => {
+        if(this.myInterval) {
+          clearInterval(this.myInterval);
+        }
+        this.myInterval = setInterval(() => {
           this.serverDatetime.setSeconds(this.serverDatetime.getSeconds() + 1);
         }, 1000);
+
         if(response.status.clocked_in) {
           this.clockedinDatetime = new Date(response.status.clocked_in);
         } else {
