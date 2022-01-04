@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guard/auth.guard';
+import { BiometGuard } from './guard/biomet.guard';
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
   {
     path: 'qrscan',
     loadChildren: () => import('./pages/qrscan/qrscan.module').then( m => m.QrscanPageModule),
-    canActivate: [AuthGuard]
+    canActivate: [BiometGuard]
   },
   {
     path: 'login',

@@ -5,6 +5,7 @@ import { AppComponent } from 'src/app/app.component';
 import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-qrscan',
@@ -72,8 +73,25 @@ export class QrscanPage implements AfterViewInit {
     private loadingCtrl: LoadingController,
     private plt: Platform,
     private auth: AuthService,
-    public app: AppComponent
+    public app: AppComponent,
+    private router: Router
   ) {
+    this.api.post('users/permissions', {}).subscribe((response: any) => {
+      let authorized = false;
+      if(response.success) {
+        if(response.admin) {
+          authorized = true;
+        } else {
+          if(typeof response.data.can_use_biometric !== 'undefined') {
+            authorized = response.data.can_use_biometric ? true:false;
+          }
+        }
+        if(!authorized) {
+          this.router.navigate(['/']);
+        }
+      }
+    });
+
     const isInStandaloneMode = () =>
       'standalone' in window.navigator && window.navigator['standalone'];
     if (this.plt.is('ios') && isInStandaloneMode()) {

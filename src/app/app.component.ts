@@ -16,7 +16,7 @@ export class AppComponent {
     { title: 'Home', url: '/home', icon: 'home' },
     // { title: 'Camera', url: '/camera', icon: 'camera' },
     // { title: 'Gallery', url: '/gallery', icon: 'images' },
-    { title: 'Biometrix', url: '/qrscan', icon: 'qr-code' },
+    //{ title: 'Biometrix', url: '/qrscan', icon: 'qr-code' }
   ];
   public labels = ['Logout'];
 
@@ -24,8 +24,26 @@ export class AppComponent {
     public util: UtilService,
     public auth: AuthService,
     private router: Router,
+    private api: ApiService,
     private menuCtrl: MenuController
-  ) { }
+  ) {
+    //If user have manage timecard then add
+    this.api.post('users/permissions', {}).subscribe((response: any) => {
+      let authorized = false;
+      if(response.success) {
+        if(response.admin) {
+          authorized = true;
+        } else {
+          if(typeof response.data.can_use_biometric !== 'undefined') {
+            authorized = response.data.can_use_biometric ? true:false;
+          }
+        }
+        if(authorized) {
+          this.appPages.push({ title: 'Biometrix', url: '/qrscan', icon: 'qr-code' });
+        }
+      }
+    });
+  }
 
   openMenu() {
     this.menuCtrl.toggle();
