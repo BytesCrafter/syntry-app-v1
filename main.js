@@ -1,16 +1,8 @@
 const { app, Tray, Menu, BrowserWindow, Notification } = require('electron')
-const { autoUpdater } = require("electron-updater")
 const log = require('electron-log')
+  log.info('App starting...');
 const path = require('path')
-const iconPath = path.join(__dirname, 'logo.png')
-
-//-------------------------------------------------------------------
-// Logging - This logging setup is not required for auto-updates to work,
-// but it sure makes debugging easier :)
-//-------------------------------------------------------------------
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
-log.info('App starting...');
+const iconPath = path.join(__dirname, 'logo.ico')
 
 //-------------------------------------------------------------------
 // Open a window that displays the version
@@ -21,68 +13,7 @@ log.info('App starting...');
 let win;
 let tray;
 
-function sendStatusToWindow(text) {
-  log.info(text);
-  if(win) {
-    win.webContents.send('message', text);
-  }
-}
-
-function splashWindow() {
-  let splash = new BrowserWindow({
-    width: 320,
-    height: 320,
-    resizable: false,
-    frame: false,
-    closable: false,
-    autoHideMenuBar: true,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
-    }
-  });
-  //splash.webContents.openDevTools()
-  splash.on('closed', () => {
-    splash = null;
-  });
-  splash.loadURL(`file://${__dirname}/splash.html#v${app.getVersion()}`);
-  return splash;
-}
-autoUpdater.on('checking-for-update', () => {
-  sendStatusToWindow('Checking for update...');
-})
-autoUpdater.on('update-available', (info) => {
-  sendStatusToWindow('Update available.');
-})
-autoUpdater.on('update-not-available', (info) => {
-  sendStatusToWindow('Update not available.');
-  BrowserWindow.getAllWindows().forEach((curWin) => {
-    curWin.setClosable(true);
-    curWin.close();
-  });
-  win = primaryWindow();
-})
-autoUpdater.on('error', (err) => {
-  //sendStatusToWindow('Error in auto-updater. ' + err);
-  sendStatusToWindow('Something went wrong during the update!');
-  BrowserWindow.getAllWindows().forEach((curWin) => {
-    curWin.setClosable(true);
-    curWin.close();
-  });
-  win = primaryWindow();
-})
-autoUpdater.on('download-progress', (progressObj) => {
-  let log_message = "Download speed: " + progressObj.bytesPerSecond;
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-  sendStatusToWindow(log_message);
-})
-autoUpdater.on('update-downloaded', (info) => {
-  sendStatusToWindow('Update downloaded');
-  autoUpdater.quitAndInstall(true, true);
-});
-
-function primaryWindow () {
+function createPrimaryWindow () {
   tray = new Tray(iconPath);
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -119,16 +50,15 @@ function primaryWindow () {
     closable: false,
     autoHideMenuBar: true,
     //backgroundColor: '#ffffff',
-    //icon: `file://${__dirname}/dist/assets/logo.png`,
+    icon: path.join(__dirname, 'logo.ico'),
     webPreferences: {
       //preload: path.join(__dirname, 'electron/preload.js'),
       nodeIntegration: true
     }
   })
-
-  primary.loadURL(`file://${__dirname}/www/index.html`)
-
+  primary.loadURL(`file://${__dirname}/public/index.html`)
   //primary.webContents.openDevTools()
+
   primary.on('minimize', () => {
     primary.hide();
   });
@@ -136,13 +66,9 @@ function primaryWindow () {
   return primary;
 }
 
-//-------------------------------------------------------------------
-// Auto updates - Option 1 - Simplest version
-//-------------------------------------------------------------------
-app.on('ready', function()  {
-  win = splashWindow();
-  autoUpdater.checkForUpdates();
-});
+app.whenReady().then(() => {
+  win = createPrimaryWindow()
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
