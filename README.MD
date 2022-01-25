@@ -49,7 +49,7 @@ Note: Use the dist/win-ia32-unpacked
 1. Run this command on CMD then provide all the necessary information.
 
 ```
-electron-windows-store
+electron-windows-store --publisher-display-name 'Company Name' --identity-name '57848CompanyName.App' --package-version 1.0.0.0
 ```
 
 2. Use the .appx build and submit it on Microsoft Partner Center.
