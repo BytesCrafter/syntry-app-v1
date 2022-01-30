@@ -2,7 +2,7 @@
   "hosting": [
   {
       "site": "erpat-ahm",
-      "public": "www",
+      "public": "public",
       "ignore": [
         "firebase.json",
         "**/.*",
