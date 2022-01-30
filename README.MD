@@ -58,6 +58,15 @@ electron-windows-store --publisher-display-name 'Company Name' --identity-name '
 It is important to signed your build using yung CN=XXXX-XXX-XXXXX-XXXXXX
 ```
 
+## Generate new PWA icons and name.
+
+1. Make sure to update name and shortname on manifest.webmanifest on src
+2. ngx-pwa-icons is required to be able to generate PWA icons. Install globally
+3. Run this command: ./icon.png <-- Update this image, this will be use on generation.
+```
+ngx-pwa-icons
+```
+
 ## Built With
 
 * [ElectronJS](https://electron.org/) - Desktop App Container
