@@ -1,10 +1,10 @@
 {
   "name": "Syntry",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Initially a biometrics app for ERPAT system.",
   "main": "main.js",
   "author": "BytesCrafter",
-  "homepage": "https://businext.net/",
+  "homepage": "https://businext.app/",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -94,7 +94,11 @@
   "build": {
     "productName": "Syntry",
     "appId": "net.bytescrafter.syntry",
+    "appx": {
+      "publisherDisplayName": "Bytes Crafter"
+    },
     "win": {
+      "target": "appx",
       "icon": "logo.ico"
     }
   }

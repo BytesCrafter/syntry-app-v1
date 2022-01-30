@@ -17,7 +17,7 @@
     },
     {
       "target": "app",
-      "public": "www",
+      "public": "public",
       "ignore": [
         "**/.*"
       ],

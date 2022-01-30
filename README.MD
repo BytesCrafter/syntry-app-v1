@@ -49,13 +49,35 @@ Note: Use the dist/win-ia32-unpacked
 1. Run this command on CMD then provide all the necessary information.
 
 ```
-electron-windows-store
+electron-windows-store --publisher-display-name 'Company Name' --identity-name '57848CompanyName.App' --package-version 1.0.0.0
 ```
 
 2. Use the .appx build and submit it on Microsoft Partner Center.
 
 ```
 It is important to signed your build using yung CN=XXXX-XXX-XXXXX-XXXXXX
+```
+
+## Generate new PWA icons and name.
+
+1. Make sure to update name and shortname on manifest.webmanifest on src
+2. ngx-pwa-icons is required to be able to generate PWA icons. Install globally
+3. Run this command: ./icon.png <-- Update this image, this will be use on generation.
+```
+ngx-pwa-icons
+```
+
+## Publish to firebase
+
+1. Publish to the specific site.
+
+```
+firebase deploy --only hosting:syntry
+```
+
+Optionally! Set on firebase.json
+```
+"site": "syntry",
 ```
 
 ## Built With
