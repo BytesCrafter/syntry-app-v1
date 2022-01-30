@@ -44,9 +44,11 @@ export class AuthService {
       if(jwtHash != null && jwtHash !== '') {
         const token = this.util.jwtDecode(jwtHash);
         this.subject.next(token);
+        return this.subject.value;
       }
-      return this.subject.value;
     } //TODO: Verify if okay to not return anything when nulled.
+
+    return null;
   }
 
   public set setToken(jwtHash: string) {
