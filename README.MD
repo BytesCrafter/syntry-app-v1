@@ -67,6 +67,19 @@ It is important to signed your build using yung CN=XXXX-XXX-XXXXX-XXXXXX
 ngx-pwa-icons
 ```
 
+## Publish to firebase
+
+1. Publish to the specific site.
+
+```
+firebase deploy --only hosting:syntry
+```
+
+Optionally! Set on firebase.json
+```
+"site": "syntry",
+```
+
 ## Built With
 
 * [ElectronJS](https://electron.org/) - Desktop App Container

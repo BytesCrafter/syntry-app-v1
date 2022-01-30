@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  baseURL: 'https://beta.erpat.net/v1/api/',
+  baseURL: 'https://erpat.businext.app/v1/api/',
   authToken: '9bc12f10eb077de',
   firebase: {
     apiKey: 'AIzaSyDBy1btu2_RUN2r4tWTtUY2Zhw4oJsum6E',
