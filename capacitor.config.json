@@ -3,7 +3,7 @@
   "appName": "BusiNext-Syntry",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "www",
+  "webDir": "public",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0
