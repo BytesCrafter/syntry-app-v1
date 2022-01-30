@@ -8,7 +8,7 @@ export const environment = {
     projectId: 'businext-app',
     storageBucket: 'businext-app.appspot.com',
     messagingSenderId: '71633264934',
-    appId: '1:71633264934:web:d17444e6bce72b70e6e1e7',
-    measurementId: 'G-YHKPV3XFSV'
+    appId: '1:71633264934:web:371daa3cf8e8be68e6e1e7',
+    measurementId: 'G-E329JC1KZR'
   }
 };
