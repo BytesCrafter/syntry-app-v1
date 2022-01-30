@@ -94,8 +94,8 @@
   "build": {
     "productName": "Syntry",
     "appId": "net.bytescrafter.syntry",
-    "appx" : {
-      "publisherDisplayName" : "Bytes Crafter"
+    "appx": {
+      "publisherDisplayName": "Bytes Crafter"
     },
     "win": {
       "target": "appx",
