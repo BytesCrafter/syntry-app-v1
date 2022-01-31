@@ -49,6 +49,7 @@ function createPrimaryWindow () {
     frame: false,
     closable: false,
     autoHideMenuBar: true,
+    darkTheme: true,
     //backgroundColor: '#ffffff',
     icon: path.join(__dirname, 'logo.ico'),
     webPreferences: {
@@ -56,10 +57,24 @@ function createPrimaryWindow () {
       nodeIntegration: true
     }
   })
-  primary.loadURL(`file://${__dirname}/public/index.html`)
-  //primary.webContents.openDevTools()
+  //primary.loadURL('https://github.com')
+  primary.loadURL(`file://${__dirname}/dist/public/index.html`)
+  primary.webContents.openDevTools()
+
+  primary.on('focus', () => {
+    log.info('Focused on app...');
+  });
+
+  primary.on('unresponsive', () => {
+    log.info('App is currently busy...');
+  });
+
+  primary.on('maximize', () => {
+    log.info('Showing from tray...');
+  });
 
   primary.on('minimize', () => {
+    log.info('Hiding on tray...');
     primary.hide();
   });
 
