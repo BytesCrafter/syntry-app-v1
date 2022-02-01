@@ -29,6 +29,5 @@ npm-debug.log*
 /platforms
 /build
 /plugins
-/public
 
 .firebase

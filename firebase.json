@@ -2,7 +2,7 @@
   "hosting": [
     {
       "site": "syntry",
-      "public": "public",
+      "public": "dist/htdocs",
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -17,7 +17,7 @@
     },
     {
       "target": "app",
-      "public": "public",
+      "public": "dist/htdocs",
       "ignore": [
         "**/.*"
       ],

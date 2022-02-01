@@ -1,7 +1,7 @@
 {
   "name": "Syntry",
   "version": "0.3.3",
-  "description": "Initially a biometrics app for ERPAT system.",
+  "description": "Syntry is a desktop application for BusiNext.",
   "main": "main.js",
   "author": "BytesCrafter",
   "homepage": "https://businext.app/",
@@ -9,12 +9,11 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "electron .",
-    "build": "ng build && electron .",
-    "build-prod": "ng build --prod && electron .",
+    "start": "ng serve",
+    "build": "ng build",
+    "electron": "electron .",
     "pack": "electron-builder --dir --x64",
-    "dist": "electron-builder",
-    "publish": "electron-builder -p always"
+    "dist": "electron-builder"
   },
   "dependencies": {
     "@angular/common": "~11.2.0",
