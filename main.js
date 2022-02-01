@@ -58,8 +58,8 @@ function createPrimaryWindow () {
     }
   })
   //primary.loadURL('https://github.com')
-  primary.loadURL(`file://${__dirname}/dist/public/index.html`)
-  primary.webContents.openDevTools()
+  primary.loadURL(`file://${__dirname}/dist/htdocs/index.html`)
+  //primary.webContents.openDevTools()
 
   primary.on('focus', () => {
     log.info('Focused on app...');
@@ -82,7 +82,8 @@ function createPrimaryWindow () {
 }
 
 app.whenReady().then(() => {
-  win = createPrimaryWindow()
+  log.info('App is ready...');
+  win = createPrimaryWindow();
 })
 
 app.on('window-all-closed', () => {

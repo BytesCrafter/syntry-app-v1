@@ -1,8 +1,8 @@
 {
   "hosting": [
-  {
-      "site": "erpat-ahm",
-      "public": "public",
+    {
+      "site": "syntry",
+      "public": "dist/htdocs",
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -17,7 +17,7 @@
     },
     {
       "target": "app",
-      "public": "public",
+      "public": "dist/htdocs",
       "ignore": [
         "**/.*"
       ],
