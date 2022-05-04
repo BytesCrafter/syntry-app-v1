@@ -3,6 +3,7 @@ import { UtilService } from 'src/app/services/util.service';
 import { MenuController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginPage implements OnInit {
     private auth: AuthService,
     private menuController: MenuController,
     private router: Router,
+    private app: AppComponent
   ) {
     //Check if the is a token in local storage but need to check first.
     if(localStorage.getItem(AuthService.tokenKey) === null) {
@@ -48,7 +50,10 @@ export class LoginPage implements OnInit {
       if(result.success) {
         //const token: Token = result.data;
         this.menuController.enable(true);
-        this.router.navigate([`/`], { replaceUrl: true });
+        this.email = '';
+        this.password = '';
+        this.app.reloadPermission();
+        this.router.navigate(['/home']);
       } else {
         this.util.modalAlert('Action not Allowed', result.message);
       }

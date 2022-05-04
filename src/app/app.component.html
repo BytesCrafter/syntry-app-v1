@@ -20,7 +20,7 @@
 
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content">
+    <ion-menu contentId="main-content" *ngIf="auth.isAuthenticated">
       <ion-content>
 
         <ion-list class="menu-header">
