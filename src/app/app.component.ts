@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
 import { Router } from '@angular/router';
@@ -27,6 +27,10 @@ export class AppComponent {
     private api: ApiService,
     private menuCtrl: MenuController
   ) {
+    this.reloadPermission();
+  }
+
+  reloadPermission() {
     //If user have manage timecard then add
     this.api.post('users/permissions', {}).subscribe((response: any) => {
       let authorized = false;
@@ -38,7 +42,7 @@ export class AppComponent {
             authorized = response.data.can_use_biometric ? true:false;
           }
         }
-        if(authorized) {
+        if(authorized && this.appPages.filter(e => e.title === 'Biometrix').length === 0) {
           this.appPages.push({ title: 'Biometrix', url: '/qrscan', icon: 'qr-code' });
         }
       }
@@ -50,7 +54,6 @@ export class AppComponent {
   }
 
   reloadPage() {
-    console.log('asdsadasdsa');
     location.reload();
   }
 

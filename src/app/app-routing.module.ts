@@ -6,36 +6,43 @@ import { BiometGuard } from './guard/biomet.guard';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
+    children: [
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
+      {
+        path: 'home',
+        loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
+      },
+      {
+        path: 'camera',
+        loadChildren: () => import('./reserved/camera/camera.module').then( m => m.CameraPageModule),
+      },
+      {
+        path: 'gallery',
+        loadChildren: () => import('./reserved/gallery/gallery.module').then( m => m.GalleryPageModule),
+      },
+      {
+        path: 'qrscan',
+        loadChildren: () => import('./pages/qrscan/qrscan.module').then( m => m.QrscanPageModule),
+        canActivate: [BiometGuard]
+      }
+    ],
     canActivate: [AuthGuard]
-  },
-  {
-    path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'camera',
-    loadChildren: () => import('./reserved/camera/camera.module').then( m => m.CameraPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'gallery',
-    loadChildren: () => import('./reserved/gallery/gallery.module').then( m => m.GalleryPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'qrscan',
-    loadChildren: () => import('./pages/qrscan/qrscan.module').then( m => m.QrscanPageModule),
-    canActivate: [BiometGuard]
   },
   {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: '**',
+    path: 'notfound',
     loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
+  },
+  {
+    path: '**',
+    redirectTo: 'notfound'
   }
 ];
 
