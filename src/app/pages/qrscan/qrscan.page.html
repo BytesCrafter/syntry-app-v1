@@ -1,23 +1,17 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>qrscan</ion-title>
-  </ion-toolbar>
-</ion-header> -->
-
 <ion-content>
-  <ion-label *ngIf="this.previous !== null" vertical="top" horizontal="start" slot="fixed">
-    <div style="margin: 20px; margin-left: 80px; padding: 5px 10px;">
-      <h2>{{dname}}</h2>
-    </div>
-  </ion-label>
-  <ion-fab vertical="top" horizontal="end" slot="fixed">
-    <ion-fab-button [attr.size]="this.statusSize" [attr.color]="this.statusColor" disabled>
-      <!-- <strong *ngIf="!this.isSending" style="color: black;">{{countdown}}</strong> -->
-      <ion-icon *ngIf="!this.isSending" name="eye" style="color: white;"></ion-icon>
-      <ion-icon *ngIf="this.isSending" name="cloud-upload-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 
+  <div class="qr-header">
+    <ion-fab horizontal="start" style="margin-top: 10px;">
+      <h5 *ngIf="this.previous !== null" style="margin: 10px; margin-left: 10px; padding: 5px 10px;">{{dname}}</h5>
+    </ion-fab>
+    <ion-fab horizontal="end" style="margin-top: 10px;">
+      <ion-fab-button [attr.size]="this.statusSize" [attr.color]="this.statusColor" disabled>
+        <!-- <strong *ngIf="!this.isSending" style="color: black;">{{countdown}}</strong> -->
+        <ion-icon *ngIf="!this.isSending" name="eye" style="color: white;"></ion-icon>
+        <ion-icon *ngIf="this.isSending" name="cloud-upload"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </div>
   <!-- Fallback for iOS PWA -->
   <!-- <input #fileinput type="file" accept="image/*;capture=camera" hidden (change)="handleFile($event.target.file)"> -->
 
@@ -27,9 +21,10 @@
     Capture Image
   </ion-button> -->
 
-  <div style="height: 50vh;">
+  <!-- VIDEO HISTORY AREA -->
+  <div style="height: 50vh; width: -webkit-fill-available;">
     <!-- <video #video [hidden]="!scanActive" width="100%" controls></video> -->
-    <video #video width="100%" style="-webkit-transform: scaleX(-1);transform: scaleX(-1); width: auto;"></video>
+    <video #video width="100%" width="auto" style="-webkit-transform: scaleX(-1);transform: scaleX(-1);"></video>
 
     <!-- Used to render the camera stream images -->
     <canvas #canvas hidden></canvas>
@@ -38,8 +33,8 @@
     </ion-item>
   </div>
 
-  <div style="height: 50vh;">
-
+  <!-- LOG HISTORY AREA -->
+  <div style="height: auto;">
     <ion-list-header>
       <ion-label><h2>Log History for Today</h2></ion-label>
     </ion-list-header>
