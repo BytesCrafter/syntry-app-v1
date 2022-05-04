@@ -25,17 +25,20 @@ export class HomePage implements OnInit {
 
   getMyClockedList() {
     this.api.get('attendance/my_clocked_in_list').subscribe((response: any) => {
+      this.serverDatetime = new Date(response.status.local_time);
+
       if(response.success) {
-        this.serverDatetime = new Date(response.status.local_time);
+
         if(this.myInterval) {
           clearInterval(this.myInterval);
         }
+
         this.myInterval = setInterval(() => {
           this.serverDatetime.setSeconds(this.serverDatetime.getSeconds() + 1);
         }, 1000);
 
         if(response.status.clocked_in) {
-          this.clockedinDatetime = new Date(response.status.clocked_in);
+          this.clockedinDatetime = new Date(response.status.clocked_in); //Issue
         } else {
           this.clockedinDatetime = null;
         }
@@ -54,6 +57,12 @@ export class HomePage implements OnInit {
           );
         });
 
+      } else {
+        this.util.modalAlert(
+          'Something went wrong',
+          this.serverDatetime.toLocaleTimeString(),
+          'The server did not respond accordingly.'
+        );
       }
     });
   }

@@ -1,22 +1,43 @@
 <ion-header *ngIf="auth.isAuthenticated">
-  <ion-toolbar style="background: none; display: inline;">
-    <ion-button (click)="openMenu()" style="padding: 5px 20px;">
-      <ion-icon name="menu-outline" style="background: none;"></ion-icon>
-    </ion-button>
+
+  <ion-toolbar color="light">
+    <ion-buttons slot="secondary">
+      <ion-button (click)="reloadPage()">
+        <ion-icon slot="icon-only" name="reload-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-button color="dark" (click)="openMenu()">
+        <ion-icon slot="icon-only" ios="menu-outline" md="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-img [src]="'assets/images/syntry.png'" style="height: 30px; display: inline-flex;"></ion-img>
+    </ion-title>
   </ion-toolbar>
+
 </ion-header>
 
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
+    <ion-menu contentId="main-content">
       <ion-content>
-        <ion-list id="inbox-list" *ngIf="auth.userToken !== null">
-          <ion-thumbnail slot="start">
-            <ion-img [src]="auth.userToken.avatar" style="border-radius: 50%;margin: 50px;"></ion-img>
-          </ion-thumbnail>
-          <ion-list-header>{{ auth.userToken.fullname }}</ion-list-header>
-          <ion-note>{{ auth.userToken.email }}</ion-note>
 
+        <ion-list class="menu-header">
+          <ion-item>
+            <ion-thumbnail class="avatar-image">
+              <ion-img [src]="auth.userToken.avatar" style="border-radius: 50%;"></ion-img>
+            </ion-thumbnail>
+          </ion-item>
+          <ion-item>
+            <ion-title style="font-size: 20px; display: block; text-align: center; height: 0px;">{{ auth.userToken.fullname }}</ion-title>
+          </ion-item>
+          <ion-item>
+            <ion-title style="font-size: 14px; text-align: center;">{{ auth.userToken.email }}</ion-title>
+          </ion-item>
+        </ion-list>
+
+        <ion-list id="inbox-list" *ngIf="auth.userToken !== null">
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
             <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
@@ -30,8 +51,8 @@
         </ion-list>
 
         <ion-list class="menu-footer">
-          <ion-label class="footer-item">Syntry v{{ util.version }}</ion-label>
-          <ion-label class="footer-item footer-copy">2021 © BytesCrafter</ion-label>
+          <ion-label class="footer-item" style="font-size: 17px;">Syntry v{{ util.version }} © 2022</ion-label>
+          <ion-label class="footer-item footer-copy">Made Possible by BytesCrafter</ion-label>
         </ion-list>
 
       </ion-content>
