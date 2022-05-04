@@ -1,6 +1,6 @@
 {
   "name": "Syntry",
-  "version": "0.3.3",
+  "version": "0.3.5",
   "description": "Syntry is a desktop application for BusiNext.",
   "main": "main.js",
   "author": "BytesCrafter",
@@ -88,7 +88,10 @@
     "productName": "Syntry",
     "appId": "net.bytescrafter.syntry",
     "appx": {
-      "publisherDisplayName": "Bytes Crafter"
+      "applicationId": "net.bytescrafter.syntry",
+      "identityName": "57848BytesCrafter.Syntry",
+      "publisherDisplayName": "Bytes Crafter",
+      "publisher": "CN=B9B08555-C86E-4814-BA22-A42EA64D0A4C"
     },
     "win": {
       "target": "appx",

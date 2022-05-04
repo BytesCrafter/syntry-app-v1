@@ -49,6 +49,11 @@ export class AppComponent {
     this.menuCtrl.toggle();
   }
 
+  reloadPage() {
+    console.log('asdsadasdsa');
+    location.reload();
+  }
+
   logout() {
     localStorage.clear();
     this.router.navigate([`/login`], { replaceUrl: true });

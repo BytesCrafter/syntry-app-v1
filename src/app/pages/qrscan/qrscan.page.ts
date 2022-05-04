@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, HostListener, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, HostListener, AfterViewInit, OnDestroy } from '@angular/core';
 import { ToastController, LoadingController, Platform } from '@ionic/angular';
 import jsQR from 'jsqr';
 import { AppComponent } from 'src/app/app.component';
@@ -6,13 +6,14 @@ import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { Page } from '@ionic/core';
 
 @Component({
   selector: 'app-qrscan',
   templateUrl: './qrscan.page.html',
   styleUrls: ['./qrscan.page.scss'],
 })
-export class QrscanPage implements AfterViewInit {
+export class QrscanPage implements AfterViewInit, OnDestroy {
   @ViewChild('video', { static: false }) video: ElementRef;
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
   @ViewChild('fileinput', { static: false }) fileinput: ElementRef;
@@ -74,7 +75,7 @@ export class QrscanPage implements AfterViewInit {
     private plt: Platform,
     private auth: AuthService,
     public app: AppComponent,
-    private router: Router
+    private router: Router,
   ) {
     this.api.post('users/permissions', {}).subscribe((response: any) => {
       let authorized = false;
@@ -362,5 +363,11 @@ export class QrscanPage implements AfterViewInit {
 
   stopScan() {
     this.scanActive = false;
+  }
+
+  ngOnDestroy() {
+    this.videoStream.getTracks().forEach((track) => {
+      track.stop();
+    });
   }
 }
