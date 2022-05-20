@@ -31,6 +31,10 @@ export class AppComponent {
   }
 
   reloadPermission() {
+    if(!this.auth.isAuthenticated) {
+      return;
+    }
+
     //If user have manage timecard then add
     this.api.post('users/permissions', {}).subscribe((response: any) => {
       let authorized = false;
