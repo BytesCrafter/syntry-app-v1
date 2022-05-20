@@ -1,12 +1,7 @@
 <ion-header *ngIf="auth.isAuthenticated">
 
   <ion-toolbar color="light">
-    <ion-buttons slot="secondary">
-      <ion-button (click)="reloadPage()">
-        <ion-icon slot="icon-only" name="reload-circle"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="primary">
+    <ion-buttons slot="start">
       <ion-button color="dark" (click)="openMenu()">
         <ion-icon slot="icon-only" ios="menu-outline" md="menu-outline"></ion-icon>
       </ion-button>
@@ -14,6 +9,11 @@
     <ion-title>
       <ion-img [src]="'assets/images/syntry.png'" style="height: 30px; display: inline-flex;"></ion-img>
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="reloadPage()">
+        <ion-icon slot="icon-only" name="reload-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 
 </ion-header>
@@ -25,15 +25,15 @@
 
         <ion-list class="menu-header">
           <ion-item>
-            <ion-thumbnail class="avatar-image">
+            <ion-thumbnail class="avatar-image" style="margin-bottom: 35px">
               <ion-img [src]="auth.userToken.avatar" style="border-radius: 50%;"></ion-img>
             </ion-thumbnail>
           </ion-item>
           <ion-item>
-            <ion-title style="font-size: 20px; display: block; text-align: center; height: 0px;">{{ auth.userToken.fullname }}</ion-title>
-          </ion-item>
-          <ion-item>
-            <ion-title style="font-size: 14px; text-align: center;">{{ auth.userToken.email }}</ion-title>
+            <div style="text-align: center; width: -webkit-fill-available; margin: 10px 0;">
+              <ion-label style="font-size: 14px; line-height: 20px;">{{ auth.userToken.fullname }}</ion-label>
+              <ion-label style="font-size: 12px; line-height: 20px;">{{ auth.userToken.email }}</ion-label>
+            </div>
           </ion-item>
         </ion-list>
 
@@ -51,7 +51,7 @@
         </ion-list>
 
         <ion-list class="menu-footer">
-          <ion-label class="footer-item" style="font-size: 17px;">Syntry v{{ util.version }} © 2022</ion-label>
+          <ion-label class="footer-item">Syntry v{{ util.version }} © 2022</ion-label>
           <ion-label class="footer-item footer-copy">Made Possible by BytesCrafter</ion-label>
         </ion-list>
 
