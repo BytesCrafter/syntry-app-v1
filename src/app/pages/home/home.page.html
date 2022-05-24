@@ -10,23 +10,23 @@
       <ion-col *ngIf="isClockedIn" size="10" size-lg offset="1">
         <ion-card>
           <ion-card-header style="margin: 25px 0;">
-            <ion-card-title class="ion-text-center" style="font-size: xxx-large;">{{currentTimespan}}</ion-card-title>
-            <ion-card-subtitle class="ion-text-center">{{currentDatestart}}</ion-card-subtitle>
+            <ion-card-title class="ion-text-center" style="font-size: xx-large;">{{currentTimespan}}</ion-card-title>
+            <ion-card-subtitle class="ion-text-center time-info">{{currentDatestart}}</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content class="ion-text-center">
-            <ion-button color="danger" (click)="logTime()" style="margin-right: 15px;">TIME OUT</ion-button>
-            <ion-button color="secondary" disabled="">TAKE BREAK</ion-button>
+            <ion-button color="danger" class="action-btn" (click)="logTime()" style="margin-right: 15px;">TIME OUT</ion-button>
+            <ion-button color="secondary" class="action-btn" disabled="">TAKE BREAK</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>
       <ion-col *ngIf="!isClockedIn" size="10" size-lg offset="1">
         <ion-card>
           <ion-card-header style="margin: 25px 0;">
-            <ion-card-title class="ion-text-center" style="font-size: xxx-large;">{{currentTime}}</ion-card-title>
-            <ion-card-subtitle class="ion-text-center">{{currentDate}}</ion-card-subtitle>
+            <ion-card-title class="ion-text-center" style="font-size: xx-large;">{{currentTime}}</ion-card-title>
+            <ion-card-subtitle class="ion-text-center time-info">{{currentDate}}</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content class="ion-text-center">
-            <ion-button color="success" (click)="logTime()">TIME IN</ion-button>
+            <ion-button color="success" class="action-btn" (click)="logTime()" style="width: max-content;">TIME IN</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -39,10 +39,10 @@
         <ion-list style="background-color: transparent;">
           <ion-item *ngFor="let att of attendance; let i = index" style="border-bottom: 7px transparent dashed;">
             <ion-label>
-              <p><ion-badge color="success" slot="end" style="font-size: 7px;">IN</ion-badge> {{att.timein}}</p>
-              <p><ion-badge color="danger" slot="end" style="font-size: 7px;">OUT</ion-badge> {{att.timeout}}</p>
+              <p style="font-size: 11px;"><ion-label color="success" slot="end" style="font-size: 7px;">IN</ion-label> {{att.timein}}</p>
+              <p style="font-size: 11px;"><ion-label color="danger" slot="end" style="font-size: 7px;">OUT</ion-label> {{att.timeout}}</p>
             </ion-label>
-            <ion-badge color="primary" slot="end">{{att.duration}}</ion-badge>
+            <ion-label color="dark" style="text-align: right; font-size: 15px;">{{att.duration}}</ion-label>
           </ion-item>
         </ion-list>
       </ion-col>

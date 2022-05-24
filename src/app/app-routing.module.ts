@@ -25,6 +25,10 @@ const routes: Routes = [
         loadChildren: () => import('./reserved/gallery/gallery.module').then( m => m.GalleryPageModule),
       },
       {
+        path: 'change-passwd',
+        loadChildren: () => import('./pages/change-passwd/change-passwd.module').then( m => m.ChangePasswdPageModule)
+      },
+      {
         path: 'qrscan',
         loadChildren: () => import('./pages/qrscan/qrscan.module').then( m => m.QrscanPageModule),
         canActivate: [BiometGuard]

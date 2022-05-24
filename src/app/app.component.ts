@@ -14,6 +14,7 @@ export class AppComponent {
 
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
+    { title: 'Change Pass', url: '/change-passwd', icon: 'medical' },
     // { title: 'Camera', url: '/camera', icon: 'camera' },
     // { title: 'Gallery', url: '/gallery', icon: 'images' },
     //{ title: 'Biometrix', url: '/qrscan', icon: 'qr-code' }
@@ -31,6 +32,10 @@ export class AppComponent {
   }
 
   reloadPermission() {
+    if(!this.auth.isAuthenticated) {
+      return;
+    }
+
     //If user have manage timecard then add
     this.api.post('users/permissions', {}).subscribe((response: any) => {
       let authorized = false;

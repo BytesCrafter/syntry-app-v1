@@ -1,0 +1,35 @@
+<!--
+
+  Authors : Bytes Crafter
+  Website : https://bytescrafter.net
+  App Name : Galyon App
+  Created : 01-Sep-2020
+
+ -->
+ <ion-content>
+  <div class="space-top">
+
+  </div>
+  <div class="header">
+    <h4>Change Password</h4>
+    <ion-item style="padding-top: 10px;">
+      <ion-label position="floating">Old Password</ion-label>
+      <ion-input [(ngModel)]="oldpass"></ion-input>
+    </ion-item>
+    <ion-item style="padding-top: 10px;">
+      <ion-label position="floating">New Password</ion-label>
+      <ion-input [(ngModel)]="newpass"></ion-input>
+    </ion-item>
+    <ion-item style="padding-top: 10px;">
+      <ion-label position="floating">Confirm Password</ion-label>
+      <ion-input [(ngModel)]="confirmpass"></ion-input>
+    </ion-item>
+    <div style="padding: 20px;">
+      <ion-button expand="block" class="ion-activatable ripple-parent" (click)="changepass()">
+        Submit Changes
+        <ion-ripple-effect></ion-ripple-effect>
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>
