@@ -28,6 +28,9 @@ export class ChangePasswdPage implements OnInit {
       confirmpass: this.confirmpass,
     }).then((res: any) => {
       if(res && res.success === true) {
+        this.oldpass = '';
+        this.newpass = '';
+        this.confirmpass = '';
         this.util.modalAlert('Success', res.message);
       } else {
         this.util.modalAlert('Warning', res.message);
