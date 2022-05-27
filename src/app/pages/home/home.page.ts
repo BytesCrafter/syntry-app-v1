@@ -11,6 +11,7 @@ import { UtilService } from 'src/app/services/util.service';
 })
 export class HomePage implements OnInit {
 
+  isLoading: any = true;
   myInterval = null;
   previous = null;
   attendance: any[] = [];
@@ -64,6 +65,8 @@ export class HomePage implements OnInit {
           'The server did not respond accordingly.'
         );
       }
+
+      this.isLoading = false;
     });
   }
 

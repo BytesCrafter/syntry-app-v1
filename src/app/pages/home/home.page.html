@@ -7,7 +7,18 @@
   </ion-label>
   <ion-grid style="margin-top: 50px;">
     <ion-row style="margin-top: 20px;">
-      <ion-col *ngIf="isClockedIn" size="10" size-lg offset="1">
+      <ion-col *ngIf="isLoading" size="10" size-lg offset="1">
+        <ion-card>
+          <ion-card-header style="margin: 25px 0;">
+            <ion-card-title class="ion-text-center" style="font-size: xx-large;">{{currentTime}}</ion-card-title>
+            <ion-card-subtitle class="ion-text-center time-info">{{currentDate}}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content class="ion-text-center">
+            <ion-spinner name="crescent"></ion-spinner>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col *ngIf="isClockedIn && !isLoading" size="10" size-lg offset="1">
         <ion-card>
           <ion-card-header style="margin: 25px 0;">
             <ion-card-title class="ion-text-center" style="font-size: xx-large;">{{currentTimespan}}</ion-card-title>
@@ -19,7 +30,7 @@
           </ion-card-content>
         </ion-card>
       </ion-col>
-      <ion-col *ngIf="!isClockedIn" size="10" size-lg offset="1">
+      <ion-col *ngIf="!isClockedIn && !isLoading" size="10" size-lg offset="1">
         <ion-card>
           <ion-card-header style="margin: 25px 0;">
             <ion-card-title class="ion-text-center" style="font-size: xx-large;">{{currentTime}}</ion-card-title>
@@ -36,13 +47,18 @@
         <ion-list-header>
           <ion-label><h2>History for Last 30 days</h2></ion-label>
         </ion-list-header>
-        <ion-list style="background-color: transparent;">
+        <ion-list *ngIf="!isLoading" style="background-color: transparent;">
           <ion-item *ngFor="let att of attendance; let i = index" style="border-bottom: 7px transparent dashed;">
             <ion-label>
               <p style="font-size: 11px;"><ion-label color="success" slot="end" style="font-size: 7px;">IN</ion-label> {{att.timein}}</p>
               <p style="font-size: 11px;"><ion-label color="danger" slot="end" style="font-size: 7px;">OUT</ion-label> {{att.timeout}}</p>
             </ion-label>
             <ion-label color="dark" style="text-align: right; font-size: 15px;">{{att.duration}}</ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-list *ngIf="isLoading" style="background-color: transparent;">
+          <ion-item style="border-bottom: 7px transparent dashed;">
+            <ion-spinner name="crescent" style="padding-right: 50px;"></ion-spinner> Please wait...
           </ion-item>
         </ion-list>
       </ion-col>
