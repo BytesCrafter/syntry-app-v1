@@ -13,51 +13,24 @@ export class HomePage implements OnInit {
 
   isLoading: any = true;
   myInterval = null;
-  previous = null;
-  attendance: any[] = [];
+  advisories: any[] = [];
 
   constructor(
     private api: ApiService,
     public auth: AuthService,
     private util: UtilService
   ) {
-    this.getMyClockedList();
+    this.getAdvisories();
   }
 
-  getMyClockedList() {
-    this.api.get('attendance/my_clocked_in_list').subscribe((response: any) => {
-      this.serverDatetime = new Date(response.status.local_time);
+  async getAdvisories() {
+    this.isLoading = false;
+
+    this.api.post('advisories/listdata', {}).subscribe((response: any) => {
+      this.serverDatetime = new Date(response.stamp);
 
       if(response.success) {
-
-        if(this.myInterval) {
-          clearInterval(this.myInterval);
-        }
-
-        this.myInterval = setInterval(() => {
-          this.serverDatetime.setSeconds(this.serverDatetime.getSeconds() + 1);
-        }, 1000);
-
-        if(response.status.clocked_in) {
-          this.clockedinDatetime = new Date(response.status.clocked_in); //Issue
-        } else {
-          this.clockedinDatetime = null;
-        }
-
-        this.previous = null;
-        this.attendance = [];
-        const clockedIn: any[] = response.data;
-        clockedIn.forEach(attd => {
-          this.attendance.push(
-            {
-              id: attd.id,
-              timein: attd.in_time,
-              timeout: attd.out_time,
-              duration: attd.duration
-            }
-          );
-        });
-
+        this.advisories = response.data;
       } else {
         this.util.modalAlert(
           'Something went wrong',
@@ -70,8 +43,9 @@ export class HomePage implements OnInit {
     });
   }
 
-  public get isClockedIn(): any {
-    return this.clockedinDatetime ? true:false;
+  stringToHtml(str) {
+    const parser = new DOMParser();
+	  return parser.parseFromString(str, 'text/html');
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -99,27 +73,6 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  logTime() {
-    const userId = this.auth.userToken.id;
-    this.api.post('attendance/logtime/'+userId, {
-      self: this.auth.userToken.uuid
-    }).subscribe(async (res: any) => {
-
-      if(res.success === false) {
-        this.util.modalAlert('Action not Allowed', res.message);
-        await this.sleep(3000);
-        return;
-      }
-
-      this.util.playAudio();
-      const premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
-      this.util.modalAlert(premsg, res.stamp, res.data.fname +' '+ res.data.lname);
-
-      this.getMyClockedList();
-      await this.sleep(3000);
-    });
   }
 
   sleep(ms) {
