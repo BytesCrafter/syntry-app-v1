@@ -17,7 +17,7 @@ export class AppComponent {
     { title: 'Attendance', url: '/attendance', icon: 'alarm' },
     { title: 'Schedule', url: '/schedule', icon: 'calendar' },
     { title: 'Overtime', url: '/overtime', icon: 'timer' },
-    { title: 'Change Pass', url: '/change-passwd', icon: 'medical' },
+    { title: 'Settings', url: '/settings', icon: 'settings' },
     // { title: 'Camera', url: '/camera', icon: 'camera' },
     // { title: 'Gallery', url: '/gallery', icon: 'images' },
     //{ title: 'Biometrix', url: '/qrscan', icon: 'qr-code' }

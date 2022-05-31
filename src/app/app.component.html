@@ -23,16 +23,30 @@
     <ion-menu contentId="main-content" *ngIf="auth.isAuthenticated">
       <ion-content>
 
-        <ion-list class="menu-header">
+        <ion-list *ngIf="auth.currentUser !== null" class="menu-header">
           <ion-item>
             <ion-thumbnail class="avatar-image" style="margin-bottom: 35px">
-              <ion-img [src]="auth.userToken.avatar" style="border-radius: 50%;"></ion-img>
+              <ion-img [src]="auth.currentUser.image" style="border-radius: 50%;"></ion-img>
             </ion-thumbnail>
           </ion-item>
           <ion-item>
             <div style="text-align: center; width: -webkit-fill-available; margin: 10px 0;">
-              <ion-label style="font-size: 14px; line-height: 20px;">{{ auth.userToken.fullname }}</ion-label>
-              <ion-label style="font-size: 12px; line-height: 20px;">{{ auth.userToken.email }}</ion-label>
+              <ion-label style="font-size: 14px; line-height: 20px;">{{ auth.currentUser.first_name +' ' + auth.currentUser.last_name }}</ion-label>
+              <ion-label style="font-size: 12px; line-height: 20px;">{{ auth.currentUser.email }}</ion-label>
+            </div>
+          </ion-item>
+        </ion-list>
+
+        <ion-list *ngIf="auth.currentUser === null" class="menu-header">
+          <ion-item>
+            <ion-thumbnail class="avatar-image" style="margin-bottom: 35px">
+              <ion-skeleton-text animated style="width: 100%; height: 100%; margin: auto; border-radius: 50%;"></ion-skeleton-text>
+            </ion-thumbnail>
+          </ion-item>
+          <ion-item>
+            <div style="text-align: center; width: -webkit-fill-available; margin: 10px 0;">
+              <ion-label style="font-size: 14px; line-height: 20px; text-align: center; margin-bottom: 10px;"><ion-skeleton-text animated style="width: 50%; margin: auto;"></ion-skeleton-text></ion-label>
+              <ion-label style="font-size: 12px; line-height: 20px; text-align: center;"><ion-skeleton-text animated style="width: 70%; margin: auto;"></ion-skeleton-text></ion-label>
             </div>
           </ion-item>
         </ion-list>
@@ -49,13 +63,13 @@
             <ion-label>Logout</ion-label>
           </ion-item>
         </ion-list>
-
+      </ion-content>
+      <ion-footer>
         <ion-list class="menu-footer">
           <ion-label class="footer-item">Syntry v{{ util.version }} © 2022</ion-label>
-          <ion-label class="footer-item footer-copy">Made Possible by BytesCrafter</ion-label>
+          <ion-label class="footer-item footer-copy">Made Possible by&nbsp;<a href="http://bytescrafter.net" target="_blank" style="color: gray;">BytesCrafter</a></ion-label>
         </ion-list>
-
-      </ion-content>
+      </ion-footer>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>

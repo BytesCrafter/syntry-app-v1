@@ -1,0 +1,41 @@
+<!--
+
+  Authors : Bytes Crafter
+  Website : https://bytescrafter.net
+  App Name : Galyon App
+  Created : 01-Sep-2020
+
+ -->
+ <ion-content>
+  <div class="space-top">
+
+  </div>
+  <div class="header">
+    <h4>Settings</h4>
+
+    <div style="padding: 20px;">
+      <!-- Default Segment -->
+      <ion-segment [(ngModel)]="curTab">
+        <ion-segment-button value="general">
+          <ion-label>General</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="change-password">
+          <ion-label>Change Password</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <div [ngSwitch]="curTab">
+      <ion-grid *ngSwitchCase="'general'">
+        <ion-label style="display: block; text-align: center; margin-top: 50px;" color="warning">
+          This setting page (GENERAL) is currently under development.
+        </ion-label>
+      </ion-grid>
+      <ion-grid *ngSwitchCase="'change-password'">
+        <app-change-passwd></app-change-passwd>
+        <div class="app-change-passwd"></div>
+      </ion-grid>
+    </div>
+
+  </div>
+</ion-content>
