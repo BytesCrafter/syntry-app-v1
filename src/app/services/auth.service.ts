@@ -11,6 +11,7 @@ import { Token } from '../model/token.model';
 export class AuthService {
 
   public static tokenKey: any = 'businext-token';
+  public currentUser: any = null;
   private subject: BehaviorSubject<Token>;
   private observable: Observable<Token>;
 
@@ -55,6 +56,16 @@ export class AuthService {
     localStorage.setItem(AuthService.tokenKey, jwtHash);
     const token = this.util.jwtDecode(jwtHash);
     this.subject.next(token);
+  }
+
+  getInfo() {
+    this.api.posts('users/get_user_info', {}).then((res: any) => {
+      if(res && res.success === true && res.data) {
+        this.currentUser = res.data;
+      }
+    }).catch(error => {
+      console.log('error', error);
+    });
   }
 
   login(username: string, password: string, callback) {
