@@ -22,14 +22,9 @@ ion-menu.md ion-note {
   padding-left: 10px;
 }
 
-ion-menu.md ion-list#inbox-list {
-  border-bottom: 1px solid var(--ion-color-step-150, #d7d8da);
-}
-
 ion-menu.md ion-list#inbox-list ion-list-header {
   font-size: 22px;
   font-weight: 600;
-
   min-height: 20px;
 }
 
@@ -109,9 +104,11 @@ ion-item.selected {
 }
 
 .menu-footer {
-  margin-top: 40px;
+  border-top: 1px solid var(--ion-color-step-150, #d7d8da);
+  padding: 15px !important;
+  margin: auto;
   .footer-item {
-    font-size: 16px;
+    font-size: 14px;
     flex-grow: 1;
     display: flex;
     align-items: flex-end;
@@ -126,5 +123,5 @@ ion-item.selected {
 .avatar-image {
   margin: 50px auto 0px;
   width: 100px;
-  height: auto;
+  height: 100px;
 }

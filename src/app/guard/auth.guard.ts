@@ -10,13 +10,16 @@ import { AuthService } from '../services/auth.service';
 export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
-    private api: ApiService
+    private api: ApiService,
+    private auth: AuthService
   ) {
 
     const uid = localStorage.getItem(AuthService.tokenKey);
     if (uid && uid != null && uid !== 'null') {
       this.api.posts('users/count_notification', {}).then((res: any) => {
-        //Just updating the last online.
+        if(res.success) {
+          this.auth.getInfo(); //Get user data.
+        }
       }).catch(error => {
         console.log('error', error);
       });

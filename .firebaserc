@@ -3,7 +3,7 @@
     "businext-app": {
       "hosting": {
         "app": [
-          "businext-app"
+          "erpat-ahm"
         ]
       }
     }
