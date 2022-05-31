@@ -21,6 +21,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/schedule/schedule.module').then( m => m.SchedulePageModule)
       },
       {
+        path: 'overtime',
+        loadChildren: () => import('./pages/overtime/overtime.module').then( m => m.OvertimePageModule)
+      },
+      {
         path: 'camera',
         loadChildren: () => import('./reserved/camera/camera.module').then( m => m.CameraPageModule),
       },

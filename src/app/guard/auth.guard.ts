@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
     const uid = localStorage.getItem(AuthService.tokenKey);
     if (uid && uid != null && uid !== 'null') {
       this.api.posts('users/count_notification', {}).then((res: any) => {
-        console.log('main', res);
+        //Just updating the last online.
       }).catch(error => {
         console.log('error', error);
       });

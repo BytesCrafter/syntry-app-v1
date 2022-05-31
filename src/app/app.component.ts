@@ -15,6 +15,7 @@ export class AppComponent {
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
     { title: 'Schedule', url: '/schedule', icon: 'calendar' },
+    { title: 'Overtime', url: '/overtime', icon: 'timer' },
     { title: 'Change Pass', url: '/change-passwd', icon: 'medical' },
     // { title: 'Camera', url: '/camera', icon: 'camera' },
     // { title: 'Gallery', url: '/gallery', icon: 'images' },
