@@ -14,7 +14,6 @@ export class AuthService {
   public currentUser: any = null;
   private subject: BehaviorSubject<Token>;
   private observable: Observable<Token>;
-  private currentUser: any = null;
 
   constructor(
     private router: Router,
