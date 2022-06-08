@@ -43,11 +43,11 @@ export class AppComponent {
     this.api.post('users/permissions', {}).subscribe((response: any) => {
       let authorized = false;
       if(response.success) {
-        if(response.admin) {
+        if(response.data.is_admin) {
           authorized = true;
         } else {
-          if(typeof response.data.can_use_biometric !== 'undefined') {
-            authorized = response.data.can_use_biometric ? true:false;
+          if(typeof response.data.permissions.can_use_biometric !== 'undefined') {
+            authorized = response.data.permissions.can_use_biometric ? true:false;
           }
         }
         if(authorized && this.appPages.filter(e => e.title === 'Biometrix').length === 0) {
@@ -68,6 +68,15 @@ export class AppComponent {
   logout() {
     localStorage.clear();
     this.router.navigate([`/login`], { replaceUrl: true });
+    //If user have manage timecard then add
+    // this.api.post('users/logout', {}).subscribe((response: any) => {
+    //   if(response.success) {
+    //     localStorage.clear();
+    //     this.router.navigate([`/login`], { replaceUrl: true });
+    //   } else {
+    //     console.log('Something went wrong');
+    //   }
+    // });
   }
 
 }

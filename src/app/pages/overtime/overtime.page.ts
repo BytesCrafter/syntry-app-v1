@@ -11,6 +11,7 @@ import { UtilService } from 'src/app/services/util.service';
 })
 export class OvertimePage implements OnInit {
 
+  isLogging: any = false;
   isLoading: any = true;
   myInterval = null;
   previous = null;
@@ -25,7 +26,7 @@ export class OvertimePage implements OnInit {
   }
 
   getMyClockedList() {
-    this.api.get('overtime/my_clocked_in_list').subscribe((response: any) => {
+    this.api.posts('overtime/my_clocked_in_list', {}).then((response: any) => {
       this.serverDatetime = new Date(response.status.local_time);
 
       if(response.success) {
@@ -102,10 +103,10 @@ export class OvertimePage implements OnInit {
   }
 
   logTime() {
+    this.isLogging = true;
     const userId = this.auth.userToken.id;
-    this.api.post('overtime/logtime/'+userId, {
-      self: this.auth.userToken.uuid
-    }).subscribe(async (res: any) => {
+    this.api.posts('overtime/logtime', {}).then(async (res: any) => {
+      this.isLogging = false;
 
       if(res.success === false) {
         this.util.modalAlert('Action not Allowed', res.message);
@@ -115,7 +116,7 @@ export class OvertimePage implements OnInit {
 
       this.util.playAudio();
       const premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
-      this.util.modalAlert(premsg, res.stamp, res.data.fname +' '+ res.data.lname);
+      this.util.modalAlert(premsg, res.stamp, this.auth.currentUser.first_name +' '+this.auth.currentUser.last_name);
 
       this.getMyClockedList();
       await this.sleep(3000);

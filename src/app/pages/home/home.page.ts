@@ -20,13 +20,14 @@ export class HomePage implements OnInit {
     public auth: AuthService,
     private util: UtilService
   ) {
+    this.auth.getInfo(); //Get user data.
     this.getAdvisories();
   }
 
   async getAdvisories() {
     this.isLoading = false;
 
-    this.api.post('advisories/listdata', {}).subscribe((response: any) => {
+    this.api.posts('advisories/listdata', {}).then((response: any) => {
       this.serverDatetime = new Date(response.stamp);
 
       if(response.success) {
@@ -40,6 +41,8 @@ export class HomePage implements OnInit {
       }
 
       this.isLoading = false;
+    }).catch(error => {
+      console.log('error', error);
     });
   }
 

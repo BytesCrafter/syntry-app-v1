@@ -25,7 +25,7 @@
             <ion-card-subtitle class="ion-text-center time-info">{{currentDatestart}}</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content class="ion-text-center">
-            <ion-button color="danger" class="action-btn" (click)="logTime()" style="margin-right: 15px;">TIME OUT</ion-button>
+            <ion-button color="danger" class="action-btn" (click)="logTime()" style="margin-right: 15px;" [disabled]="isLogging">TIME OUT</ion-button>
             <ion-button color="secondary" class="action-btn" disabled="">TAKE BREAK</ion-button>
           </ion-card-content>
         </ion-card>
@@ -37,7 +37,7 @@
             <ion-card-subtitle class="ion-text-center time-info">{{currentDate}}</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content class="ion-text-center">
-            <ion-button color="success" class="action-btn" (click)="logTime()" style="width: max-content;">TIME IN</ion-button>
+            <ion-button color="success" class="action-btn" (click)="logTime()" style="width: max-content;" [disabled]="isLogging">TIME IN</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>

@@ -121,7 +121,7 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
         this.startScan();
     }, false);
 
-    this.api.get('attendance/clocked_in_list').subscribe((response: any) => {
+    this.api.posts('attendance/clocked_in_list', {}).then((response: any) => {
       if(response.success) {
         this.previous = null;
 
@@ -129,9 +129,9 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
         clockedIn.forEach(attd => {
           this.attendance.push(
             {
-              avatar: attd.avatar,
-              fname: attd.fname,
-              lname: attd.lname,
+              avatar: attd.image,
+              fname: attd.first_name,
+              lname: attd.last_name,
               stamp: attd.in_time,
               color: attd.out_time ? 'danger' : 'success',
               event: attd.out_time ? ' OUT ' : ' IN '
@@ -300,7 +300,9 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
       this.statusColor = 'primary';
 
       this.dname = 'Hello!';
-      await this.api.get('users/get/'+userId).subscribe((response: any) => {
+      await this.api.posts('users/get', {
+        current: userId
+      }).then(async (response: any) => {
         if(response.success) {
           this.dname = 'Hey! ' + response.data.fname;
         }
@@ -322,8 +324,8 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
     this.scanActive = false;
     this.isSending = true;
 
-    this.api.post('attendance/logtime/'+userId, {
-      id: this.auth.userToken.id
+    this.api.post('attendance/biotime', {
+      current: userId
     }).subscribe(async (res: any) => {
 
       if(res.success === false) {
@@ -339,7 +341,7 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
 
       this.attendance.unshift(
         {
-          avatar: res.data.avatar,
+          avatar: res.data.image,
           fname: res.data.fname,
           lname: res.data.lname,
           stamp: res.stamp,
