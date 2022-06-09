@@ -10,14 +10,14 @@
   <div class="login-window">
     <div class="header-section">
       <img src="assets/images/logo.png" alt="" class="icon">
-      <label><strong>Syntry</strong> v{{util.version}}</label>
+      <label style="color: white;"><strong>Syntry</strong> v{{util.version}}</label>
     </div>
     <div class="form-div">
       <ion-label class="form-head"> {{util.getString('Sign in')}} </ion-label>
       <ion-input type="email" [placeholder]="util.getString('Email')" [(ngModel)]="email">
         <ion-icon name="mail" slot="icon-only"></ion-icon>
       </ion-input>
-      <ion-input type="password" [placeholder]="util.getString('Password')" [(ngModel)]="password">
+      <ion-input type="password" [placeholder]="util.getString('Password')" [(ngModel)]="password" (keyup.enter)="login()">
         <ion-icon name="key" slot="icon-only"></ion-icon>
       </ion-input>
       <ion-button expand="block" (click)="login()">
