@@ -26,6 +26,7 @@ export class AttendancePage implements OnInit {
   }
 
   getMyClockedList() {
+    this.isLoading = true;
     this.api.posts('attendance/my_clocked_in_list', {}).then((response: any) => {
       this.serverDatetime = new Date(response.status.local_time);
 
@@ -66,7 +67,10 @@ export class AttendancePage implements OnInit {
           'The server did not respond accordingly.'
         );
       }
-
+    }).catch(error => {
+      this.util.modalAlert('Error', 'Something went wrong!');
+      console.log('error', error);
+    }).finally(() => {
       this.isLoading = false;
     });
   }
@@ -106,10 +110,9 @@ export class AttendancePage implements OnInit {
     this.isLogging = true;
 
     const userId = this.auth.userToken.id;
-    this.api.post('attendance/logtime', {
+    this.api.posts('attendance/logtime', {
       self: this.auth.userToken.uuid
-    }).subscribe(async (res: any) => {
-      this.isLogging = false;
+    }).then(async (res: any) => {
 
       if(res.success === false) {
         this.util.modalAlert('Action not Allowed', res.message);
@@ -123,6 +126,11 @@ export class AttendancePage implements OnInit {
 
       this.getMyClockedList();
       await this.sleep(3000);
+    }).catch(error => {
+      this.util.modalAlert('Error', 'Something went wrong!');
+      console.log('error', error);
+    }).finally(() => {
+      this.isLogging = false;
     });
   }
 

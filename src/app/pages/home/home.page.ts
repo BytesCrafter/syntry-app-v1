@@ -20,12 +20,11 @@ export class HomePage implements OnInit {
     public auth: AuthService,
     private util: UtilService
   ) {
-    this.auth.getInfo(); //Get user data.
     this.getAdvisories();
   }
 
   async getAdvisories() {
-    this.isLoading = false;
+    this.isLoading = true;
 
     this.api.posts('advisories/listdata', {}).then((response: any) => {
       this.serverDatetime = new Date(response.stamp);
@@ -39,10 +38,11 @@ export class HomePage implements OnInit {
           'The server did not respond accordingly.'
         );
       }
-
-      this.isLoading = false;
     }).catch(error => {
+      this.util.modalAlert('Error', 'Something went wrong!');
       console.log('error', error);
+    }).finally(() => {
+      this.isLoading = false;
     });
   }
 

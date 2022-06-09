@@ -16,6 +16,7 @@ export class AuthGuard implements CanActivate {
   ) {
     const uid = localStorage.getItem(AuthService.tokenKey);
     if (uid && uid != null && uid !== 'null') {
+      this.auth.getInfo(); //Get user data.
       this.api.posts('users/refresh', {}).then((res: any) => { console.log();
         if(res.status === 401) {
           localStorage.clear();
@@ -23,7 +24,6 @@ export class AuthGuard implements CanActivate {
         }
         if(res.success) {
           this.auth.setToken = res.data;
-          this.auth.getInfo(); //Get user data.
         }
       }).catch(error => {
         console.log('error', error);

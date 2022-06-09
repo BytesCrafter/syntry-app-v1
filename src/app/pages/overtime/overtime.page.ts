@@ -26,6 +26,8 @@ export class OvertimePage implements OnInit {
   }
 
   getMyClockedList() {
+    this.isLoading = true;
+
     this.api.posts('overtime/my_clocked_in_list', {}).then((response: any) => {
       this.serverDatetime = new Date(response.status.local_time);
 
@@ -66,7 +68,10 @@ export class OvertimePage implements OnInit {
           'The server did not respond accordingly.'
         );
       }
-
+    }).catch(error => {
+      this.util.modalAlert('Error', 'Something went wrong!');
+      console.log('error', error);
+    }).finally(() => {
       this.isLoading = false;
     });
   }
@@ -106,7 +111,6 @@ export class OvertimePage implements OnInit {
     this.isLogging = true;
     const userId = this.auth.userToken.id;
     this.api.posts('overtime/logtime', {}).then(async (res: any) => {
-      this.isLogging = false;
 
       if(res.success === false) {
         this.util.modalAlert('Action not Allowed', res.message);
@@ -120,6 +124,11 @@ export class OvertimePage implements OnInit {
 
       this.getMyClockedList();
       await this.sleep(3000);
+    }).catch(error => {
+      this.util.modalAlert('Error', 'Something went wrong!');
+      console.log('error', error);
+    }).finally(() => {
+      this.isLogging = false;
     });
   }
 

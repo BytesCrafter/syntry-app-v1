@@ -9,6 +9,7 @@ import { UtilService } from 'src/app/services/util.service';
 })
 export class SchedulePage implements OnInit {
 
+  isLoading: any = true;
   public scheds: any[] = [];
 
   constructor(
@@ -17,6 +18,7 @@ export class SchedulePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.isLoading = true;
     this.api.posts('attendance/my_sched', {}).then((res: any) => {
       if(res && res.success === true) {
         this.scheds.push(res.data.mon);
@@ -32,6 +34,8 @@ export class SchedulePage implements OnInit {
     }).catch(error => {
       this.util.modalAlert('Error', 'Something went wrong!');
       console.log('error', error);
+    }).finally(() => {
+      this.isLoading = false;
     });
   }
 

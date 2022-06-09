@@ -13,7 +13,7 @@
   <div class="header">
     <h4>My Schedule</h4>
 
-    <div *ngIf="scheds" style="padding: 20px;">
+    <div *ngIf="scheds && !isLoading" style="padding: 20px;">
       <!-- List of Input Items -->
       <ion-list style="background-color: transparent;">
         <ion-item  *ngFor="let sched of scheds; let i = index" style="border-bottom: 10px transparent solid;">
@@ -26,8 +26,12 @@
       </ion-list>
     </div>
 
-    <div *ngIf="!scheds" style="padding: 20px;">
+    <div *ngIf="!scheds && !isLoading" style="padding: 20px;" class="ion-text-center">
       <ion-label color="warning">No schedule had been assigned to you yet.</ion-label>
+    </div>
+
+    <div *ngIf="isLoading" style="padding: 20px;" class="ion-text-center">
+      <ion-spinner name="crescent"></ion-spinner>
     </div>
 
   </div>

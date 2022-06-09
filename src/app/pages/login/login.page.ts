@@ -52,6 +52,7 @@ export class LoginPage implements OnInit {
         this.menuController.enable(true);
         this.email = '';
         this.password = '';
+        this.auth.getInfo();
         this.app.reloadPermission();
         this.router.navigate(['/home']);
       } else {
