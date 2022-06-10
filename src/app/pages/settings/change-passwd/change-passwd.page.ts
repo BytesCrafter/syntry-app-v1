@@ -22,6 +22,11 @@ export class ChangePasswdPage implements OnInit {
   }
 
   changepass() {
+    if(!this.oldpass || !this.newpass || !this.confirmpass) {
+      this.util.modalAlert('Invalid', 'Inputs are currently empty!');
+      return;
+    }
+
     this.api.posts('users/changepass', {
       oldpass: this.oldpass,
       newpass: this.newpass,
