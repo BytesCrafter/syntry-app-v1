@@ -5,8 +5,6 @@ import { AppComponent } from 'src/app/app.component';
 import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router';
-import { Page } from '@ionic/core';
 
 @Component({
   selector: 'app-qrscan',
@@ -21,7 +19,7 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
   previous = null;
   lastLog: number;
   retries: any = 0;
-  dname: any = 'Hello!';
+  dname: any = 'Ready!';
   timespan: any = 1; //do not set
   get countdown(): number {
       return this.timespan - this.retries;
@@ -33,7 +31,6 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
   canvasContext: any;
 
   scanActive = false;
-  loading: HTMLIonLoadingElement = null;
   sColor = 'light';
   get statusColor(): string {
     if(this.isSending) {
@@ -71,28 +68,9 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
   constructor(
     public util: UtilService,
     private api: ApiService,
-    private loadingCtrl: LoadingController,
     private plt: Platform,
-    private auth: AuthService,
     public app: AppComponent,
-    private router: Router,
   ) {
-    this.api.post('users/permissions', {}).subscribe((response: any) => {
-      let authorized = false;
-      if(response.success) {
-        if(response.admin) {
-          authorized = true;
-        } else {
-          if(typeof response.data.can_use_biometric !== 'undefined') {
-            authorized = response.data.can_use_biometric ? true:false;
-          }
-        }
-        if(!authorized) {
-          this.router.navigate(['/']);
-        }
-      }
-    });
-
     const isInStandaloneMode = () =>
       'standalone' in window.navigator && window.navigator['standalone'];
     if (this.plt.is('ios') && isInStandaloneMode()) {
@@ -197,17 +175,15 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
 
       this.videoStream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: 'user',
-          height: screen.height / 2,
-          width: screen.width
+          facingMode: 'user'
         }
       })
       .then(this.gotMedia.bind(this))
-      .catch(err => console.error('getUserMedia() failed: ', err));
+      .catch(err => console.error('getUserMedia() failed: ', err))
+      .finally(() => {
+        console.log('Video stream started.');
+      });
     }
-
-    this.loading = await this.loadingCtrl.create({});
-    await this.loading.present();
 
     requestAnimationFrame(this.scan.bind(this));
   }
@@ -239,12 +215,8 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
 
   async scan() {
     if (this.videoElement.readyState === this.videoElement.HAVE_ENOUGH_DATA) {
-      if (this.loading) {
-        await this.loading.dismiss();
-        this.loading = null;
-        this.scanActive = true;
-      }
 
+      this.scanActive = true;
       this.canvasElement.height = this.videoElement.videoHeight;
       this.canvasElement.width = this.videoElement.videoWidth;
 
@@ -284,8 +256,6 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
       }
     }
 
-    // this.previous = null;
-    // this.retries = 0;
     requestAnimationFrame(this.scan.bind(this));
   }
 
@@ -299,7 +269,7 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
       this.previous = userId;
       this.statusColor = 'primary';
 
-      this.dname = 'Hello!';
+      this.dname = 'Verifying...';
       await this.api.posts('users/get', {
         current: userId
       }).then(async (response: any) => {
@@ -327,6 +297,7 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
     this.api.post('attendance/biotime', {
       current: userId
     }).subscribe(async (res: any) => {
+      this.dname = 'Ready!';
 
       if(res.success === false) {
         this.util.modalAlert('Action not Allowed', res.message);

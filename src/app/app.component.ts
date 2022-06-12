@@ -31,34 +31,15 @@ export class AppComponent {
     private api: ApiService,
     private menuCtrl: MenuController
   ) {
-    this.reloadPermission();
-  }
-
-  reloadPermission() {
-    if(!this.auth.isAuthenticated) {
-      return;
-    }
-
-    //If user have manage timecard then add
-    this.api.post('users/permissions', {}).subscribe((response: any) => {
-      let authorized = false;
-      if(response.success) {
-        if(response.data.is_admin) {
-          authorized = true;
-        } else {
-          if(typeof response.data.permissions.can_use_biometric !== 'undefined') {
-            authorized = response.data.permissions.can_use_biometric ? true:false;
-          }
-        }
-        if(authorized && this.appPages.filter(e => e.title === 'Biometrix').length === 0) {
-          this.appPages.push({ title: 'Biometrix', url: '/qrscan', icon: 'qr-code' });
-        }
-      }
-    });
+    this.auth.loadPermission();
   }
 
   openMenu() {
     this.menuCtrl.toggle();
+  }
+
+  openBio() {
+    this.router.navigate(['/qrscan']);
   }
 
   reloadPage() {

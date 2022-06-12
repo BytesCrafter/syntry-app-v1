@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ApiService } from './api.service';
 import { UtilService } from './util.service';
 import { Token } from '../model/token.model';
+import { Permission } from '../model/permission.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,12 @@ export class AuthService {
 
   public static tokenKey: any = 'businext-token';
   public currentUser: any = null;
+
   private subject: BehaviorSubject<Token>;
   private observable: Observable<Token>;
+
+  private permitSubject: BehaviorSubject<Permission>;
+  private permitObservable: Observable<Permission>;
 
   constructor(
     private router: Router,
@@ -26,8 +31,20 @@ export class AuthService {
       token = this.util.jwtDecode(jwtHash);
       //const isExpired = jwt.isTokenExpired(token);
     }
+
     this.subject = new BehaviorSubject<Token>(token);
     this.observable = this.subject.asObservable();
+
+    this.permitSubject = new BehaviorSubject<Permission>(null);
+    this.permitObservable = this.permitSubject.asObservable();
+  }
+
+  public get userPermits(): Permission {
+    if(this.isAuthenticated && typeof this.permitSubject.value !== 'undefined') {
+      return this.permitSubject.value;
+    }
+
+    return null;
   }
 
   public get isAuthenticated(): boolean {
@@ -85,6 +102,19 @@ export class AuthService {
     }).catch(error => {
       console.log('error', error);
       callback({ success: false, message: 'Something went wrong!' });
+    });
+  }
+
+  loadPermission() {
+    if(!this.isAuthenticated) {
+      return;
+    }
+
+    //If user have manage timecard then add
+    this.api.post('users/permissions', {}).subscribe((response: any) => {
+      if(response && response.success && response.data) {
+        this.permitSubject.next(response.data);
+      }
     });
   }
 
