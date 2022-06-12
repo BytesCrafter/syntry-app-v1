@@ -3,9 +3,12 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpResponse,
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { catchError,tap} from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { environment } from 'src/environments/environment';
 
@@ -16,7 +19,7 @@ export class JwtInterceptor implements HttpInterceptor {
     private auth: AuthService
   ) {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add auth header with jwt if user is logged in and request is to api url
     const user = this.auth.userToken;
     const isLoggedIn = user;
@@ -30,6 +33,16 @@ export class JwtInterceptor implements HttpInterceptor {
         });
     }
 
-    return next.handle(request);
+    return next.handle(request).pipe(
+      tap(event => {
+        if (event instanceof HttpResponse) {
+          //console.log(event.status);
+        }
+      }, error => {
+          //console.error(error.status);
+          //console.error(error.message);
+      })
+    );
+
   }
 }
