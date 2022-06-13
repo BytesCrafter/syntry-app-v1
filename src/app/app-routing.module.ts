@@ -29,6 +29,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/overtime/overtime.module').then( m => m.OvertimePageModule)
       },
       {
+        path: 'teams',
+        loadChildren: () => import('./pages/teams/teams.module').then( m => m.TeamsPageModule)
+      },
+      {
         path: 'camera',
         loadChildren: () => import('./reserved/camera/camera.module').then( m => m.CameraPageModule),
       },

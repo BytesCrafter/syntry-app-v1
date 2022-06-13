@@ -17,7 +17,6 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { JwtInterceptor } from './interceptor/jwt.interceptor';
-import { ChangePasswdPage } from './pages/settings/change-passwd/change-passwd.page';
 
 @NgModule({
   declarations: [

@@ -1,0 +1,40 @@
+ion-content {
+  .space-top {
+    height: 55px;
+  }
+  .header {
+    padding: 25px;
+  }
+}
+
+.avatar {
+  width: 25px;
+  height: auto;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+tr th {
+  color: var(--ion-color-primary);
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+
+}
+
+.title {
+  font-size: medium;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 20px;
+}

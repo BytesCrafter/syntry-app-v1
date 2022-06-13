@@ -1,0 +1,76 @@
+<!--
+
+  Authors : Bytes Crafter
+  Website : https://bytescrafter.net
+  App Name : Galyon App
+  Created : 01-Sep-2020
+
+ -->
+ <ion-content>
+  <div class="space-top">
+
+  </div>
+  <div class="header">
+    <h4>Team Members</h4>
+
+    <div style="padding: 20px;">
+      <ion-segment [(ngModel)]="curTab" (ionChange)="onChangeTab(curTab)">
+        <ion-segment-button *ngFor="let tab of tabList; let i = index" [value]="tab.id">
+          <ion-label>{{tab.name}}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <div *ngIf="!isLoading" [ngSwitch]="curTab">
+      <ion-grid *ngSwitchCase="curTab">
+        <ion-row class="title">
+          <ion-title>Department Heads ({{activeHeads.length}})</ion-title>
+        </ion-row>
+        <ion-row>
+          <table>
+            <tr>
+              <th>Image</th>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>Clocked in</th>
+            </tr>
+            <tr *ngFor="let item of activeHeads; let i = index">
+              <td>
+                <ion-img class="avatar" [src]="item.image" style="border-radius: 50%;"></ion-img>
+              </td>
+              <td>{{item.fname}}</td>
+              <td>{{item.lname}}</td>
+              <td>{{item.clockin}}</td>
+            </tr>
+          </table>
+        </ion-row>
+        <ion-row class="title" style="padding-top: 30px;">
+          <ion-title>Department Members ({{activeMembers.length}})</ion-title>
+        </ion-row>
+        <ion-row>
+          <table>
+            <tr>
+              <th>Image</th>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>Clocked in</th>
+            </tr>
+            <tr *ngFor="let item of activeMembers; let i = index">
+              <td>
+                <ion-img class="avatar" [src]="item.image" style="border-radius: 50%;"></ion-img>
+              </td>
+              <td>{{item.fname}}</td>
+              <td>{{item.lname}}</td>
+              <td>{{item.clockin}}</td>
+            </tr>
+          </table>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <div *ngIf="isLoading" style="padding: 20px;" class="ion-text-center">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+
+  </div>
+</ion-content>
