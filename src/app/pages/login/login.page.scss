@@ -5,7 +5,7 @@
   Created : 01-Jan-2021
 */
 ion-content{
-  --background: var(--ion-color-primary);
+
 }
 
 .login-window{
@@ -17,26 +17,32 @@ ion-content{
   left: 50%;
   transform: translate(-50%,-50%);
 
+
   .header-section{
     display: grid;
     text-align: center;
+    padding: 15px;
     .icon {
       width: 320px;
       height: auto;
-
+    }
+    label {
+      color: var(--ion-color-primary);
+      font-size: x-small;
+      margin-top: 10px;
     }
   }
 
   ion-icon{
       color: var(--ion-color-primary);
-      font-size: 20px;
+      font-size: 15px;
       padding: 10px;
   }
 
   .form-div{
       padding: 25px;
       position: relative;
-      border: 1px solid white;
+      border: 1px solid var(--ion-color-primary);
       border-radius: 20px;
       margin-top: 26px;
       .form-head{
@@ -52,10 +58,10 @@ ion-content{
           color: white;
       }
       ion-input{
-          background: white;
           color: rgb(49, 49, 49);
           border-radius: 10px;
           margin-bottom: 15px;
+          font-size: 14px;
       }
       ion-button{
           margin-top: 20px;
@@ -69,4 +75,10 @@ ion-content{
         --color: var(--ion-color-light);
     }
   }
+}
+
+.header-logo {
+  margin: auto;
+  width: max-content;
+  height: 50px;
 }

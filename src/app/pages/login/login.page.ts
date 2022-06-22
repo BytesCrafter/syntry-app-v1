@@ -3,7 +3,7 @@ import { UtilService } from 'src/app/services/util.service';
 import { MenuController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { AppComponent } from 'src/app/app.component';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-login',
@@ -15,12 +15,14 @@ export class LoginPage implements OnInit {
   password: any = '';
   loggedIn: boolean;
 
+  siteLogo: any = 'assets/images/logo.png';
+
   constructor(
     public util: UtilService,
     private auth: AuthService,
     private menuController: MenuController,
     private router: Router,
-    private app: AppComponent
+    private api: ApiService
   ) {
     //Check if the is a token in local storage but need to check first.
     if(localStorage.getItem(AuthService.tokenKey) === null) {
@@ -32,6 +34,13 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+    this.api.posts('settings/company_info', {}).then((res: any) => {
+      if(res.success === true) {
+        this.siteLogo = res.logo ? res.logo:this.siteLogo;
+      }
+    }).catch(error => {
+      console.log('error', error);
+    });
   }
 
   login() {

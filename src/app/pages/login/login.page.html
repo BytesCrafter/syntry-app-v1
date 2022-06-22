@@ -9,15 +9,17 @@
 <ion-content>
   <div class="login-window">
     <div class="header-section">
-      <img src="assets/images/logo.png" alt="" class="icon">
-      <label style="color: white;"><strong>Syntry</strong> v{{util.version}}</label>
+      <ion-thumbnail class="header-logo">
+        <ion-img [src]="siteLogo"></ion-img>
+      </ion-thumbnail>
+      <label><strong>Syntry</strong> v{{util.version}}</label>
     </div>
     <div class="form-div">
       <ion-label class="form-head"> {{util.getString('Sign in')}} </ion-label>
-      <ion-input type="email" [placeholder]="util.getString('Email')" [(ngModel)]="email">
+      <ion-input type="email" [placeholder]="util.getString('Email')" [(ngModel)]="email" autocomplete="off">
         <ion-icon name="mail" slot="icon-only"></ion-icon>
       </ion-input>
-      <ion-input type="password" [placeholder]="util.getString('Password')" [(ngModel)]="password" (keyup.enter)="login()">
+      <ion-input type="password" [placeholder]="util.getString('Password')" [(ngModel)]="password" (keyup.enter)="login()" autocomplete="off">
         <ion-icon name="key" slot="icon-only"></ion-icon>
       </ion-input>
       <ion-button expand="block" (click)="login()">
