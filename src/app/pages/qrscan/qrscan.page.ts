@@ -175,6 +175,8 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
 
       this.videoStream = await navigator.mediaDevices.getUserMedia({
         video: {
+          width: 720,
+          height: 720,
           facingMode: 'user'
         }
       })
@@ -195,7 +197,7 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
 
     // Check whether focus distance is supported or not.
     if (!capabilities.focusDistance) {
-      this.util.modalAlert('NOT SUPPORTED', '', 'Sorry, manual focus not supported!');
+      //this.util.modalAlert('NOT SUPPORTED', '', 'Sorry, manual focus not supported!');
     } else {
       track.applyConstraints({
         advanced: [{
@@ -307,19 +309,32 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
       }
 
       this.util.playAudio();
-      const premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
+      let premsg = res.clocked ? 'Goodbye! ' : 'Welcome! ';
+      if(typeof res.break !== 'undefined' && typeof res.in !== 'undefined') {
+        premsg = res.in?'Enjoy your break!':'Welcome back, glad your here.';
+        this.attendance.unshift(
+          {
+            avatar: res.data.image,
+            fname: res.data.fname,
+            lname: res.data.lname,
+            stamp: res.stamp,
+            color: 'secondary',
+            event: ' BREAK '
+          }
+        );
+      } else {
+        this.attendance.unshift(
+          {
+            avatar: res.data.image,
+            fname: res.data.fname,
+            lname: res.data.lname,
+            stamp: res.stamp,
+            color: res.clocked ? 'danger' : 'success',
+            event: res.clocked ? ' OUT ' : ' IN '
+          }
+        );
+      }
       this.util.modalAlert(premsg, res.stamp, res.data.fname +' '+ res.data.lname);
-
-      this.attendance.unshift(
-        {
-          avatar: res.data.image,
-          fname: res.data.fname,
-          lname: res.data.lname,
-          stamp: res.stamp,
-          color: res.clocked ? 'danger' : 'success',
-          event: res.clocked ? ' OUT ' : ' IN '
-        }
-      );
 
       await this.sleep(3000);
       this.resetScan();
