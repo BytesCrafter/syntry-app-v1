@@ -124,7 +124,7 @@ export class UtilService {
     await alert.present();
     setTimeout(()=> {
       alert.dismiss();
-    }, 2500);
+    }, 2000);
   }
 
   jwtDecode(token: string) {

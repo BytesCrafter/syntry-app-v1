@@ -1,10 +1,9 @@
-import { Component, ViewChild, ElementRef, HostListener, AfterViewInit, OnDestroy } from '@angular/core';
-import { ToastController, LoadingController, Platform } from '@ionic/angular';
+import { Component, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Platform } from '@ionic/angular';
 import jsQR from 'jsqr';
 import { AppComponent } from 'src/app/app.component';
 import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
-import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-qrscan',
@@ -18,12 +17,7 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
 
   previous = null;
   lastLog: number;
-  retries: any = 0;
   dname: any = 'Ready!';
-  timespan: any = 1; //do not set
-  get countdown(): number {
-      return this.timespan - this.retries;
-  }
 
   videoStream = null;
   canvasElement: any;
@@ -59,31 +53,47 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
     }
   }
 
-  focusValue = 1;
-  previouslyCorrected = false;
-  isResizing = false;
-
   attendance: any[] = [];
+  focusValue = 1;
+  public curDate: Date = new Date();
 
   constructor(
     public util: UtilService,
     private api: ApiService,
-    private plt: Platform,
     public app: AppComponent,
   ) {
-    const isInStandaloneMode = () =>
-      'standalone' in window.navigator && window.navigator['standalone'];
-    if (this.plt.is('ios') && isInStandaloneMode()) {
-      console.log('I am a an iOS PWA!');
-      // E.g. hide the scan functionality!
-    }
+    this.api.posts('attendance/clocked_in_list', {}).then((response: any) => {
+      if(response.success) {
+        this.previous = null;
+
+        const clockedIn: any[] = response.data;
+        clockedIn.forEach(attd => {
+          this.attendance.push({
+              avatar: attd.image,
+              fname: attd.first_name,
+              lname: attd.last_name,
+              stamp: attd.in_time,
+              color: attd.out_time ? 'danger' : 'success',
+              event: attd.out_time ? ' OUT ' : ' IN '
+          });
+        });
+
+      }
+    });
+
+    setInterval(() => {
+      this.curDate = new Date();
+    }, 1);
+
+    setInterval(()=> {
+      if( (!this.scanActive || !this.isSending) && this.sinceLastLog() > 60) {
+        location.reload();
+      }
+    }, 60000);
 
     this.lastLog = new Date().getTime();
     setInterval(()=> {
-      const timer = new Date().getTime() - this.lastLog;
-      const seconds = timer/1000;
-      if( seconds > 10) {
-        this.retries = 0;
+      if( !this.scanActive && this.sinceLastLog() > 5) {
         this.previous = null;
         this.scanActive = true;
         this.isSending = false;
@@ -92,42 +102,13 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
     }, 1000);
 
     this.focusValue = Number(localStorage.getItem('focusValue'));
-    let supportsOrientationChange = 'onorientationchange' in window,
-      orientationEvent = supportsOrientationChange ? 'orientationchange' : 'resize';
-    window.addEventListener(orientationEvent, () => {
-        this.videoStream = null;
-        this.startScan();
-    }, false);
-
-    this.api.posts('attendance/clocked_in_list', {}).then((response: any) => {
-      if(response.success) {
-        this.previous = null;
-
-        const clockedIn: any[] = response.data;
-        clockedIn.forEach(attd => {
-          this.attendance.push(
-            {
-              avatar: attd.image,
-              fname: attd.first_name,
-              lname: attd.last_name,
-              stamp: attd.in_time,
-              color: attd.out_time ? 'danger' : 'success',
-              event: attd.out_time ? ' OUT ' : ' IN '
-            }
-          );
-        });
-
-      }
-    });
+    this.videoStream = null;
+    this.startScan();
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    if(!this.isResizing) {
-      this.isResizing = true;
-      this.videoStream = null;
-      this.startScan();
-    }
+  sinceLastLog() {
+    const timer = new Date().getTime() - this.lastLog;
+    return timer/1000;
   }
 
   onSliderEvent(event) {
@@ -159,7 +140,9 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
   }
 
   sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    setTimeout(() => {
+      this.resetScan();
+    }, ms);
   }
 
   async ngAfterViewInit() {
@@ -210,7 +193,6 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
     this.videoElement.srcObject = mediastream;
     this.videoElement.setAttribute('playsinline', true);
     this.videoElement.play();
-    this.isResizing = false;
 
     return mediastream;
   }
@@ -241,7 +223,7 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
         inversionAttempts: 'dontInvert'
       });
 
-      if (code) {
+      if (!this.isSending && code) {
         //Temporary disable scan to take time for qr processing.
         this.scanActive = false;
 
@@ -253,8 +235,6 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
             return;
           }
         }
-
-        this.scanActive = true;
       }
     }
 
@@ -263,11 +243,9 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
 
   async logtime(userId: any = 0) {
     this.lastLog = new Date().getTime();
-    this.retries += 1;
 
     //New user clocked in.
     if(this.previous !== userId ) {
-      this.retries = 0;
       this.previous = userId;
       this.statusColor = 'primary';
 
@@ -281,19 +259,12 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
       });
       this.startScan();
     } else {
-      if(this.countdown !== 0) {
-        this.startScan();
-        return;
-      }
-
-      this.retries = 0;
       this.previous = null;
       this.trySend(userId); //Validated! Send clocked in.
     }
   }
 
   async trySend(userId: any = 0) {
-    this.scanActive = false;
     this.isSending = true;
 
     this.api.post('attendance/biotime', {
@@ -303,8 +274,7 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
 
       if(res.success === false) {
         this.util.modalAlert('Action not Allowed', res.message);
-        await this.sleep(3000);
-        this.resetScan();
+        this.sleep(3000);
         return;
       }
 
@@ -336,13 +306,11 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
       }
       this.util.modalAlert(premsg, res.stamp, res.data.fname +' '+ res.data.lname);
 
-      await this.sleep(3000);
-      this.resetScan();
+      this.sleep(3000);
     });
   }
 
   resetScan() {
-    this.retries = 0;
     this.previous = null;
     this.scanActive = true;
     this.isSending = false;
