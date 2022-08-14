@@ -46,6 +46,10 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
     }
   }
 
+  modalActive: any = false;
+  modalTitle: any = '';
+  modalMsg: any = '';
+
   attendance: any[] = [];
   lastLog: number;
   public curDate: Date = new Date();
@@ -83,9 +87,7 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
         return;
       }
 
-      this.previous = null;
-      this.scanActive = true;
-      this.isSending = false;
+      this.resetScan();
       this.lastLog = new Date().getTime();
     }, 1000);
   }
@@ -190,8 +192,6 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
   async scan() {
     if (this.videoElement.readyState === this.videoElement.HAVE_ENOUGH_DATA) {
 
-      this.scanActive = true;
-
       this.canvasContext.drawImage(
         this.videoElement,
         0,
@@ -211,10 +211,7 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
         inversionAttempts: 'dontInvert'
       });
 
-      if (!this.isSending && code) {
-        //Temporary disable scan to take time for qr processing.
-        this.scanActive = false;
-
+      if (this.scanActive && !this.isSending && code) {
         const data: any = code.data;
         if( this.util.isJsonValid(data) ) {
           const user = JSON.parse(data);
@@ -245,11 +242,23 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
           this.dname = 'Hey! ' + response.data.fname;
         }
       });
-      this.startScan();
+      this.scanActive = true;
     } else {
       this.previous = null;
       this.trySend(userId); //Validated! Send clocked in.
     }
+  }
+
+  modalAlert(title, message, timer = 3000) {
+    this.modalActive = true;
+    this.modalTitle = title;
+    this.modalMsg = message;
+
+    setTimeout(() => {
+      this.modalActive = false;
+      this.modalTitle = '';
+      this.modalMsg = '';
+    }, timer);
   }
 
   async trySend(userId: any = 0) {
@@ -258,10 +267,9 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
     this.api.post('attendance/biotime', {
       current: userId
     }).subscribe(async (res: any) => {
-      this.dname = 'Ready!';
 
       if(res.success === false) {
-        this.util.modalAlert('Action not Allowed', res.message);
+        this.modalAlert('Action not Allowed', res.message);
         this.sleep(3000);
         return;
       }
@@ -292,13 +300,14 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
           }
         );
       }
-      this.util.modalAlert(premsg, res.stamp, res.data.fname +' '+ res.data.lname);
+      this.modalAlert(premsg, res.data.fname +' '+ res.data.lname + ' <br>' + '<small style="padding-top: 20px">' + res.stamp + '</small>');
 
       this.sleep(3000);
     });
   }
 
   resetScan() {
+    this.dname = 'Ready!';
     this.previous = null;
     this.scanActive = true;
     this.isSending = false;
