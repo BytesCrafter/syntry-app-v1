@@ -1,47 +1,41 @@
 <ion-content style="height: 100%;">
-
-  <div class="qr-header">
-    <ion-fab horizontal="start" style="margin-top: 10px;">
-      <ion-button color="dark" style="margin: 10px; margin-left: 10px; padding: 5px 10px;"><strong>{{dname}}</strong></ion-button>
-    </ion-fab>
-    <ion-fab horizontal="end" style="margin-top: 10px;">
-      <ion-fab-button [attr.size]="this.statusSize" [attr.color]="this.statusColor" disabled>
-        <!-- <strong *ngIf="!this.isSending" style="color: black;">{{countdown}}</strong> -->
-        <ion-icon *ngIf="!this.isSending" name="eye" style="color: white;"></ion-icon>
-        <ion-icon *ngIf="this.isSending" name="cloud-upload"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
-  </div>
-
-  <!-- VIDEO HISTORY AREA -->
-  <div style="height: fit-content; width: -webkit-fill-available; background-color: #3d3d3d;">
-    <!-- <video #video [hidden]="!scanActive" width="100%" controls></video> -->
-    <video #video width="100%" height="100%" style="transform: scaleX(-1); max-width: 720px; margin: auto; display: block;"></video>
-
-    <!-- Used to render the camera stream images -->
-    <canvas #canvas width="100" height="100" hidden></canvas>
-    <ion-item style="position: relative;top: -80px;" *ngIf="false">
+  <ion-grid class="header-grid">
+    <ion-row class="primary">
+        <video #video width="100%" height="100%" hidden></video>
+        <canvas #canvas width="500" height="500" style="margin: auto;"></canvas>
+    </ion-row>
+    <ion-row hidden>
       <ion-range color="primary" pin="true" step="5" min="0" max="250" [(ngModel)]="focusValue" (ionChange)="onSliderEvent($event)"></ion-range>
-    </ion-item>
-  </div>
-
-  <!-- LOG HISTORY AREA -->
-  <div class="log-list" style="overflow: scroll; overflow-x: hidden; flex: 1 1 auto;">
-    <ion-list-header>
-      <ion-label><h1>Log History for Today: <strong>{{curDate | date:'hh:mm a'}}</strong></h1></ion-label>
-    </ion-list-header>
-    <ion-list style="overflow-y: hidden;">
-      <ion-item *ngFor="let att of attendance; let i = index">
-        <ion-avatar slot="start">
-          <ion-img [src]="att.avatar"></ion-img>
-        </ion-avatar>
-        <ion-label>
-          <h2>{{att.fname}} {{att.lname}}</h2>
-          <p>{{att.stamp}}</p>
-        </ion-label>
-        <ion-badge color="{{att.color}}" slot="end">{{att.event}}</ion-badge>
-      </ion-item>
-    </ion-list>
-  </div>
-
+    </ion-row>
+    <ion-row class="infolay" style="background-color: #222428;">
+      <ion-col size="7">
+        <ion-button [attr.size]="this.statusSize" [attr.color]="this.statusColor" style="margin: auto; display: contents;" disabled>
+          <ion-icon *ngIf="!this.isSending" name="eye" style="color: white;" style="font-size: xx-large;"></ion-icon>
+          <ion-icon *ngIf="this.isSending" name="cloud-upload" style="font-size: xx-large;"></ion-icon>
+          <strong style="padding: 15px 0 15px 15px; font-size: large;">{{dname}}</strong>
+        </ion-button>
+      </ion-col>
+      <ion-col size="5">
+          <strong style="font-size: x-large;">{{curDate | date:'hh:mm a'}}</strong>
+          <label style="font-size: medium; display: block;">{{curDate | date:'MMM d, y'}}</label>
+      </ion-col>
+    </ion-row>
+    <ion-row class="secondary">
+      <ion-list-header>
+        <ion-label style="margin-top: 20px; margin-bottom: 15px; border-bottom: 1px solid white;"><h1>Log History for Today</h1></ion-label>
+      </ion-list-header>
+      <ion-list style="overflow-y: hidden; width: -webkit-fill-available;">
+        <ion-item *ngFor="let att of attendance; let i = index">
+          <ion-avatar slot="start">
+            <ion-img [src]="att.avatar"></ion-img>
+          </ion-avatar>
+          <ion-label>
+            <h2>{{att.fname}} {{att.lname}}</h2>
+            <p>{{att.stamp}}</p>
+          </ion-label>
+          <ion-badge color="{{att.color}}" slot="end">{{att.event}}</ion-badge>
+        </ion-item>
+      </ion-list>
+    </ion-row>
+  </ion-grid>
 </ion-content>

@@ -1,9 +1,8 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
-import { Platform } from '@ionic/angular';
-import jsQR from 'jsqr';
 import { AppComponent } from 'src/app/app.component';
 import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
+import jsQR from 'jsqr';
 
 @Component({
   selector: 'app-qrscan',
@@ -13,18 +12,12 @@ import { ApiService } from 'src/app/services/api.service';
 export class QrscanPage implements AfterViewInit, OnDestroy {
   @ViewChild('video', { static: false }) video: ElementRef;
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
-  @ViewChild('fileinput', { static: false }) fileinput: ElementRef;
-
-  previous = null;
-  lastLog: number;
-  dname: any = 'Ready!';
 
   videoStream = null;
-  canvasElement: any;
   videoElement: any;
+  canvasElement: any;
   canvasContext: any;
 
-  scanActive = false;
   sColor = 'light';
   get statusColor(): string {
     if(this.isSending) {
@@ -54,8 +47,12 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
   }
 
   attendance: any[] = [];
-  focusValue = 1;
+  lastLog: number;
   public curDate: Date = new Date();
+  previous = null;
+  dname: any = 'Ready!';
+  scanActive = false;
+  focusValue = 1;
 
   constructor(
     public util: UtilService,
@@ -64,8 +61,6 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
   ) {
     this.api.posts('attendance/clocked_in_list', {}).then((response: any) => {
       if(response.success) {
-        this.previous = null;
-
         const clockedIn: any[] = response.data;
         clockedIn.forEach(attd => {
           this.attendance.push({
@@ -77,35 +72,28 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
               event: attd.out_time ? ' OUT ' : ' IN '
           });
         });
-
       }
     });
 
-    setInterval(() => {
-      this.curDate = new Date();
-    }, 1);
-
-    setInterval(()=> {
-      if( (!this.scanActive || !this.isSending) && this.sinceLastLog() > 60) {
-        location.reload();
-      }
-    }, 60000);
-
     this.lastLog = new Date().getTime();
     setInterval(()=> {
-      if( !this.scanActive && this.sinceLastLog() > 5) {
-        this.previous = null;
-        this.scanActive = true;
-        this.isSending = false;
-        this.lastLog = new Date().getTime();
-      }
-    }, 1000);
+      this.curDate = new Date();
 
-    this.focusValue = Number(localStorage.getItem('focusValue'));
-    this.videoStream = null;
-    this.startScan();
+      if( this.scanActive && this.sinceLastLog() < 5) {
+        return;
+      }
+
+      this.previous = null;
+      this.scanActive = true;
+      this.isSending = false;
+      this.lastLog = new Date().getTime();
+    }, 1000);
   }
 
+  /**
+   *
+   * @returns returns time in seconds since last log.
+   */
   sinceLastLog() {
     const timer = new Date().getTime() - this.lastLog;
     return timer/1000;
@@ -149,6 +137,8 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
     this.canvasElement = this.canvas.nativeElement;
     this.canvasContext = this.canvasElement.getContext('2d');
     this.videoElement = this.video.nativeElement;
+
+    this.focusValue = Number(localStorage.getItem('focusValue'));
     this.startScan();
   }
 
@@ -201,8 +191,6 @@ export class QrscanPage implements AfterViewInit, OnDestroy {
     if (this.videoElement.readyState === this.videoElement.HAVE_ENOUGH_DATA) {
 
       this.scanActive = true;
-      this.canvasElement.height = this.videoElement.videoHeight;
-      this.canvasElement.width = this.videoElement.videoWidth;
 
       this.canvasContext.drawImage(
         this.videoElement,

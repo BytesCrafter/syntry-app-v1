@@ -1,10 +1,33 @@
 
-.qr-header {
-  margin-top: 50px;
+.header-grid {
+  margin-top: 55px;
+  padding: 0;
 }
 
-.log-list {
+.primary {
+  height: fit-content;
+  width: -webkit-fill-available;
+  background-color: #3d3d3d;
 
+  video {
+
+  }
+
+  canvas {
+    border: 1px solid #3d3d3d;
+    transform: scale(-1, 1);
+  }
+}
+
+.infolay {
+  ion-col {
+    text-align: center;
+    padding: 15px;
+  }
+}
+
+.secondary {
+  background-color: #3d3d3d;
 }
 
 ion-list {
