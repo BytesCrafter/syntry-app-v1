@@ -1,0 +1,130 @@
+.header-grid {
+  margin-top: 55px;
+  padding: 0;
+}
+
+.primary {
+  height: 35vh;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-bottom: 50px solid rgb(243, 47, 155);
+
+  .datetime {
+    color: rgb(243, 47, 155);
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 35px;
+    display: block;
+    text-align: center;
+  }
+}
+
+.secondary {
+  height: 60vh;
+  width: -webkit-fill-available;
+  background-color: rgb(255, 188, 229);
+  padding-top: 8vw;
+  padding: 5vw;
+  display: block;
+
+  .avatar {
+    height: 30vw;
+    width: 30vw;
+    position: relative;
+    top: -30vw;
+    left: 50%;
+    transform: translateX(-50%);
+
+    ion-img {
+      height: auto;
+      width: -webkit-fill-available;
+
+      border-radius: 12% !important;
+      border: 5px solid #f32f9b;
+      overflow: hidden;
+    }
+  }
+
+  .main-info {
+    text-transform: uppercase;
+    text-align: center;
+    color: #3d3d3d;
+    margin-top: 20px;
+    position: relative;
+    top: -30vw;
+
+    h1 {
+      width: calc(100vw/2);
+      margin: auto;
+      font-weight: bold;
+      padding-bottom: 5px;
+      border-bottom: 2px dashed rgba(128, 128, 128, 0.25);
+    }
+    h5 {
+      margin-top: 10px;
+    }
+  }
+
+  .logs-list {
+    margin-top: 35px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.35);
+    color: black;
+    border: 1px dashed rgba(243, 47, 155, 0.40);
+    position: relative;
+    top: -30vw;
+
+    .header {
+      ion-col {
+        font-weight: bold;
+        text-align: center;
+      }
+      border-bottom: 1px solid grey;
+      margin-bottom: 10px;
+    }
+    .items{
+      ion-col {
+        padding-top: 15px;
+        text-align: center;
+      }
+      border-bottom: 1px dashed grey;
+    }
+  }
+}
+
+.blink_me {
+  color: red;
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.notify {
+  position: absolute;
+  top: 200px;
+  background-color: white;
+  padding: 5px 15px 10px;
+  left: 40px;
+  right: 40px;
+  z-index: 99999;
+
+  .window {
+    text-align: center;
+    color: #2d2d2d;
+
+    h3 {
+      font-size: x-large;
+      font-weight: bold;
+    }
+
+    p {
+      font-size: x-large;
+    }
+  }
+}

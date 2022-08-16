@@ -48,6 +48,10 @@ const routes: Routes = [
         path: 'qrscan',
         loadChildren: () => import('./pages/qrscan/qrscan.module').then( m => m.QrscanPageModule),
         canActivate: [BiometGuard]
+      },
+      {
+        path: 'rfid',
+        loadChildren: () => import('./pages/rfid/rfid.module').then( m => m.RfidPageModule)
       }
     ],
     canActivate: [AuthGuard]

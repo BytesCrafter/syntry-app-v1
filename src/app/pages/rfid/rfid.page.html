@@ -1,0 +1,110 @@
+<ion-content style="height: 100%;">
+  <ion-grid class="header-grid">
+    <ion-row class="primary" [style.background-image]="'url(assets/images/banner.jpg' + ')'">
+      <div class="datetime">
+        <label style="font-size: x-large; display: block;">{{curDate | date:'MMM d, y'}}</label>
+        <strong style="font-size: xxx-large;">{{curDate | date:'hh:mm a'}}</strong>
+        <h2 class="blink_me" *ngIf="!isSending">PLEASE TAP YOUR RFID</h2>
+      </div>
+    </ion-row>
+    <div class="notify" [hidden]="!modalActive">
+      <div class="window">
+        <h3 style="border-bottom: 1px dashed #2d2d2d; padding-bottom: 5px">{{modalTitle}}</h3>
+        <p style="white-space: pre-wrap;" [innerHtml]="modalMsg"></p>
+      </div>
+    </div>
+    <ion-row class="secondary" *ngIf="!isSending">
+      <ion-grid *ngIf="!isLoading" class="logs-list" style="background-color: white;">
+        <ion-row>
+          <h3 style="margin: auto; font-weight: bolder; padding-bottom: 15px; border-bottom: 1px solid grey;">COMPANY ADVISORIES</h3>
+        </ion-row>
+        <ion-row *ngFor="let advise of advisories; let i = index" style="border-bottom: 15px transparent dashed;">
+          <ion-grid style="padding: 30px 10px 10px;">
+            <ion-row style="padding-bottom: 10px; border-bottom: 1px white solid;">
+              <ion-label>{{advise.title}}</ion-label>
+            </ion-row>
+            <ion-row><p [innerHTML]="advise.description"></p></ion-row>
+            <ion-row style="display: block; text-align: right;">
+              <p style="font-style: italic; font-size: smaller;">{{advise.start_date}} - {{advise.end_date}}</p>
+            </ion-row>
+          </ion-grid>
+        </ion-row>
+      </ion-grid>
+      <ion-grid *ngIf="isLoading" class="logs-list" style="background-color: white;">
+        <ion-row style="border-bottom: 7px transparent dashed; text-align: center; display: block;">
+          <ion-spinner name="crescent" style="padding-right: 50px; font-size: x-large; color: #f32f9b;"></ion-spinner>
+        </ion-row>
+      </ion-grid>
+    </ion-row>
+    <ion-row class="secondary" *ngIf="isSending">
+      <div class="avatar">
+        <ion-img [src]="userAvatar"></ion-img>
+      </div>
+      <div class="main-info">
+        <h1>{{userFullname}}</h1>
+        <h5>{{userTitle}}</h5>
+      </div>
+      <ion-grid class="logs-list" *ngIf="!currentAttd">
+        <ion-row style="border-bottom: 7px transparent dashed; text-align: center; display: block;">
+          <ion-spinner name="crescent" style="padding-right: 50px; font-size: x-large; color: #f32f9b;"></ion-spinner>
+        </ion-row>
+      </ion-grid>
+      <ion-grid class="logs-list" *ngIf="currentAttd">
+        <ion-row class="header">
+          <ion-col size="3" style="border-right: 1px solid grey;">LEGEND</ion-col>
+          <ion-col size="3" style="border-right: 1px solid grey;">DATE</ion-col>
+          <ion-col size="3" style="border-right: 1px solid grey;">TIME</ion-col>
+          <ion-col size="3">STATUS</ion-col>
+        </ion-row>
+        <ion-row class="items">
+          <ion-col size="3">CLOCK IN</ion-col>
+          <ion-col size="3">{{currentAttd.in_time?(currentAttd.in_time | date:'MMM d, y'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.in_time?(currentAttd.in_time  | date:'hh:mm a'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.in_time?'LOGGED':'PENDING'}}</ion-col>
+        </ion-row>
+        <ion-row class="items">
+          <ion-col size="3">1ST BREAK Start</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[0]?(currentAttd.break_time[0] | date:'MMM d, y'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[0]?(currentAttd.break_time[0]  | date:'hh:mm a'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[0]?'LOGGED':'PENDING'}}</ion-col>
+        </ion-row>
+        <ion-row class="items">
+          <ion-col size="3">1ST BREAK End</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[1]?(currentAttd.break_time[1] | date:'MMM d, y'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[1]?(currentAttd.break_time[1]  | date:'hh:mm a'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[1]?'LOGGED':'PENDING'}}</ion-col>
+        </ion-row>
+        <ion-row class="items">
+          <ion-col size="3">LUNCH BREAK Start</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[2]?(currentAttd.break_time[2] | date:'MMM d, y'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[2]?(currentAttd.break_time[2]  | date:'hh:mm a'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[2]?'LOGGED':'PENDING'}}</ion-col>
+        </ion-row>
+        <ion-row class="items">
+          <ion-col size="3">LUNCH BREAK End</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[3]?(currentAttd.break_time[3] | date:'MMM d, y'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[3]?(currentAttd.break_time[3]  | date:'hh:mm a'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[3]?'LOGGED':'PENDING'}}</ion-col>
+        </ion-row>
+        <ion-row class="items">
+          <ion-col size="3">2ND BREAK START</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[4]?(currentAttd.break_time[4] | date:'MMM d, y'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[4]?(currentAttd.break_time[4]  | date:'hh:mm a'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[4]?'LOGGED':'PENDING'}}</ion-col>
+        </ion-row>
+        <ion-row class="items">
+          <ion-col size="3">2ND BREAK END</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[5]?(currentAttd.break_time[5] | date:'MMM d, y'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[5]?(currentAttd.break_time[5]  | date:'hh:mm a'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.break_time[5]?'LOGGED':'PENDING'}}</ion-col>
+        </ion-row>
+        <ion-row class="items">
+          <ion-col size="3">CLOCK OUT</ion-col>
+          <ion-col size="3">{{currentAttd.out_time?(currentAttd.out_time | date:'MMM d, y'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.out_time?(currentAttd.out_time  | date:'hh:mm a'):'-'}}</ion-col>
+          <ion-col size="3">{{currentAttd.out_time?'CURRENT':'PENDING'}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-row>
+  </ion-grid>
+</ion-content>

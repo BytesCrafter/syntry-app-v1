@@ -10,6 +10,9 @@
       <ion-img [src]="'assets/images/syntry.png'" style="height: 30px; display: inline-flex;"></ion-img>
     </ion-title>
     <ion-buttons slot="end">
+      <ion-button (click)="openBiov2()" *ngIf="auth.userPermits?.permissions?.can_use_biometric">
+        <ion-icon slot="icon-only" name="barcode-outline"></ion-icon>
+      </ion-button>
       <ion-button (click)="openBio()" *ngIf="auth.userPermits?.permissions?.can_use_biometric">
         <ion-icon slot="icon-only" name="qr-code"></ion-icon>
       </ion-button>

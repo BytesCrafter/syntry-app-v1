@@ -49,6 +49,10 @@ export class AppComponent {
     this.router.navigate(['/qrscan']);
   }
 
+  openBiov2() {
+    this.router.navigate(['/rfid']);
+  }
+
   reloadPage() {
     location.reload();
   }

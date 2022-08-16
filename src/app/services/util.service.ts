@@ -114,6 +114,13 @@ export class UtilService {
     audio.play();
   }
 
+  stopAudio(){
+    const audio = new Audio();
+    audio.src = '../../assets/audio/stop.wav';
+    audio.load();
+    audio.play();
+  }
+
   async modalAlert(title='Alert', subtitle='', content='') {
     const alert = await this.alertCtrl.create({
       cssClass: 'my-custom-class',
