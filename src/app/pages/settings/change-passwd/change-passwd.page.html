@@ -10,15 +10,15 @@
   <div class="header">
     <ion-item style="padding-top: 10px;">
       <ion-label position="floating">Old Password</ion-label>
-      <ion-input [(ngModel)]="oldpass" type="password"></ion-input>
+      <ion-input [(ngModel)]="oldpass" type="password" autocomplete="off"></ion-input>
     </ion-item>
     <ion-item style="padding-top: 10px;">
       <ion-label position="floating">New Password</ion-label>
-      <ion-input [(ngModel)]="newpass" type="password"></ion-input>
+      <ion-input [(ngModel)]="newpass" type="password" autocomplete="off"></ion-input>
     </ion-item>
     <ion-item style="padding-top: 10px;">
       <ion-label position="floating">Confirm Password</ion-label>
-      <ion-input [(ngModel)]="confirmpass" type="password"></ion-input>
+      <ion-input [(ngModel)]="confirmpass" type="password" autocomplete="off"></ion-input>
     </ion-item>
     <div style="padding: 20px;">
       <ion-button expand="block" class="ion-activatable ripple-parent" (click)="changepass()">
