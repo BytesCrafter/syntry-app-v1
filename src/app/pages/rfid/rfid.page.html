@@ -2,8 +2,8 @@
   <ion-grid class="header-grid">
     <ion-row class="primary" [style.background-image]="'url(assets/images/banner.jpg' + ')'">
       <div class="datetime">
-        <label style="font-size: x-large; display: block;">{{curDate | date:'MMM d, y'}}</label>
-        <strong style="font-size: xxx-large;">{{curDate | date:'hh:mm a'}}</strong>
+        <label style="font-size: large; display: block;">{{curDate | date:'MMM d, y'}}</label>
+        <strong style="font-size: xx-large;">{{curDate | date:'hh:mm a'}}</strong>
         <h2 class="blink_me" *ngIf="!isSending">PLEASE TAP YOUR RFID</h2>
       </div>
     </ion-row>
