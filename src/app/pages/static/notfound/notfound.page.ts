@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,13 +10,13 @@ import { Router } from '@angular/router';
 export class NotfoundPage implements OnInit {
 
   constructor(
-    private router: Router,
+    private location: Location,
   ) { }
 
   ngOnInit() {
   }
 
-  onHome() {
-    this.router.navigate([`/`]);
+  goBack() {
+    this.location.back();
   }
 }
