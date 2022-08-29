@@ -5,15 +5,16 @@
 export const environment = {
   production: false,
   baseURL: 'http://localhost:8000/api/v1/',
-  authToken: '2bb22f08eb0770d',
+  authToken: '9bc12f10eb077de',
   firebase: {
-    apiKey: 'AIzaSyDBy1btu2_RUN2r4tWTtUY2Zhw4oJsum6E',
-    authDomain: 'businext-app.firebaseapp.com',
-    projectId: 'businext-app',
-    storageBucket: 'businext-app.appspot.com',
-    messagingSenderId: '71633264934',
-    appId: '1:71633264934:web:371daa3cf8e8be68e6e1e7',
-    measurementId: 'G-E329JC1KZR'
+    apiKey: 'AIzaSyCmJaB6O6et28ChK2yACmGEjV-i0f3UbN4',
+    authDomain: 'spartan-figure-294709.firebaseapp.com',
+    databaseURL: 'https://spartan-figure-294709-default-rtdb.asia-southeast1.firebasedatabase.app',
+    projectId: 'spartan-figure-294709',
+    storageBucket: 'spartan-figure-294709.appspot.com',
+    messagingSenderId: '101960398024',
+    appId: '1:101960398024:web:e7f0bfe7ab52546c6761fd',
+    measurementId: 'G-DX6S778X4W'
   }
 };
 

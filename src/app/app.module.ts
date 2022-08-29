@@ -17,6 +17,10 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { JwtInterceptor } from './interceptor/jwt.interceptor';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { MessagingService } from './services/messaging.service';
+import { AsyncPipe } from '@angular/common';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 @NgModule({
   declarations: [
@@ -30,9 +34,11 @@ import { JwtInterceptor } from './interceptor/jwt.interceptor';
     HttpClientModule,
 
     // 3. Initialize
-    AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule, // auth
     AngularFireAnalyticsModule, // analytics
+    AngularFireMessagingModule, //cloud
+    AngularFireDatabaseModule, //database
+    AngularFireModule.initializeApp(environment.firebase),
 
     ServiceWorkerModule.register('ngsw-worker.js', {
   enabled: environment.production,
@@ -41,6 +47,7 @@ import { JwtInterceptor } from './interceptor/jwt.interceptor';
   registrationStrategy: 'registerWhenStable:30000'
 })],
   providers: [
+    MessagingService, AsyncPipe,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],

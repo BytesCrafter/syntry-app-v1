@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { UtilService } from 'src/app/services/util.service';
 import { ApiService } from 'src/app/services/api.service';
 import { Router } from '@angular/router';
@@ -37,7 +37,7 @@ export class AppComponent {
     private router: Router,
     private api: ApiService,
     private menuCtrl: MenuController
-  ) {
+    ) {
     this.auth.loadPermission();
   }
 

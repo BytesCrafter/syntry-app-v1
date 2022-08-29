@@ -5,6 +5,7 @@ import { ApiService } from './api.service';
 import { UtilService } from './util.service';
 import { Token } from '../model/token.model';
 import { Permission } from '../model/permission.model';
+import { MessagingService } from './messaging.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,7 @@ export class AuthService {
     private router: Router,
     private api: ApiService,
     private util: UtilService,
+    private messaging: MessagingService
   ) {
     const jwtHash = localStorage.getItem(AuthService.tokenKey);
     let token = new Token();
@@ -79,6 +81,10 @@ export class AuthService {
     this.api.posts('users/get_user_info', {}).then((res: any) => {
       if(res && res.success === true && res.data) {
         this.currentUser = res.data;
+
+        this.messaging.requestPermission(this.currentUser.id);
+        this.messaging.receiveMessage();
+        //this.message = this.messaging.currentMessage;
       }
     }).catch(error => {
       console.log('error', error);
