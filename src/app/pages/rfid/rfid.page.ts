@@ -59,8 +59,11 @@ export class RfidPage implements OnInit {
     if(event.key !== 'Enter') {
       this.code += event.key;
     } else {
-      this.verifyUser(this.code);
-      this.code = '';
+      if(!this.isSending) {
+        const current = this.code+'';
+        this.code = '';
+        this.verifyUser(current);
+      }
     }
   }
 
@@ -145,7 +148,7 @@ export class RfidPage implements OnInit {
 
       this.timeouts = setTimeout(() => {
         this.isSending = false;
-      }, 4000);
+      }, 3500);
 
       this.util.playAudio();
     });
