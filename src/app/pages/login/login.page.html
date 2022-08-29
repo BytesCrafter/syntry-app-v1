@@ -6,26 +6,36 @@
   Created : 01-Sep-2020
 
  -->
-<ion-content>
-  <div class="login-window">
-    <div class="header-section">
-      <ion-thumbnail class="header-logo">
-        <ion-img [src]="siteLogo"></ion-img>
-      </ion-thumbnail>
-      <label><strong>Syntry</strong> v{{util.version}}</label>
-    </div>
-    <div class="form-div">
-      <ion-label class="form-head"> {{util.getString('Sign in')}} </ion-label>
-      <ion-input type="email" [placeholder]="util.getString('Email')" [(ngModel)]="email" autocomplete="off">
-        <ion-icon name="mail" slot="icon-only"></ion-icon>
+ <ion-content>
+  <div class="main_content_div" style="padding-top: 20vh;">
+
+      <div style="background-color: white; padding-top: 15px; margin-bottom: 25px; border-top: 3px var(--ion-color-primary)solid;">
+        <ion-thumbnail style="display: contents;">
+          <ion-skeleton-text *ngIf="!loadedCompany" [animated]="true" style="width: 200px; height: 40px; margin: auto;"></ion-skeleton-text>
+          <ion-img *ngIf="loadedCompany" [src]="siteLogo" style="width: 200px; height: auto; margin: auto;"></ion-img>
+        </ion-thumbnail>
+        <ion-label class="small_lbl" style="color: black; padding: 10px 0 25px;">Log in with your account</ion-label>
+      </div>
+
+      <ion-input type="text" placeholder="Email" [(ngModel)]="email">
+          <ion-icon name="mail"></ion-icon>
       </ion-input>
-      <ion-input type="password" [placeholder]="util.getString('Password')" [(ngModel)]="password" (keyup.enter)="login()" autocomplete="off">
-        <ion-icon name="key" slot="icon-only"></ion-icon>
+
+      <ion-input type="password" placeholder="Password" [(ngModel)]="password" (keyup.enter)="login()">
+          <ion-icon name="key"></ion-icon>
       </ion-input>
+
       <ion-button expand="block" (click)="login()">
-        <span *ngIf="!loggedIn">LOGIN</span>
-        <ion-spinner name="circular" *ngIf="loggedIn"></ion-spinner>
+        Login
       </ion-button>
-    </div>
+
+      <ion-label class="forgot_lbl" (click)="forgotPass()">Forgot Password</ion-label>
+
+
+      <ion-label class="abs_lbl">
+        Syntry © 2022. All Rights Reserved. <br>
+        <small>Made possible by <a href="http://bytescrafter.net">BytesCrafter</a></small>
+      </ion-label>
+
   </div>
 </ion-content>

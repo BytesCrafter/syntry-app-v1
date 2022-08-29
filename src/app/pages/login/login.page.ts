@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilService } from 'src/app/services/util.service';
-import { MenuController } from '@ionic/angular';
+import { MenuController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ApiService } from 'src/app/services/api.service';
@@ -14,6 +14,7 @@ export class LoginPage implements OnInit {
   email: any = '';
   password: any = '';
   loggedIn: boolean;
+  loadedCompany: boolean;
 
   siteLogo: any = 'assets/images/logo.png';
 
@@ -22,7 +23,7 @@ export class LoginPage implements OnInit {
     private auth: AuthService,
     private menuController: MenuController,
     private router: Router,
-    private api: ApiService
+    private api: ApiService,
   ) {
     //Check if the is a token in local storage but need to check first.
     if(localStorage.getItem(AuthService.tokenKey) === null) {
@@ -37,10 +38,15 @@ export class LoginPage implements OnInit {
     this.api.posts('settings/company_info', {}).then((res: any) => {
       if(res.success === true) {
         this.siteLogo = res.logo ? res.logo:this.siteLogo;
+        this.loadedCompany = true;
       }
     }).catch(error => {
       console.log('error', error);
     });
+  }
+
+  forgotPass() {
+    this.util.modalAlert('Notification', '', 'This feature is not fully implemented yet, thank you for your patience.');
   }
 
   login() {

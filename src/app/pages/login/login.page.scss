@@ -1,84 +1,64 @@
-/*
-  Name: Galyon App
-  Authors : Bytes Crafter
-  Website : https://bytescrafter.net
-  Created : 01-Jan-2021
-*/
-ion-content{
-
+ion-content {
+  --background: #fff url('../../../assets/images/login.jpg') no-repeat center center / cover;
 }
-
-.login-window{
-  max-width: 480px;
-  width: fit-content;
-  padding: 30px;
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-
-
-  .header-section{
-    display: grid;
-    text-align: center;
-    padding: 15px;
-    .icon {
-      width: 320px;
-      height: auto;
-    }
-    label {
-      color: var(--ion-color-primary);
-      font-size: x-small;
-      margin-top: 10px;
-    }
-  }
-
-  ion-icon{
-      color: var(--ion-color-primary);
-      font-size: 15px;
-      padding: 10px;
-  }
-
-  .form-div{
-      padding: 25px;
-      position: relative;
-      border: 1px solid var(--ion-color-primary);
-      border-radius: 20px;
-      margin-top: 26px;
-      .form-head{
-          display: block;
-          text-align: left;
-          color: white;
-          font-weight: 400;
-          font-size: 23px;
-          margin: 10px;
-      }
-      ion-label {
-          font-size: 12px;
-          color: white;
-      }
-      ion-input{
-          color: rgb(49, 49, 49);
-          border-radius: 10px;
-          margin-bottom: 15px;
-          font-size: 14px;
-      }
-      ion-button{
-          margin-top: 20px;
-          font-weight: bolder;
-          --border-radius: 5px;
-          --background: white;
-          --color: var(--ion-color-primary);
-      }
-      ion-button:hover{
-        --background: var(--ion-color-secondary);
-        --color: var(--ion-color-light);
-    }
-  }
-}
-
-.header-logo {
+.main_content_div {
+  max-width: 500px;
   margin: auto;
-  width: max-content;
-  height: 50px;
+  padding: 16px;
+
+  ion-label {
+      display: block;
+  }
+
+  .bold_lbl {
+      font-family: 'semi-bold';
+      font-size: 26px;
+      text-align: center;
+      color: white;
+  }
+
+  .small_lbl {
+      text-align: center;
+      color: white;
+      font-size: 14px;
+      margin-bottom: 30px;
+  }
+
+  ion-input {
+      background: rgb(148, 137, 145, 0.3);
+      border-radius: 5px;
+      margin-bottom: 20px;
+      height: 50px;
+      --padding-start: 8px;
+      color: white;
+
+      ion-icon {
+          margin-left: 10px;
+          color: white;
+      }
+  }
+
+  ion-button {
+      margin: 0px;
+      --border-radius: 5px;
+      height: 50px;
+      margin-bottom: 40px;
+  }
+
+  .forgot_lbl {
+      color: white;
+      font-size: 14px;
+      text-align: center;
+  }
+
+  .abs_lbl {
+      position: absolute;
+      bottom: 40px;
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      left: 50%;
+      transform: translate(-50%);
+      width: 100%;
+  }
 }
