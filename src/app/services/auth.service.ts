@@ -64,7 +64,7 @@ export class AuthService {
         this.subject.next(token);
         return this.subject.value;
       }
-    } //TODO: Verify if okay to not return anything when nulled.
+    } //TODO: Verify if okay to notfound return anything when nulled.
 
     return null;
   }
@@ -111,10 +111,17 @@ export class AuthService {
     }
 
     //If user have manage timecard then add
-    this.api.post('users/permissions', {}).subscribe((response: any) => {
+    this.api.posts('users/permissions', null)
+    .then( (response: any) => {
       if(response && response.success && response.data) {
         this.permitSubject.next(response.data);
+      } else {
+        this.router.navigate([`/error`], {
+          skipLocationChange: true
+        });
       }
+    }).catch(error => {
+      console.log('error', error);
     });
   }
 

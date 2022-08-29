@@ -65,6 +65,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
   },
   {
+    path: 'error',
+    loadChildren: () => import('./pages/static/error/error.module').then( m => m.ErrorPageModule)
+  },
+  {
     path: '**',
     redirectTo: 'notfound'
   }

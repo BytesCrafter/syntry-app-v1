@@ -1,7 +1,6 @@
-import { ComponentFactoryResolver, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AppComponent } from '../app.component';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 
@@ -17,11 +16,13 @@ export class AuthGuard implements CanActivate {
     const uid = localStorage.getItem(AuthService.tokenKey);
     if (uid && uid != null && uid !== 'null') {
       this.auth.getInfo(); //Get user data.
-      this.api.posts('users/refresh', {}).then((res: any) => { console.log();
+      this.api.posts('users/refresh', null)
+      .then((res: any) => { console.log();
         if(res.status === 401) {
           localStorage.clear();
-          this.router.navigate([`/login`], { replaceUrl: true });
+          this.router.navigate([`/login`]);
         }
+
         if(res.success) {
           this.auth.setToken = res.data;
         }

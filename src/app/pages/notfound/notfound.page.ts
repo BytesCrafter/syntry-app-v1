@@ -16,6 +16,6 @@ export class NotfoundPage implements OnInit {
   }
 
   onHome() {
-    this.router.navigate([`/`], { replaceUrl: true });
+    this.router.navigate([`/`]);
   }
 }

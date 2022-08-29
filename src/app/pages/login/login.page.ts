@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
       this.menuController.enable(false);
     } else {
       this.menuController.enable(true);
-      this.router.navigate([`/`], { replaceUrl: true });
+      this.router.navigate([`/`]);
     }
   }
 
