@@ -61,9 +61,9 @@ export class RfidPage implements OnInit {
     } else {
       if(!this.isSending) {
         const current = this.code+'';
-        this.code = '';
         this.verifyUser(current);
       }
+      this.code = '';
     }
   }
 
