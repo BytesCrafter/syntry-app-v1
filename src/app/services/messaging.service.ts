@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireMessaging } from '@angular/fire/messaging';
-import { mergeMapTo } from 'rxjs/operators';
 import { take } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { UtilService } from './util.service';
@@ -16,7 +15,8 @@ export class MessagingService {
     private angularFireDB: AngularFireDatabase,
     private angularFireAuth: AngularFireAuth,
     private util: UtilService,
-    private angularFireMessaging: AngularFireMessaging) {
+    private angularFireMessaging: AngularFireMessaging,
+    ) {
   }
 
   /**
@@ -35,12 +35,24 @@ export class MessagingService {
       });
   }
 
+  submitUpdate(userId, tokenFb, deviceId, biometrics) {
+    if( biometrics && deviceId ) {
+      const data = {
+        token: tokenFb,
+        userid: userId,
+        appversion: this.util.version,
+        lastupdate: Date.now()
+      };
+      this.angularFireDB.object('kiosk/'+deviceId).update(data);
+    }
+  }
+
   /**
    * request permission for notification from firebase cloud messaging
    *
    * @param userId userId
    */
-  requestPermission(userId) {
+  requestPermission(userId, biometrics = false) {
     this.angularFireMessaging.requestToken.subscribe(
       (token) => {
         if(token) {
@@ -49,6 +61,26 @@ export class MessagingService {
         } else {
           Notification.requestPermission();
         }
+
+        let sent: any = false;
+        if (!navigator.mediaDevices?.enumerateDevices) {
+          //this.submitUpdate(userId, token, 'none');
+        } else {
+          navigator.mediaDevices.enumerateDevices()
+            .then((devices) => {
+              devices.forEach((device) => {
+                if(device.kind === 'videoinput' && !sent) {
+                  this.submitUpdate(userId, token, device.deviceId, biometrics);
+                  sent = true;
+                }
+              });
+            })
+            .catch((err) => {
+              console.error(`${err.name}: ${err.message}`);
+              //this.submitUpdate(userId, token, 'error');
+            });
+        }
+
       },
       (err) => {
         console.error('Unable to get permission to notify.', err);

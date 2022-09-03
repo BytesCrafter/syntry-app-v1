@@ -82,7 +82,7 @@ export class AuthService {
       if(res && res.success === true && res.data) {
         this.currentUser = res.data;
 
-        this.messaging.requestPermission(this.currentUser.id);
+        this.messaging.requestPermission(this.currentUser.id, this.userPermits.permissions.can_use_biometric);
         this.messaging.receiveMessage();
         //this.message = this.messaging.currentMessage;
       }
