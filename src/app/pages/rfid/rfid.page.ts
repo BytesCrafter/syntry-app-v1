@@ -28,6 +28,15 @@ export class RfidPage implements OnInit {
   public curDate: Date = new Date();
   public timer: any = 0;
 
+  public slideOpt = {
+    initialSlide: 0,
+    speed: 500,
+    direction: 'horizontal',
+    slidesPerView: 1,
+    loop: true,
+  };
+  public sliderRefs: any;
+
   // eslint-disable-next-line @typescript-eslint/member-ordering
   private serverDatetime: Date = new Date();
   public get currentDate(): any {
@@ -73,6 +82,12 @@ export class RfidPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ionSlidesDidLoad(slider: any) {
+    setInterval(() => {
+      slider.slideNext();
+    }, 10000);
   }
 
   async getAdvisories() {

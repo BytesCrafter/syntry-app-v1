@@ -14,20 +14,23 @@
       </div>
     </div>
     <ion-row class="secondary" *ngIf="!isSending">
-      <ion-grid *ngIf="!isLoading" class="logs-list" style="background-color: white;">
+      <ion-grid *ngIf="!isLoading" class="logs-list" style="background-color: white; height: 80vh; overflow-y:auto;">
         <ion-row>
-          <h3 style="margin: auto; font-weight: bolder; padding-bottom: 15px; border-bottom: 1px solid grey;">COMPANY ADVISORIES</h3>
-        </ion-row>
-        <ion-row *ngFor="let advise of advisories; let i = index" style="border-bottom: 15px transparent dashed;">
-          <ion-grid style="padding: 30px 10px 10px;">
-            <ion-row style="padding-bottom: 10px; border-bottom: 1px white solid;">
-              <ion-label>{{advise.title}}</ion-label>
-            </ion-row>
-            <ion-row><p [innerHTML]="advise.description"></p></ion-row>
-            <ion-row style="display: block; text-align: right;">
-              <p style="font-style: italic; font-size: smaller;">{{advise.start_date}} - {{advise.end_date}}</p>
-            </ion-row>
-          </ion-grid>
+          <h3 style="margin: auto; font-weight: bolder; padding-bottom: 15px; border-bottom: 1px solid grey; padding-bottom: 15px;
+          margin-bottom: 20px;">COMPANY ADVISORIES</h3>
+          <ion-slides [options]="slideOpt" (ionSlidesDidLoad)="ionSlidesDidLoad(slider)" #slider>
+            <ion-slide *ngFor="let advise of advisories; let i = index" style="border-bottom: 15px transparent dashed; display: block;">
+              <ion-grid style="padding: 15px;">
+                <ion-row style="padding-bottom: 0;">
+                  <ion-label style="font-weight: bold;">{{advise.title}}</ion-label>
+                </ion-row>
+                <ion-row style="padding-bottom: 5px;">
+                  <p style="font-style: italic; font-size: smaller;">{{advise.start_date}} - {{advise.end_date}}</p>
+                </ion-row>
+                <ion-row><p [innerHTML]="advise.description"></p></ion-row>
+              </ion-grid>
+            </ion-slide>
+          </ion-slides>
         </ion-row>
       </ion-grid>
       <ion-grid *ngIf="isLoading" class="logs-list" style="background-color: white;">
