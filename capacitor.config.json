@@ -1,5 +1,5 @@
 {
-  "appId": "app.businext.syntry",
+  "appId": "net.bytescrafter.syntry",
   "appName": "Syntry",
   "bundledWebRuntime": false,
   "npmClient": "npm",

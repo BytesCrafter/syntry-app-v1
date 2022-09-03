@@ -1,10 +1,10 @@
 {
   "name": "Syntry",
-  "version": "0.6.8",
-  "description": "Syntry is a desktop application for BusiNext.",
+  "version": "0.6.9",
+  "description": "Syntry is an biometric app for ERPat system.",
   "main": "main.js",
   "author": "BytesCrafter",
-  "homepage": "https://businext.app/",
+  "homepage": "https://syntry.bytescrafter.net",
   "license": "MIT",
   "private": true,
   "scripts": {

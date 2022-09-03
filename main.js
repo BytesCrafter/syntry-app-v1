@@ -57,7 +57,7 @@ function createPrimaryWindow () {
       nodeIntegration: true
     }
   })
-  primary.loadURL('https://erpat-ahm.web.app')
+  primary.loadURL('https://syntry.web.app')
   //primary.loadURL(`file://${__dirname}/dist/htdocs/index.html`)
   //primary.webContents.openDevTools()
 
