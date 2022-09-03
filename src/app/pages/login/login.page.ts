@@ -17,6 +17,8 @@ export class LoginPage implements OnInit {
   loadedCompany: boolean;
 
   siteLogo: any = 'assets/images/logo.png';
+  companyName: any = 'Log in with your account';
+  themeColor: any = '';
 
   constructor(
     public util: UtilService,
@@ -38,6 +40,7 @@ export class LoginPage implements OnInit {
     this.api.posts('settings/company_info', {}).then((res: any) => {
       if(res.success === true) {
         this.siteLogo = res.logo ? res.logo:this.siteLogo;
+        this.companyName = res.title ? res.title:'Log in with your account';
         this.loadedCompany = true;
       }
     }).catch(error => {

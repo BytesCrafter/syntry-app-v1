@@ -6,8 +6,8 @@
         <ion-icon slot="icon-only" ios="menu-outline" md="menu-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>
-      <ion-img [src]="'assets/images/syntry.png'" style="height: 30px; display: inline-flex;"></ion-img>
+    <ion-title style="text-align: center;">
+      <ion-img [src]="'assets/images/logo.png'" style="height: 30px; display: inline-flex;"></ion-img>
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="openBiov2()" *ngIf="auth.userPermits?.permissions?.can_use_biometric">

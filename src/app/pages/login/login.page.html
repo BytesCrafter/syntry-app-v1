@@ -7,14 +7,14 @@
 
  -->
  <ion-content>
-  <div class="main_content_div" style="padding-top: 20vh;">
+  <div class="main_content_div" style="padding-top: 18vh;">
 
-      <div style="background-color: white; padding-top: 15px; margin-bottom: 25px; border-top: 3px var(--ion-color-primary)solid;">
+      <div style="padding-top: 15px; margin-bottom: 25px;;">
         <ion-thumbnail style="display: contents;">
-          <ion-skeleton-text *ngIf="!loadedCompany" [animated]="true" style="width: 200px; height: 40px; margin: auto;"></ion-skeleton-text>
-          <ion-img *ngIf="loadedCompany" [src]="siteLogo" style="width: 200px; height: auto; margin: auto;"></ion-img>
+          <ion-skeleton-text *ngIf="!loadedCompany" [animated]="true" style="width: 210px; height: 70px; margin: auto;"></ion-skeleton-text>
+          <ion-img *ngIf="loadedCompany" [src]="siteLogo" style="width: 210px; height: auto; margin: auto;"></ion-img>
         </ion-thumbnail>
-        <ion-label class="small_lbl" style="color: black; padding: 10px 0 25px;">Log in with your account</ion-label>
+        <ion-label class="small_lbl">{{companyName}}</ion-label>
       </div>
 
       <ion-input type="text" placeholder="Email" [(ngModel)]="email">
@@ -31,10 +31,9 @@
 
       <ion-label class="forgot_lbl" (click)="forgotPass()">Forgot Password</ion-label>
 
-
       <ion-label class="abs_lbl">
-        Syntry © 2022. All Rights Reserved. <br>
-        <small>Made possible by <a href="http://bytescrafter.net">BytesCrafter</a></small>
+        <a href="http://syntry.bytescrafter.net" target="_blank">Syntry</a> © 2022. All Rights Reserved. <br>
+        <small>Made possible by <a href="http://bytescrafter.net" target="_blank">BytesCrafter</a></small>
       </ion-label>
 
   </div>
