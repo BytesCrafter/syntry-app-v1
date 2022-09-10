@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "erpat-beta",
+    "site": "erpat-ahm",
     "public": "dist/htdocs",
     "ignore": [
       "firebase.json",

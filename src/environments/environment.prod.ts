@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   version: '0.1.0',
-  baseURL: 'https://api-syntry.businext.app/api/v1/',
+  baseURL: 'https://api-syntry.ahmoutsourcing.com/api/v1/',
   authToken: '9bc12f10eb077de',
   firebase: {
     apiKey: 'AIzaSyDBy1btu2_RUN2r4tWTtUY2Zhw4oJsum6E',
