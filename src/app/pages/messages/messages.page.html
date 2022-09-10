@@ -1,0 +1,29 @@
+<!--
+
+  Authors : Bytes Crafter
+  Website : https://bytescrafter.net
+  App Name : Galyon App
+  Created : 01-Sep-2020
+
+ -->
+ <ion-content>
+  <div class="space-top">
+
+  </div>
+  <div class="header">
+    <h4>Messages</h4>
+
+    <div style="padding: 20px;">
+      <ion-label style="display: block; text-align: center; margin-top: 50px;" color="warning">
+        This MESSAGES page is currently under development.
+      </ion-label>
+      <ion-list style="background-color: transparent;">
+        <ion-item  *ngFor="let message of messages; let i = index" style="border-bottom: 10px transparent solid;">
+          <ion-label>{{message.subject}}</ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+</ion-content>
+
+

@@ -33,6 +33,18 @@ const routes: Routes = [
         loadChildren: () => import('./pages/teams/teams.module').then( m => m.TeamsPageModule)
       },
       {
+        path: 'todo',
+        loadChildren: () => import('./pages/todo/todo.module').then( m => m.TodoPageModule)
+      },
+      {
+        path: 'notes',
+        loadChildren: () => import('./pages/notes/notes.module').then( m => m.NotesPageModule)
+      },
+      {
+        path: 'messages',
+        loadChildren: () => import('./pages/messages/messages.module').then( m => m.MessagesPageModule)
+      },
+      {
         path: 'camera',
         loadChildren: () => import('./reserved/camera/camera.module').then( m => m.CameraPageModule),
       },

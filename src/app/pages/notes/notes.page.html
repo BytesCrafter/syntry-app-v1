@@ -1,0 +1,34 @@
+<!--
+
+  Authors : Bytes Crafter
+  Website : https://bytescrafter.net
+  App Name : Galyon App
+  Created : 01-Sep-2020
+
+ -->
+ <ion-content>
+  <div class="space-top">
+
+  </div>
+  <div class="header">
+    <h4>Notes</h4>
+
+    <div style="padding: 20px;">
+      <ion-label style="display: block; text-align: center; margin-top: 50px;" color="warning">
+        This organize page (NOTES) is currently under development.
+      </ion-label>
+      <ion-list style="background-color: transparent;">
+        <ion-item  *ngFor="let note of notes; let i = index" style="border-bottom: 10px transparent solid;">
+          <ion-label>{{note.title}}</ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" style="margin: 0 15px 15px 0;">
+    <ion-fab-button>
+      <ion-icon name="add" (click)="onAdd()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+

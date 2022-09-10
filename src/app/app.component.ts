@@ -14,20 +14,20 @@ export class AppComponent {
 
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
-    { title: 'Attendance', url: '/attendance', icon: 'alarm' },
-    { title: 'Schedule', url: '/schedule', icon: 'calendar' },
-    { title: 'Overtime', url: '/overtime', icon: 'timer'},
-    { title: 'Teams', icon: 'people', open: true, children: [
-      { title: 'Members', url: '/teams/members', icon: 'person' },
-      // { title: 'Schedule', url: '/teams/schedule', icon: 'calendar' },
-      // { title: 'Attendance', url: '/teams/attendance', icon: 'alarm'},
-      // { title: 'Overtime', url: '/teams/overtime', icon: 'timer' },
-      // { title: 'Leaves', url: '/teams/leaves', icon: 'footsteps' },
+    { title: 'Messages', url: '/messages', icon: 'chatbox-ellipses' },
+    { title: 'Biometric', icon: 'id-card', open: false, children: [
+      { title: 'Attendance', url: '/attendance', icon: 'alarm' },
+      { title: 'Overtime', url: '/overtime', icon: 'timer'},
+      { title: 'Schedule', url: '/schedule', icon: 'calendar' },
     ]},
+    { title: 'Organize', icon: 'file-tray-stacked', open: false, children: [
+      { title: 'To Do', url: '/todo', icon: 'checkmark-circle' },
+      { title: 'Notes', url: '/notes', icon: 'create' },
+    ]},
+    { title: 'Department', url: '/teams/members', icon: 'people' },
     { title: 'Settings', url: '/settings', icon: 'settings' },
     // { title: 'Camera', url: '/camera', icon: 'camera' },
     // { title: 'Gallery', url: '/gallery', icon: 'images' },
-    //{ title: 'Biometrix', url: '/qrscan', icon: 'qr-code' }
   ];
   public labels = ['Logout'];
 
@@ -35,7 +35,6 @@ export class AppComponent {
     public util: UtilService,
     public auth: AuthService,
     private router: Router,
-    private api: ApiService,
     private menuCtrl: MenuController
     ) {
     this.auth.loadPermission();
