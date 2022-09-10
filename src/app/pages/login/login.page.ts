@@ -72,7 +72,10 @@ export class LoginPage implements OnInit {
         this.password = '';
         this.auth.getInfo();
         this.auth.loadPermission();
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home'])
+        .then(() => {
+          window.location.reload();
+        });
       } else {
         this.util.modalAlert('Action not Allowed', result.message);
       }
