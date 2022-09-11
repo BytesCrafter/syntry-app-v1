@@ -1,12 +1,12 @@
 {
   "projects": {
-    "default": "businext-app"
+    "default": "spartan-figure-294709"
   },
   "targets": {
-    "businext-app": {
+    "spartan-figure-294709": {
       "hosting": {
-        "erpat-beta": [
-          "businext-app"
+        "brilliantsyntry": [
+          "spartan-figure-294709"
         ]
       }
     }

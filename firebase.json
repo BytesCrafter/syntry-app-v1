@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "erpat-beta",
+    "site": "brilliantsyntry",
     "public": "dist/htdocs",
     "ignore": [
       "firebase.json",
