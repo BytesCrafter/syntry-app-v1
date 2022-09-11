@@ -11,23 +11,49 @@
 
   </div>
   <div class="header">
-    <h4>To Do list</h4>
-
+    <h4>Todo List</h4>
     <div style="padding: 20px;">
-      <ion-label style="display: block; text-align: center; margin-top: 50px;" color="warning">
-        This organize page (TODO) is currently under development.
-      </ion-label>
-      <ion-list style="background-color: transparent;">
-        <ion-item  *ngFor="let task of tasks; let i = index" style="border-bottom: 10px transparent solid;">
-          <ion-checkbox slot="start" checked="{{task.done}}" (click)="taskDone(task)"></ion-checkbox>
-          <ion-label>{{task.title}}</ion-label>
-        </ion-item>
-      </ion-list>
+      <ion-segment [(ngModel)]="curTab">
+        <ion-segment-button value="todo">
+          <ion-label>Pending</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="done">
+          <ion-label>Completed</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <div [ngSwitch]="curTab">
+        <ion-grid *ngSwitchCase="'todo'">
+          <ion-list style="background-color: transparent; margin-top: 15px;" *ngIf="!isLoading">
+            <ion-item  *ngFor="let task of pending; let i = index" style="border-bottom: 10px transparent solid;">
+              <ion-checkbox slot="start" checked="{{task.done}}" (click)="onPendingChange(task, i)"></ion-checkbox>
+              <ion-text style="padding: 10px 0;">{{task.title}}</ion-text>
+            </ion-item>
+          </ion-list>
+          <ion-list *ngIf="isLoading" style="background-color: transparent;">
+            <ion-item style="border-bottom: 7px transparent dashed;">
+              <ion-spinner name="crescent" style="padding-right: 50px;"></ion-spinner> Please wait...
+            </ion-item>
+          </ion-list>
+        </ion-grid>
+        <ion-grid *ngSwitchCase="'done'">
+          <ion-list style="background-color: transparent; margin-top: 15px;" *ngIf="!isLoading2">
+            <ion-item  *ngFor="let task of completed; let i = index" style="border-bottom: 10px transparent solid;">
+              <ion-checkbox slot="start" checked="{{task.done}}" disabled></ion-checkbox>
+              <ion-text style="padding: 10px 0;">{{task.title}}</ion-text>
+            </ion-item>
+          </ion-list>
+          <ion-list *ngIf="isLoading2" style="background-color: transparent;">
+            <ion-item style="border-bottom: 7px transparent dashed;">
+              <ion-spinner name="crescent" style="padding-right: 50px;"></ion-spinner> Please wait...
+            </ion-item>
+          </ion-list>
+        </ion-grid>
+      </div>
     </div>
   </div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" style="margin: 0 15px 15px 0;">
-    <ion-fab-button>
-      <ion-icon name="add" (click)="onAdd()"></ion-icon>
+    <ion-fab-button (click)="onAdd()">
+      <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

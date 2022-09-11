@@ -1,0 +1,16 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title slot="start">Add Todo</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()" [strong]="true">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-item style="margin-bottom: 20px;">
+    <ion-label position="stacked">Title</ion-label>
+    <ion-input type="text" placeholder="Enter todo here..." [(ngModel)]="message" (keyup.enter)="confirm()"></ion-input>
+  </ion-item>
+  <ion-button expand="block" (click)="confirm()" disabled="{{isSending}}">Save</ion-button>
+</ion-content>
