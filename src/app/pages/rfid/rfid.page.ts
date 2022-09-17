@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
+import { MessagingService } from 'src/app/services/messaging.service';
 import { UtilService } from 'src/app/services/util.service';
 
 @Component({
@@ -37,6 +38,8 @@ export class RfidPage implements OnInit {
   };
   public sliderRefs: any;
 
+  reloadTimer: number = 0;
+
   // eslint-disable-next-line @typescript-eslint/member-ordering
   private serverDatetime: Date = new Date();
   public get currentDate(): any {
@@ -50,16 +53,28 @@ export class RfidPage implements OnInit {
 
   constructor(
     private api: ApiService,
-    private util: UtilService
+    private util: UtilService,
+    private msg: MessagingService
   ) {
     this.getAdvisories();
+    this.reloadTimer = new Date().getTime();
 
     setInterval(()=> {
       this.curDate = new Date();
       if(this.timer > 0) {
         this.timer -= 1;
       }
+
+      if(this.sinceLastLog() > 3600 && msg.isUserOnline) {
+        location.reload();
+        this.reloadTimer = new Date().getTime();
+      }
     }, 1000);
+  }
+
+  sinceLastLog() {
+    const timer = new Date().getTime() - this.reloadTimer;
+    return timer/1000;
   }
 
   @HostListener('document:keypress', ['$event'])

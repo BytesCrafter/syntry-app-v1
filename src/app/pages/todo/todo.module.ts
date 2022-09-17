@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { TodoPageRoutingModule } from './todo-routing.module';
 
 import { TodoPage } from './todo.page';
+import { ModalPage } from './modal/modal.page';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { TodoPage } from './todo.page';
     IonicModule,
     TodoPageRoutingModule
   ],
-  declarations: [TodoPage]
+  declarations: [TodoPage, ModalPage]
 })
 export class TodoPageModule {}

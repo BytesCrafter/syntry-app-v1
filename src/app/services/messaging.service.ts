@@ -10,6 +10,7 @@ import { UtilService } from './util.service';
 export class MessagingService {
 
   currentMessage = new BehaviorSubject(null);
+  isUserOnline: any = false;
 
   constructor(
     private angularFireDB: AngularFireDatabase,
@@ -17,6 +18,14 @@ export class MessagingService {
     private util: UtilService,
     private angularFireMessaging: AngularFireMessaging,
     ) {
+     const ref = angularFireDB.database.ref('.info/connected');
+     ref.on('value', (snap) => {
+      if (snap.val() === true) {
+        this.isUserOnline = true;
+      } else {
+        this.isUserOnline = false;
+      }
+     });
   }
 
   /**
