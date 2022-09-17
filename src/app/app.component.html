@@ -3,8 +3,10 @@
   <ion-toolbar color="light">
     <ion-buttons slot="start">
       <ion-button color="dark" (click)="openMenu()">
-        <ion-icon slot="icon-only" ios="menu-outline" md="menu-outline"></ion-icon>
+        <ion-icon slot="icon-only" ios="menu-outline" md="menu-outline" size="large"></ion-icon>
       </ion-button>
+      <ion-icon name="cloud-done" *ngIf="msgSvs.isUserOnline" class="ion-margin-start" style="font-size: 24px; color: rgb(31, 215, 31);"></ion-icon>
+      <ion-icon name="warning" *ngIf="!msgSvs.isUserOnline" class="ion-margin-start" style=" font-size: 24px; color: rgb(252, 46, 46);"></ion-icon>
     </ion-buttons>
     <ion-title style="text-align: center;">
       <ion-img [src]="'assets/images/logo.png'" style="height: 30px; display: inline-flex;"></ion-img>
