@@ -64,6 +64,10 @@ const routes: Routes = [
       {
         path: 'rfid',
         loadChildren: () => import('./pages/rfid/rfid.module').then( m => m.RfidPageModule)
+      },
+      {
+        path: 'raffle',
+        loadChildren: () => import('./pages/raffle/raffle.module').then( m => m.RafflePageModule)
       }
     ],
     canActivate: [AuthGuard]

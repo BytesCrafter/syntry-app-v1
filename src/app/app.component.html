@@ -12,6 +12,9 @@
       <ion-img [src]="'assets/images/logo.png'" style="height: 30px; display: inline-flex;"></ion-img>
     </ion-title>
     <ion-buttons slot="end">
+      <ion-button (click)="openRaffle()" *ngIf="true">
+        <ion-icon slot="icon-only" name="ribbon"></ion-icon>
+      </ion-button>
       <ion-button (click)="openBiov2()" *ngIf="auth.userPermits?.permissions?.can_use_biometric">
         <ion-icon slot="icon-only" name="barcode-outline"></ion-icon>
       </ion-button>

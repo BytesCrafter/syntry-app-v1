@@ -54,6 +54,10 @@ export class AppComponent {
     this.router.navigate(['/rfid']);
   }
 
+  openRaffle() {
+    this.router.navigate(['/raffle']);
+  }
+
   reloadPage() {
     location.reload();
   }

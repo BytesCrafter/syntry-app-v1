@@ -1,0 +1,33 @@
+<ion-content style="height: 100%;">
+  <ion-grid class="header-grid">
+    <ion-row class="primary">
+        <video #video width="100%" height="100%"></video>
+        <canvas #canvas width="500" height="500" hidden></canvas>
+        <div class="notify" [hidden]="!modalActive">
+          <div class="window">
+            <h3 style="border-bottom: 1px dashed #2d2d2d; padding-bottom: 5px">{{modalTitle}}</h3>
+            <p style="white-space: pre-wrap;" [innerHtml]="modalMsg"></p>
+          </div>
+        </div>
+    </ion-row>
+    <ion-row hidden>
+      <ion-range color="primary" pin="true" step="5" min="0" max="250" [(ngModel)]="focusValue" (ionChange)="onSliderEvent($event)"></ion-range>
+    </ion-row>
+    <ion-row class="infolay" style="background-color: #222428;">
+      <ion-col size="7">
+        <ion-button [attr.size]="this.statusSize" [attr.color]="this.statusColor" style="margin: auto; display: contents;" disabled>
+          <ion-icon *ngIf="!this.isSending" name="eye" style="color: white;" style="font-size: xx-large;"></ion-icon>
+          <ion-icon *ngIf="this.isSending" name="cloud-upload" style="font-size: xx-large;"></ion-icon>
+          <strong style="padding: 15px 0 15px 15px; font-size: large;">{{dname}}</strong>
+        </ion-button>
+      </ion-col>
+      <ion-col size="5">
+          <strong style="font-size: x-large;">{{curDate | date:'hh:mm a'}}</strong>
+          <label style="font-size: medium; display: block;">{{curDate | date:'MMM d, y'}}</label>
+      </ion-col>
+    </ion-row>
+    <ion-row class="secondary">
+
+    </ion-row>
+  </ion-grid>
+</ion-content>
