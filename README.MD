@@ -33,7 +33,10 @@ npm run electron
 1. Please make sure to build angular when you make changes to src folder.
 
 ```
-ng build
+ng build //dev
+ng build --prod //prod
+
+export NODE_OPTIONS=--openssl-legacy-provider //for issue on latest nodejs
 ```
 
 2. Build the unpacked windows application.

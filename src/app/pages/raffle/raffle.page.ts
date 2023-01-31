@@ -221,20 +221,18 @@ export class RafflePage implements AfterViewInit, OnDestroy {
 
     //TODO: API to join.
     this.isSending = true;
-    await this.delay(2000);
-    // this.api.post('users/join_raffle', {
-    //   uuid: epassId
-    // }).subscribe(async (res: any) => {
-    //   if(res.success) {
+    this.api.post('event/raffle/join', {
+      uuid: epassId,
+      eventid: 3,
+    }).subscribe(async (res: any) => {
+      if(res.success) {
+        this.modalAlert('Congratulation!', res.message);
+      } else {
+        this.modalAlert('Notification!', res.message);
+      }
 
-    //   } else {
-
-    //   }
-    //   //Move the reset here.
-    // });
-
-    this.modalAlert('Congratulation!', 'You successfully join the raffle: '+epassId);
-    this.resetScan();//reset ready for the next.
+      this.resetScan();//reset ready for the next.
+    });
   }
 
   modalAlert(title, message, timer = 3500) {

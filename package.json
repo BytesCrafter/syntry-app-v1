@@ -10,7 +10,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build ",
     "electron": "electron .",
     "pack": "electron-builder --dir --x64",
     "dist": "electron-builder"
