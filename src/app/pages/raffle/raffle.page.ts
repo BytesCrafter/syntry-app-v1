@@ -120,7 +120,7 @@ export class RafflePage implements AfterViewInit, OnDestroy {
         video: {
           width: 720,
           height: 720,
-          facingMode: 'user'
+          facingMode: 'environment' //user - front
         }
       })
       .then(this.gotMedia.bind(this))
