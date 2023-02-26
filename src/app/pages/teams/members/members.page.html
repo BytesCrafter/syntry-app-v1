@@ -24,7 +24,7 @@
     <div *ngIf="!isLoading" [ngSwitch]="curTab">
       <ion-grid *ngSwitchCase="curTab">
         <ion-row class="title">
-          <ion-title>Department Heads ({{activeHeads.length}})</ion-title>
+          <h5>Department Heads ({{activeHeads.length}})</h5>
         </ion-row>
         <ion-row>
           <table>
@@ -45,7 +45,7 @@
           </table>
         </ion-row>
         <ion-row class="title" style="padding-top: 30px;">
-          <ion-title>Department Members ({{activeMembers.length}})</ion-title>
+          <h5>Department Members ({{activeMembers.length}})</h5>
         </ion-row>
         <ion-row>
           <table>
