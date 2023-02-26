@@ -58,8 +58,8 @@
         </ion-list>
 
         <ion-list id="inbox-list" *ngIf="auth.userToken !== null && !auth.userPermits?.permissions?.can_use_biometric">
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item *ngIf="p.children?.length <= 0" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+          <ion-item-group *ngFor="let p of appPages; let i = index">
+            <ion-item *ngIf="p.children?.length <= 0" (click)="toggle()" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
@@ -70,23 +70,25 @@
               <ion-icon slot="end" [ios]="'chevron-down-outline'" [md]="'chevron-down-sharp'" *ngIf="!p.open"></ion-icon>
             </ion-item>
             <ion-list *ngIf="p.children?.length > 0 && p.open" class="subpages">
-              <ion-menu-toggle auto-hide="false" *ngFor="let sp of p.children; let i = index">
-                <ion-item routerDirection="root" [routerLink]="[sp.url]" lines="none" detail="false" routerLinkActive="selected">
+              <ion-list *ngFor="let sp of p.children; let i = index" style="padding: 0;">
+                <ion-item routerDirection="root" (click)="toggle()" [routerLink]="[sp.url]" lines="none" detail="false" routerLinkActive="selected">
                   <ion-icon slot="start" [ios]="sp.icon + '-outline'" [md]="sp.icon + '-sharp'" class="subpage-icon"></ion-icon>
                   <ion-label>{{ sp.title }}</ion-label>
                 </ion-item>
-              </ion-menu-toggle>
+              </ion-list>
             </ion-list>
-          </ion-menu-toggle>
-          <ion-item lines="none" button (click)="logout()">
-            <ion-icon slot="start" ios="power-outline" md="power-outline"></ion-icon>
-            <ion-label>Logout</ion-label>
-          </ion-item>
+          </ion-item-group>
+          <ion-item-group>
+            <ion-item button (click)="logout()">
+              <ion-icon slot="start" ios="power-outline" md="power-outline"></ion-icon>
+              <ion-label>Logout</ion-label>
+            </ion-item>
+          </ion-item-group>
         </ion-list>
 
         <ion-list id="inbox-list" *ngIf="auth.userToken !== null && auth.userPermits?.permissions?.can_use_biometric">
           <ion-menu-toggle auto-hide="false">
-            <ion-item routerDirection="root" [routerLink]="'home'" lines="none" detail="false" routerLinkActive="selected">
+            <ion-item routerDirection="root" (click)="toggle()" [routerLink]="'home'" lines="none" detail="false" routerLinkActive="selected">
               <ion-icon slot="start" [ios]="'home-outline'" [md]="'home-sharp'"></ion-icon>
               <ion-label>Home</ion-label>
             </ion-item>

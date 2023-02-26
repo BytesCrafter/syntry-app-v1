@@ -40,6 +40,10 @@ export class AppComponent {
     this.auth.loadPermission();
   }
 
+  toggle() {
+    this.menuCtrl.toggle();
+  }
+
   openMenu() {
     this.menuCtrl.toggle();
   }
