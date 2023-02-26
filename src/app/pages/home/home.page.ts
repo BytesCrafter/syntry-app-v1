@@ -26,7 +26,7 @@ export class HomePage implements OnInit {
   async getAdvisories() {
     this.isLoading = true;
 
-    this.api.posts('advisories/listdata', {}).then((response: any) => {
+    this.api.posts('announcements/list', {}).then((response: any) => {
       this.serverDatetime = new Date(response.stamp);
 
       if(response.success) {

@@ -19,7 +19,7 @@ export class SchedulePage implements OnInit {
 
   ngOnInit() {
     this.isLoading = true;
-    this.api.posts('attendance/my_sched', {}).then((res: any) => {
+    this.api.posts('schedule/active', {}).then((res: any) => {
       if(res && res.success === true) {
         this.scheds.push(res.data.mon);
         this.scheds.push(res.data.tue);

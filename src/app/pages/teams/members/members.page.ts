@@ -43,7 +43,7 @@ export class MembersPage implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.isLoading = true;
-    this.api.posts('teams/lists', {}).then((res: any) => {
+    this.api.posts('departments/list', {}).then((res: any) => {
 
       if(res && res.success === true && res.data) {
         this.curTab = res.data.length ? res.data[0].id:0;
@@ -55,6 +55,23 @@ export class MembersPage implements OnInit, OnDestroy {
             members: tabs.members
           });
         });
+
+        // this.tabList.forEach( item => {
+        //   item.heads.forEach( head => {
+        //     this.api.posts('departments/list', {}).then((res: any) => {
+        //       if(res && res.success === true && res.data) {
+        //         head.clockin = "aaa";
+        //       }
+        //     })
+        //   })
+        //   item.members.forEach( member => {
+        //     this.api.posts('departments/list', {}).then((res: any) => {
+        //       if(res && res.success === true && res.data) {
+        //         member.clockin = "aaa";
+        //       }
+        //     })
+        //   })
+        // })
         // Calling the DT trigger to manually render the table
         //this.dtTrigger.next();
       } else {

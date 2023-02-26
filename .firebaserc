@@ -3,10 +3,10 @@
     "default": "businext-app"
   },
   "targets": {
-    "businext-app": {
+    "erpatsystem": {
       "hosting": {
-        "erpat-beta": [
-          "businext-app"
+        "dev": [
+          "erpatsystem"
         ]
       }
     }

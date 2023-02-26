@@ -1,6 +1,6 @@
 {
   "name": "Syntry",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Syntry is an biometric app for ERPat system.",
   "main": "main.js",
   "author": "BytesCrafter",
